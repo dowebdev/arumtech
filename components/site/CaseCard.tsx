@@ -16,7 +16,7 @@ export default function CaseCard({
   if (variant === "compact") {
     // Used on the home page (smaller, 16:10 image)
     return (
-      <Link href={`/cases/${study.slug}`} className="group block">
+      <Link href="/cases" className="group block">
         <div
           className={`relative aspect-[16/10] overflow-hidden rounded-[14px] border transition-colors ${
             light
@@ -56,7 +56,7 @@ export default function CaseCard({
 
   // Default — used on the cases list page (16:9 + summary)
   return (
-    <Link href={`/cases/${study.slug}`} className="block">
+    <Link href="/cases" className="block">
       <div
         className={`relative aspect-[16/9] overflow-hidden rounded-2xl border transition-colors ${
           light

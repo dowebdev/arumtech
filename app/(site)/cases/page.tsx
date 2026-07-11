@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CasesBrowser from "@/components/site/CasesBrowser";
+import CasesBoard from "@/components/site/CasesBoard";
 import PageHero from "@/components/site/PageHero";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function CasesPage() {
       />
 
       <section className="container-site py-8 pb-24">
-        <CasesBrowser />
+        <CasesBoard />
       </section>
     </div>
   );
