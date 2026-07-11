@@ -1,0 +1,377 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0b0d10;
+  color: #f4f1ea;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #6ea921;
+  color: #0b0d10;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e34;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Inputs inherit the dark theme + accent focus ring */
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #6ea921 !important;
+}
+
+@layer components {
+  /* Centered site container */
+  .container-site {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+
+  /* Eyebrow label (English kicker above section titles) */
+  .eyebrow {
+    @apply mb-3 font-mono text-xs tracking-[0.16em] text-accent;
+  }
+
+  /* Hairline border used across surfaces */
+  .hairline {
+    @apply border border-cream/10;
+  }
+
+  /* Primary CTA button */
+  .btn-primary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border-none bg-accent px-7 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover;
+  }
+
+  /* Secondary / outline button */
+  .btn-outline {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-cream/25 bg-transparent px-7 py-4 text-[15px] font-semibold text-cream transition-colors hover:border-cream;
+  }
+
+  /* Card surface */
+  .card {
+    @apply rounded-2xl border border-cream/10 bg-panel transition-colors;
+  }
+  .card-hover {
+    @apply hover:border-cream/40;
+  }
+
+  /* Light-theme variants (used on white content pages) */
+  .card-light {
+    @apply rounded-2xl border border-black/10 bg-white transition-colors;
+  }
+  .card-hover-light {
+    @apply hover:border-black/25;
+  }
+  .btn-outline-light {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-black/20 bg-transparent px-7 py-4 text-[15px] font-semibold text-ink transition-colors hover:border-black;
+  }
+
+  /* Radial "spotlight" decoration layer */
+  .spotlight {
+    background: radial-gradient(circle at 60% 45%, rgba(255, 255, 255, 0.15), transparent 60%);
+  }
+}
+
+/* Hide scrollbar (horizontal carousels) while keeping scroll */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes arumFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* === Full sitemap menu — unfolds from the top (curtain reveal) ======= */
+@keyframes menuUnfold {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* === Running-line button border (white light circling the border) ==== */
+@property --runline-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.btn-runline {
+  position: relative;
+  isolation: isolate;
+}
+.btn-runline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px; /* border thickness the light rides on */
+  background: conic-gradient(
+    from var(--runline-angle),
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(255, 255, 255, 0) 270deg,
+    rgba(255, 255, 255, 0.9) 340deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: runline-spin 2.6s linear infinite;
+}
+@keyframes runline-spin {
+  to {
+    --runline-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-runline::before {
+    animation: none;
+  }
+}
+
+/* === Solution line icons (Genesis-style hover) ===================== */
+.sol-icon {
+  overflow: visible;
+}
+.sol-icon path,
+.sol-icon rect,
+.sol-icon circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* parts that animate via transform need view-box coordinates as origin */
+.sol-icon .tassel,
+.sol-icon .wave,
+.sol-icon .confetti,
+.sol-icon .ping,
+.sol-icon .orbit {
+  transform-box: view-box;
+}
+
+/* main strokes: fully drawn at rest, re-draw themselves on hover */
+.sol-icon .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.group:hover .sol-icon .draw {
+  animation: solDraw 0.8s ease both;
+}
+@keyframes solDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* accent motions — hidden/idle at rest, animate on hover */
+.sol-icon .wave {
+  opacity: 0;
+  transform-origin: 24px 24px;
+}
+.group:hover .sol-icon .wave {
+  animation: solWave 0.9s ease 0.15s both;
+}
+@keyframes solWave {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+}
+
+.sol-icon .tassel {
+  transform-origin: 43px 19px;
+}
+.group:hover .sol-icon .tassel {
+  animation: solSwing 1s ease both;
+}
+@keyframes solSwing {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  60% {
+    transform: rotate(-9deg);
+  }
+  85% {
+    transform: rotate(4deg);
+  }
+}
+
+.sol-icon .confetti {
+  opacity: 0;
+  transform-origin: center;
+}
+.group:hover .sol-icon .confetti {
+  animation: solFloat 0.9s ease both;
+}
+@keyframes solFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-5px) rotate(40deg);
+  }
+}
+
+.sol-icon .win {
+  opacity: 0.3;
+}
+.group:hover .sol-icon .win {
+  animation: solFlicker 1s ease 0.2s both;
+}
+@keyframes solFlicker {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+/* Domestic — ground ping under the location pin */
+.sol-icon .ping {
+  opacity: 0;
+  transform-origin: 24px 43px;
+}
+.group:hover .sol-icon .ping {
+  animation: solPing 0.95s ease 0.2s both;
+}
+@keyframes solPing {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+/* International — satellite dot orbiting the globe */
+.sol-icon .orbit {
+  transform-origin: 24px 24px;
+}
+.group:hover .sol-icon .orbit {
+  animation: solOrbit 1.2s linear both;
+}
+@keyframes solOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Auto-cycle spotlight — mirror the hover animations onto an active item */
+.sol-cycle-active .sol-icon .draw {
+  animation: solDraw 0.8s ease both;
+}
+.sol-cycle-active .sol-icon .wave {
+  animation: solWave 0.9s ease 0.15s both;
+}
+.sol-cycle-active .sol-icon .tassel {
+  animation: solSwing 1s ease both;
+}
+.sol-cycle-active .sol-icon .confetti {
+  animation: solFloat 0.9s ease both;
+}
+.sol-cycle-active .sol-icon .win {
+  animation: solFlicker 1s ease 0.2s both;
+}
+.sol-cycle-active .sol-icon .ping {
+  animation: solPing 0.95s ease 0.2s both;
+}
+.sol-cycle-active .sol-icon .orbit {
+  animation: solOrbit 1.2s linear both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .sol-icon .draw,
+  .group:hover .sol-icon .wave,
+  .group:hover .sol-icon .tassel,
+  .group:hover .sol-icon .confetti,
+  .group:hover .sol-icon .win,
+  .group:hover .sol-icon .ping,
+  .group:hover .sol-icon .orbit,
+  .sol-cycle-active .sol-icon .draw,
+  .sol-cycle-active .sol-icon .wave,
+  .sol-cycle-active .sol-icon .tassel,
+  .sol-cycle-active .sol-icon .confetti,
+  .sol-cycle-active .sol-icon .win,
+  .sol-cycle-active .sol-icon .ping,
+  .sol-cycle-active .sol-icon .orbit {
+    animation: none;
+  }
+}

@@ -1,0 +1,141 @@
+# COLUMN
+
+- 원본: https://www.arumtech.co.kr/COLUMN
+
+## 텍스트
+
+(주)아름텍 본 사 : 경남 김해시 장유로 194번지 투투스빌딩 2관 301호 서울사무소: 서울 금천구 가산로9길 더리즌밸리 지식산업센터 1411호 대표 : 박재성 사업자등록번호 : 615-86-09919 대표전화 : 1800-9810 팩스 : 02-6455-9316 , 이메일 : se@arumtech.co.kr
+A/S 안내
+Accessories
+Alarm
+ALL
+AMPLIFIERS
+B-15 / B-15A
+B-18 / B-18A
+B-Line
+C-10
+C-12/C-15
+C-Line
+COLUMN
+COLUMN SYSTEM IC 32
+Connectivity All I-Line column speakers are equipped with Phoenix MSTB 4-pin input and link connectors for quick and easy connection. Additionally they all have built-in 2-way switch that allows users to select between two signal channels. Cost-saving, improved looks and faster installation times are the most significant benefits when used with 4-wire cables. Our IA 202D and IA 402D power amplifiers have dual-channel output to make installations easy and care-free.
+Copyright ⓒ 2026 아름텍 All rights reserved.
+COX-8 mk2 / COX-12mk2
+COX-Line
+CV-10i/ 12i/ 15i
+CV-212
+CV-Line
+Die-cast Aluminum Body The cabinet of IC 32 is made from solid die-cast aluminum for maximum rigidity and to ensure that the speakers last for years to come. Aluminum also allowed us to create an elegant form and design that will easily fit in many environments. All I-Line speakers are available in black and white color. .
+Domestic
+DOWNLOAD
+Easy Mounting I-Line column speakers are built to be used together with SE AUDIOTECHNIK SMB Smart Mounting Bracket. Together with this bracket a quick and intuitive speaker placement and aiming can be achieved in any installation.IC 32 is equipped with one mounting position on the center of the back panel that allows for both vertical and horizontal orientation.
+Features
+FULL RANGE
+IA 402D
+IC 32
+IC 32 IC 32
+IC 38X
+IC32 data_sheet IC34 data_sheet IC38 date_sheet I-Line Brochure I-Line Manual IC32 시방서 IC34 시방서 IC32 dwg IC34 dwg
+IC34
+icon
+Intelligent installation The I -Line is designed for fixed installations with ambitious requirements regarding aesthetics, speech reproduction and music playback. The system comprises two different sized column speakers, an adjustable mounting bracket, a dedicated subwoofer and two system amplifiers. No matter if you want to fill a conference room, the sales area of a shop or a bar with sound &ndash; this lineup offers you freedom of choice to compose a setup which suits your needs best. All speakers are available in both black and white finishes.
+International
+K-10i/ 12i/ 15i
+K-18B
+K-Line
+L-35
+L-35 FS
+L-65
+L-65 FS
+LA 10.4D
+L-Line
+M-121AMONG2
+M-42(W)G2/242(W)G2
+M-62(W)G2
+M-82(W)G2 / M-82AG2
+MA 2000 Series
+M-A8
+MENU
+M-F3
+M-F3A (W)
+M-F3A FS
+M-F3A PRO
+M-F3A PRO MAX
+M-Line
+M-LINE 악세사리
+Model:IC 32 ACOUSTICAL Frequency range (-3 dB): 150 Hz &ndash; 17 kHz Frequency range (-10 dB): 100 Hz &ndash; 20 kHz Coverage angles (-6dB) [H x V]: 120&deg; &ndash; 60&deg; Nominal impedance: 16 &Omega; Sensitivity *: 91 dB Peak power: 400 W Continuous power **: 100 W Connectors: Input / Link: Phoenix contact MSTB 4-pins User controls: 2-positions input selection switch Wiring: Pins 1+/1- or 2+/2- (switchable) Maximum Peak SPL *: 123 dB System type: 1-way passive system Transducers: 2 x 3.5&Prime; neodymium drivers Enclosure type: Vented box Connectors: Input / Link: Phoenix contact MSTB 4-pins User controls: 2-positions input selection switch Wiring: Pins 1+/1- or 2+/2- (switchable) MECHANICAL Product dimensions [H x W x D] (Including rigging): 247 x 116 x 150 mm Net weight: 2 kg Packaging dimensions [H x W x D]: 405 x 268 x 375 mm Total weight: 6.35 kg Cabinet: Die-Cast aluminium housing, plastic Cabinet finishing: Black or white powder coating Grille: Powder coated perforated steel Mounting: Centered mounting point for SMB bracket Vertical and horizontal orientation Safety wire fixing point ACCESSORIES Smart Mounting Bracket SMB All product specifications are subject to change without prior notice. * Whole space, 1W / 1m, on axis. With dedicated IA 402D amplifier&acute;s preset. ** According to EIA-426B Standard (based on RMS Voltage) *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor
+Monitor
+News
+Related Products
+S12 PRO
+S15 PRO
+se-audiotechnik
+site search
+SMB (wird mit dem Produkt ausgeliefert) - Einfache, flexible Montage The SMB &ndash; Smart Mounting Bracket &ndash; was developed for uncomplicated, time-saving installation and the greatest possible flexibility in alignment; the intelligent wall bracket. With this bracket, the speakers can be installed quickly and easily almost anywhere and at an ideal angle in order to optimise directivity. The SMB, designed in Germany, is included with every I-Line speaker and was specially designed for use with our column speakers. An SMB mounted column speaker can be adjusted on both axes by up to &plusmn; 90&deg; in 10&deg; steps. The SMB has a maximum load-bearing capacity of 10 kg and is supplied together with a 20 cm long steel cable for securing in accordance with international guidelines.
+SMX 12
+SMX-12A
+SNS 바로가기 SNS 바로가기 SNS 바로가기
+software
+Specifications
+V-10
+V-118B / V-218B
+V-12
+V-15
+V-8
+V-ARRAY
+V-L8 / V-LPS215B
+V-Line
+강당/공연장
+게시물 알림
+고객지원
+공지사항 사이트에서 보내는 중요한 공지를 실시간으로 알려줍니다.
+관공서/학교
+기술자료
+기업/상업시설
+내 글 반응 내가 작성한 게시물이나 댓글에 다른 사람이 댓글이나 답글을 작성하면 알려줍니다.
+닫기
+더보기
+도면자료
+뒤로
+로그아웃
+로그인
+로그인이 필요합니다.
+마이페이지
+메뉴얼
+문의하기
+물가정보
+설치사례
+소형 M-Line
+시방서
+아름텍
+알림
+알림 설정
+오시는 길
+자료실
+제품소개
+종교시설
+카탈로그
+회사소개
+
+## 이미지 (로컬 경로)
+
+- /images/arumtech/thumbnail/20200109/6f17891f68041.png  (https://cdn.imweb.me/thumbnail/20200109/6f17891f68041.png)
+- /images/arumtech/thumbnail/20200109/c296bfacd3b89.png  (https://cdn.imweb.me/thumbnail/20200109/c296bfacd3b89.png)
+- /images/arumtech/thumbnail/20200109/e923a2a243a34.png  (https://cdn.imweb.me/thumbnail/20200109/e923a2a243a34.png)
+- /images/arumtech/thumbnail/20200109/ecc4d4b9ed7f6.png  (https://cdn.imweb.me/thumbnail/20200109/ecc4d4b9ed7f6.png)
+- /images/arumtech/thumbnail/20201209/80e4feab5d5fd.png  (https://cdn.imweb.me/thumbnail/20201209/80e4feab5d5fd.png)
+- /images/arumtech/thumbnail/20230912/1594839ee7285.png  (https://cdn.imweb.me/thumbnail/20230912/1594839ee7285.png)
+- /images/arumtech/thumbnail/20230912/1b8e628ff0c9d.png  (https://cdn.imweb.me/thumbnail/20230912/1b8e628ff0c9d.png)
+- /images/arumtech/thumbnail/20230912/258feaaadaf9b.png  (https://cdn.imweb.me/thumbnail/20230912/258feaaadaf9b.png)
+- /images/arumtech/thumbnail/20230912/2cfc957c192bc.png  (https://cdn.imweb.me/thumbnail/20230912/2cfc957c192bc.png)
+- /images/arumtech/thumbnail/20230912/3a685a2aedbf1.jpg  (https://cdn.imweb.me/thumbnail/20230912/3a685a2aedbf1.jpg)
+- /images/arumtech/thumbnail/20230912/450089a3851ab.png  (https://cdn.imweb.me/thumbnail/20230912/450089a3851ab.png)
+- /images/arumtech/thumbnail/20230912/716f68d58103e.png  (https://cdn.imweb.me/thumbnail/20230912/716f68d58103e.png)
+- /images/arumtech/thumbnail/20230912/91dd1a456d21e.jpg  (https://cdn.imweb.me/thumbnail/20230912/91dd1a456d21e.jpg)
+- /images/arumtech/thumbnail/20230912/990089babf00b.png  (https://cdn.imweb.me/thumbnail/20230912/990089babf00b.png)
+- /images/arumtech/thumbnail/20230912/b6a9d690690d1.png  (https://cdn.imweb.me/thumbnail/20230912/b6a9d690690d1.png)
+- /images/arumtech/thumbnail/20230912/e7845a2bfbbc2.png  (https://cdn.imweb.me/thumbnail/20230912/e7845a2bfbbc2.png)
+- /images/arumtech/thumbnail/20260322/6d205320c3423.jpg  (https://cdn.imweb.me/thumbnail/20260322/6d205320c3423.jpg)
+- /images/arumtech/thumbnail/20260322/d6ee65f5bab42.jpg  (https://cdn.imweb.me/thumbnail/20260322/d6ee65f5bab42.jpg)
+- /images/arumtech/upload/S201911156f3fdc34ce4b1/84e2895ea653d.png  (https://cdn.imweb.me/upload/S201911156f3fdc34ce4b1/84e2895ea653d.png)
+- /images/arumtech/upload/S201911156f3fdc34ce4b1/95b4edd4f93ec.jpg  (https://cdn.imweb.me/upload/S201911156f3fdc34ce4b1/95b4edd4f93ec.jpg)

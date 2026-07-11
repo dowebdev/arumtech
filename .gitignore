@@ -1,0 +1,41 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# oh-my-claudecode 작업 상태 (도구가 생성)
+.omc/
+**/.omc/
+
+# 디자인 원본 (별도 보관, 용량 큼)
+/psd/
+
+# 개발용 프로토타입·스크랩 잔재
+/Markdown 파일 프로토타입/
+/sample*.jpg
+**/archive/_source-page.html
+**/archive/_image-urls.txt

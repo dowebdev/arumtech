@@ -1,0 +1,128 @@
+# C-Line
+
+- 원본: https://www.arumtech.co.kr/C-Line
+
+## 텍스트
+
+(주)아름텍 본 사 : 경남 김해시 장유로 194번지 투투스빌딩 2관 301호 서울사무소: 서울 금천구 가산로9길 더리즌밸리 지식산업센터 1411호 대표 : 박재성 사업자등록번호 : 615-86-09919 대표전화 : 1800-9810 팩스 : 02-6455-9316 , 이메일 : se@arumtech.co.kr
+A/S 안내
+Alarm
+ALL
+AMPLIFIERS
+B-15 / B-15A
+B-18 / B-18A
+B-Line
+C-10
+C-10 data_sheet C-10 시방서 C-10 dwg
+C-10 Diagram C-10 Diagram
+C-12/C-15
+C-Line
+COLUMN
+Copyright ⓒ 2026 아름텍 All rights reserved.
+COX-8 mk2 / COX-12mk2
+COX-Line
+CV-10i/ 12i/ 15i
+CV-212
+CV-Line
+Domestic
+DOWNLOAD
+FULL RANGE
+FULL RANGE C-10
+IA 402D
+IC 32
+IC 38X
+IC34
+icon
+International
+K-10i/ 12i/ 15i
+K-18B
+K-Line
+L-35
+L-35 FS
+L-65
+L-65 FS
+LA 10.4D
+L-Line
+M-121AMONG2
+M-42(W)G2/242(W)G2
+M-62(W)G2
+M-82(W)G2 / M-82AG2
+MA 2000 Series
+M-A8
+MENU
+M-F3
+M-F3A (W)
+M-F3A FS
+M-F3A PRO
+M-F3A PRO MAX
+M-Line
+M-LINE 악세사리
+Monitor
+News
+PICTURE
+S12 PRO
+S15 PRO
+se-audiotechnik
+site search
+SMX 12
+SMX-12A
+SNS 바로가기 SNS 바로가기 SNS 바로가기
+software
+SPECIFICATIONS Model: C-10 Type: 10" Two way passive full range loudspeaker Frequency / Response (-6 dB) : 60 Hz - 19 kHz Power Handling (RMS / Peak) (AES) : 250 W / 1000 W Sensitivity (1W / 1M) : 95 dB MAX SPL (1M) : 125 dB Impedance: 8 &Omega; Dispersion (H &times; V) : 90&deg; &times; 60&deg;, HF-horn rotable LF Transducer: 10" ferrite magnet, 2.5" voice coil HF Transducer: 1" ferrite PEN film compression unit, 1.75" voice coil Protection: Tweeter protection Input Interface: 2&times; Neutrik NL-4 pins+1/-1 input / THRU, pins+2/-2 N.C. Rigging System: 14&times; M8 rigging point, 1&times; 5 cargo tracks Cabinet Material / Coating: 15 mm selected plywood / Water borne texture coating Dimensions (W &times; H &times; D) : 332 &times; 542 &times; 344 mm Net Weight: 15.5 kg *35 mm pole socket DIAGRAM
+Two way passive full range loudspeaker C-LINE engineering fixed-installations featured with high quality, wide dynamic range, high SPL and extended frequency response. It is reliable enough to be not only used for sound reinforcement of small-sized system, but also for zoned sound reinforcement of large-sized system. The uniquely designed cabinets are made of selected multiplex and coated with resistant water-soluble spot painting in black. Equipped with a complete set of fly ware, the series product can be perfectly applied to engineering fixed-installation. Additionally, the 90&deg;&times;60&deg;rotating horn realizes flexible switch in both horizontal and vertical direction, which helps meet the demands of multi-functional and sound reinforcement applications.
+V-10
+V-118B / V-218B
+V-12
+V-15
+V-8
+V-ARRAY
+V-L8 / V-LPS215B
+V-Line
+강당/공연장
+게시물 알림
+고객지원
+공지사항 사이트에서 보내는 중요한 공지를 실시간으로 알려줍니다.
+관공서/학교
+기술자료
+기업/상업시설
+내 글 반응 내가 작성한 게시물이나 댓글에 다른 사람이 댓글이나 답글을 작성하면 알려줍니다.
+닫기
+더보기
+도면자료
+뒤로
+로그아웃
+로그인
+로그인이 필요합니다.
+마이페이지
+메뉴얼
+문의하기
+물가정보
+설치사례
+소형 M-Line
+시방서
+아름텍
+알림
+알림 설정
+오시는 길
+자료실
+제품소개
+종교시설
+카탈로그
+회사소개
+
+## 이미지 (로컬 경로)
+
+- /images/arumtech/thumbnail/20200109/6f17891f68041.png  (https://cdn.imweb.me/thumbnail/20200109/6f17891f68041.png)
+- /images/arumtech/thumbnail/20200109/c296bfacd3b89.png  (https://cdn.imweb.me/thumbnail/20200109/c296bfacd3b89.png)
+- /images/arumtech/thumbnail/20200109/e923a2a243a34.png  (https://cdn.imweb.me/thumbnail/20200109/e923a2a243a34.png)
+- /images/arumtech/thumbnail/20200109/ecc4d4b9ed7f6.png  (https://cdn.imweb.me/thumbnail/20200109/ecc4d4b9ed7f6.png)
+- /images/arumtech/thumbnail/20200624/21d20fb730313.jpg  (https://cdn.imweb.me/thumbnail/20200624/21d20fb730313.jpg)
+- /images/arumtech/thumbnail/20200706/21065f1703518.jpg  (https://cdn.imweb.me/thumbnail/20200706/21065f1703518.jpg)
+- /images/arumtech/thumbnail/20200714/1ee064fe362e1.jpg  (https://cdn.imweb.me/thumbnail/20200714/1ee064fe362e1.jpg)
+- /images/arumtech/thumbnail/20200714/21fe58051d0e7.jpg  (https://cdn.imweb.me/thumbnail/20200714/21fe58051d0e7.jpg)
+- /images/arumtech/thumbnail/20201209/80e4feab5d5fd.png  (https://cdn.imweb.me/thumbnail/20201209/80e4feab5d5fd.png)
+- /images/arumtech/thumbnail/20260322/6d205320c3423.jpg  (https://cdn.imweb.me/thumbnail/20260322/6d205320c3423.jpg)
+- /images/arumtech/thumbnail/20260322/d6ee65f5bab42.jpg  (https://cdn.imweb.me/thumbnail/20260322/d6ee65f5bab42.jpg)
+- /images/arumtech/upload/S201911156f3fdc34ce4b1/0ee67d9832bcb.jpg  (https://cdn.imweb.me/upload/S201911156f3fdc34ce4b1/0ee67d9832bcb.jpg)
+- /images/arumtech/upload/S201911156f3fdc34ce4b1/84e2895ea653d.png  (https://cdn.imweb.me/upload/S201911156f3fdc34ce4b1/84e2895ea653d.png)
+- /images/arumtech/upload/S201911156f3fdc34ce4b1/95b4edd4f93ec.jpg  (https://cdn.imweb.me/upload/S201911156f3fdc34ce4b1/95b4edd4f93ec.jpg)
