@@ -3,30 +3,27 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { CONTACT_TYPES, SITE } from "@/lib/data";
+import { SITE } from "@/lib/data";
 import { InquiryConfigError, sendInquiry } from "@/lib/inquiry";
+import { PRIVACY_POLICY } from "@/lib/privacy";
 
 const FIELD =
   "w-full rounded-lg border border-black/15 bg-white px-3.5 py-[13px] text-[15px] text-ink outline-none placeholder:text-[#9aa0a6]";
 const LABEL = "text-[14px] font-semibold text-ink";
 
-/** 상세 필드는 API 스키마에 없어 message 본문 끝에 라벨과 함께 덧붙인다. */
+/** 문의 유형 (아름텍 기존 사이트 기준). */
+const TYPES = ["A/S문의", "제품문의", "설치문의"];
+
+/** 제품명은 API 스키마에 없어 message 본문 끝에 라벨과 함께 덧붙인다. */
 const EXTRA_LABELS: Record<string, string> = {
-  product: "관심 제품",
-  place: "설치 장소 유형",
-  region: "지역",
-  budget: "예산 범위",
+  product: "제품명",
 };
 
 const EMPTY = {
   name: "",
-  company: "",
   phone: "",
   email: "",
   product: "",
-  place: "",
-  region: "",
-  budget: "",
   message: "",
   agreePrivacy: false,
   /** 허니팟 — 사람에게는 보이지 않는다. 값이 차 있으면 봇이다. */
@@ -37,16 +34,15 @@ type Status = "idle" | "submitting" | "error";
 
 export default function ContactForm() {
   const searchParams = useSearchParams();
-  const initialType = searchParams.get("type") ?? "견적문의";
+  const initialType = searchParams.get("type") ?? TYPES[0];
 
-  const [type, setType] = useState(
-    CONTACT_TYPES.includes(initialType) ? initialType : "견적문의"
-  );
+  const [type, setType] = useState(TYPES.includes(initialType) ? initialType : TYPES[0]);
   const [form, setForm] = useState(EMPTY);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [sentVia, setSentVia] = useState<Array<"sms" | "email">>([]);
   const [done, setDone] = useState(false);
+  const [showPolicy, setShowPolicy] = useState(false);
 
   function update(key: keyof typeof EMPTY) {
     return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -82,9 +78,9 @@ export default function ContactForm() {
         name: form.name,
         phone: form.phone,
         email: form.email,
-        company: form.company,
+        company: "",
         category: type,
-        subject: `[${type}] ${form.company || form.name}`,
+        subject: `[${type}] ${form.name}`,
         message: buildMessage(),
         agreePrivacy: form.agreePrivacy,
         agreedAt: new Date().toISOString(),
@@ -110,7 +106,7 @@ export default function ContactForm() {
           <i className="ph ph-check" style={{ fontSize: 40, color: "#2E7D5B" }} />
         </div>
         <h1 className="m-0 mt-9 text-[36px] font-semibold tracking-[-0.02em] text-ink">
-          상담 요청이 접수되었습니다
+          문의가 접수되었습니다
         </h1>
         <p className="m-0 mt-4 text-[17px] leading-[1.7] text-[#52555b]">
           담당자가 확인 후 빠르게 연락드리겠습니다.
@@ -164,107 +160,150 @@ export default function ContactForm() {
     <section className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-12 sm:px-8">
       <div className="eyebrow">CONTACT</div>
       <h2 className="m-0 mb-8 break-keep text-[26px] font-semibold tracking-[-0.02em] text-ink sm:text-[30px]">
-        상담 요청
+        문의하기
       </h2>
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3 text-[14px] font-semibold text-ink">문의 유형</div>
-        <div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
-          {CONTACT_TYPES.map((t) => {
-            const active = t === type;
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setType(t)}
-                className="cursor-pointer rounded-md border px-[18px] py-[11px] text-center text-[14.5px] transition-colors"
-                style={{
-                  fontWeight: active ? 600 : 500,
-                  borderColor: active ? "#6EA921" : "rgba(0,0,0,0.10)",
-                  color: active ? "#1A1D23" : "#52555b",
-                  background: active ? "rgba(110,169,33,0.08)" : "transparent",
-                }}
-              >
-                {t}
-              </button>
-            );
-          })}
-        </div>
+      {/* 문의 폼 — 하단 상담 진행 안내와 구별되게 박스로 감싼다 */}
+      <div className="rounded-2xl border border-black/10 bg-white p-6 shadow-[0_2px_16px_rgba(0,0,0,0.04)] sm:p-10">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3 text-[14px] font-semibold text-ink">
+            문의 유형 <span className="text-accent">*</span>
+          </div>
+          <div className="mb-8 grid grid-cols-3 gap-2">
+            {TYPES.map((t) => {
+              const active = t === type;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setType(t)}
+                  className="cursor-pointer rounded-md border px-[18px] py-[11px] text-center text-[14.5px] transition-colors"
+                  style={{
+                    fontWeight: active ? 600 : 500,
+                    borderColor: active ? "#6EA921" : "rgba(0,0,0,0.10)",
+                    color: active ? "#1A1D23" : "#52555b",
+                    background: active ? "rgba(110,169,33,0.08)" : "transparent",
+                  }}
+                >
+                  {t}
+                </button>
+              );
+            })}
+          </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <Field label="이름" name="name" required placeholder="홍길동" value={form.name} onChange={update("name")} />
-          <Field label="회사 / 기관명" name="company" required placeholder="○○대학교" value={form.company} onChange={update("company")} />
-          <Field label="연락처" name="phone" required type="tel" placeholder="010-0000-0000" value={form.phone} onChange={update("phone")} />
-          <Field label="이메일" name="email" required type="email" placeholder="user@example.com" value={form.email} onChange={update("email")} />
-          <Field label="관심 제품" name="product" placeholder="M-F3A PRO" value={form.product} onChange={update("product")} />
-          <Field label="설치 장소 유형" name="place" placeholder="교회 / 본당" value={form.place} onChange={update("place")} />
-          <Field label="지역" name="region" placeholder="서울" value={form.region} onChange={update("region")} />
-          <Field label="예산 범위" name="budget" placeholder="미정 / 협의" value={form.budget} onChange={update("budget")} />
-        </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <Field label="이름" name="name" required placeholder="홍길동" value={form.name} onChange={update("name")} />
+            <Field label="연락처" name="phone" required type="tel" placeholder="010-0000-0000" value={form.phone} onChange={update("phone")} />
+            <Field label="이메일" name="email" type="email" placeholder="user@example.com" value={form.email} onChange={update("email")} />
+            <Field label="제품명" name="product" placeholder="M-F3A PRO" value={form.product} onChange={update("product")} />
+          </div>
 
-        <label className="mt-6 block">
-          <span className={LABEL}>
-            문의 내용 <span className="text-accent">*</span>
-          </span>
-          <textarea
-            required
-            name="message"
-            rows={6}
-            value={form.message}
-            onChange={update("message")}
-            placeholder="설치 공간 규모, 용도, 현재 시스템 상황 등을 알려주시면 더 정확한 상담이 가능합니다."
-            className={`${FIELD} mt-2 resize-y leading-[1.6]`}
-          />
-        </label>
+          <label className="mt-5 block">
+            <span className={LABEL}>문의 내용</span>
+            <textarea
+              name="message"
+              rows={6}
+              value={form.message}
+              onChange={update("message")}
+              placeholder="문의하실 내용을 자세히 적어주시면 더 정확한 상담이 가능합니다."
+              className={`${FIELD} mt-2 resize-y leading-[1.6]`}
+            />
+          </label>
 
-        <label className="mt-6 flex cursor-pointer items-start gap-2.5">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+            <label className="flex cursor-pointer items-center gap-2.5">
+              <input
+                required
+                type="checkbox"
+                name="agreePrivacy"
+                checked={form.agreePrivacy}
+                onChange={update("agreePrivacy")}
+                className="peer sr-only"
+              />
+              {/* 체크 전: 흰 박스 + 회색 라인 (흰 체크마크는 배경과 같은 색이라 안 보임)
+                  체크 후: accent 박스 + 흰 체크마크 */}
+              <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border border-black/25 bg-white transition-colors peer-checked:border-accent peer-checked:bg-accent">
+                <i className="ph ph-check text-white" style={{ fontSize: 13 }} />
+              </span>
+              <span className="text-[14px] leading-[1.6] text-[#52555b]">
+                개인정보 수집 및 이용에 동의합니다. <span className="text-accent">(필수)</span>
+              </span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowPolicy(true)}
+              className="cursor-pointer text-[13px] font-medium text-[#6e7178] underline underline-offset-2 transition-colors hover:text-accent"
+            >
+              전문 보기
+            </button>
+          </div>
+
+          {/* 허니팟 — 사람에게 보이지 않고 탭 이동도 되지 않는다 */}
           <input
-            required
-            type="checkbox"
-            name="agreePrivacy"
-            checked={form.agreePrivacy}
-            onChange={update("agreePrivacy")}
-            className="mt-[3px] h-4 w-4"
-            style={{ accentColor: "#6EA921" }}
+            type="text"
+            name="company_website"
+            value={form.company_website}
+            onChange={update("company_website")}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="absolute left-[-9999px] h-0 w-0 opacity-0"
           />
-          <span className="text-[14px] leading-[1.6] text-[#52555b]">
-            개인정보 수집 및 이용에 동의합니다. 수집된 정보는 상담 응대 목적으로만 사용되며 관련
-            법령에 따라 보관·파기됩니다. <span className="text-accent">(필수)</span>
-          </span>
-        </label>
 
-        {/* 허니팟 — 사람에게 보이지 않고 탭 이동도 되지 않는다 */}
-        <input
-          type="text"
-          name="company_website"
-          value={form.company_website}
-          onChange={update("company_website")}
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-          className="absolute left-[-9999px] h-0 w-0 opacity-0"
-        />
+          {status === "error" && (
+            <p className="mt-6 flex items-center justify-center gap-2 rounded-lg border border-danger/30 bg-danger/[0.06] px-4 py-3.5 text-[14.5px] text-danger">
+              <i className="ph ph-warning-circle" style={{ fontSize: 17 }} />
+              {errorMessage}
+            </p>
+          )}
 
-        {status === "error" && (
-          <p className="mt-6 flex items-center justify-center gap-2 rounded-lg border border-danger/30 bg-danger/[0.06] px-4 py-3.5 text-[14.5px] text-danger">
-            <i className="ph ph-warning-circle" style={{ fontSize: 17 }} />
-            {errorMessage}
-          </p>
-        )}
+          <div className="mt-8 flex justify-center">
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className="inline-flex w-full max-w-[420px] cursor-pointer items-center justify-center gap-2 rounded-lg border-none bg-accent py-[17px] text-[17px] font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {status === "submitting" ? "보내는 중…" : "문의 보내기"}
+              {status !== "submitting" && (
+                <i className="ph ph-paper-plane-tilt" style={{ fontSize: 18 }} />
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
 
-        <div className="mt-8 flex justify-center">
-          <button
-            type="submit"
-            disabled={status === "submitting"}
-            className="inline-flex w-full max-w-[420px] cursor-pointer items-center justify-center gap-2 rounded-lg border-none bg-accent py-[17px] text-[17px] font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+      {/* 개인정보 처리방침 전문 모달 */}
+      {showPolicy && (
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setShowPolicy(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="개인정보 수집 및 이용 동의"
+        >
+          <div
+            className="flex max-h-[82vh] w-full max-w-[720px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            {status === "submitting" ? "보내는 중…" : "상담 요청 보내기"}
-            {status !== "submitting" && (
-              <i className="ph ph-paper-plane-tilt" style={{ fontSize: 18 }} />
-            )}
-          </button>
+            <div className="flex flex-shrink-0 items-center justify-between border-b border-black/10 px-6 py-4">
+              <h3 className="m-0 text-[16px] font-semibold text-ink">
+                개인정보 수집 및 이용 동의
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowPolicy(false)}
+                aria-label="닫기"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[#6e7178] transition-colors hover:bg-black/[0.05]"
+              >
+                <i className="ph ph-x" style={{ fontSize: 18 }} />
+              </button>
+            </div>
+            <div className="overflow-y-auto whitespace-pre-line break-keep px-6 py-5 text-[13px] leading-[1.7] text-[#4a4d52]">
+              {PRIVACY_POLICY}
+            </div>
+          </div>
         </div>
-      </form>
+      )}
 
       {/* 상담 진행 안내 */}
       <div className="mt-20">

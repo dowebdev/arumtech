@@ -69,9 +69,18 @@ export interface Accessory {
 }
 
 /** 사양표 위의 특징 블록 (Dome Tweeters, Integrated DSP, EASE® Ready …) */
+export interface FeatureImage {
+  src: string;
+  w?: number;
+  h?: number;
+}
+
 export interface Feature {
   title: string;
   body: string;
+  images?: FeatureImage[];
+  /** 특징 본문 아래에 한 줄로 나란히 넣는 보조 이미지들 */
+  rowImages?: string[];
 }
 
 /** 상세 페이지 하단 References 항목. */
@@ -122,12 +131,31 @@ export interface Product {
   ctaCaption?: string;
   /** 하단 DIAGRAM 섹션 이미지 (원본의 도해·회전 GIF) */
   diagram?: string[];
+  /** DIAGRAM 섹션: 라벨이 붙은 3-up 도면 그리드 */
+  diagramGrid?: { image: string; label: string }[];
+  /** DIAGRAM 섹션 하단 전폭 이미지 (설치 방식 등) */
+  diagramFooter?: string;
+  /** ACCESSORIES 이미지 세로 높이를 px 단위로 통일한다 (미설정 시 원본 비율). */
+  accessoryImageHeight?: number;
   /** 하단 이미지 슬라이더 (원본의 owl carousel) */
   slider?: string[];
   /** 슬라이더 위 제목. 원본에 제목이 없는 페이지도 있어 선택 항목이다. */
   sliderTitle?: string;
   /** 하단 동영상 (YouTube ID) */
   videoId?: string;
+  /** 소개(intro) 바로 아래에 넣는 유튜브 영상 ID. 하단 videoId 와 별개. */
+  introVideoId?: string;
+  /** FEATURES 섹션 바로 위에 넣는 전폭 이미지 (원본의 아이콘 배너 등). */
+  featuresTopImage?: string;
+  /** FEATURES 와 Specifications 사이에 넣는 제품 슬라이더 (예: "Products of the 15'' Series"). */
+  productsSlider?: string[];
+  productsSliderTitle?: string;
+  /** ACCESSORIES 를 카드 대신 전폭 이미지 1장으로 보여줄 때 사용. */
+  accessoriesImage?: string;
+  /** true 면 ACCESSORIES 를 하단이 아니라 Specifications 위에 렌더한다. */
+  accessoriesBeforeSpec?: boolean;
+  /** 히어로 라인 뱃지 옆에 표시할 상태 라벨 (예: "단종모델"). */
+  statusLabel?: string;
   /** 하단 DOWNLOAD 버튼. file 이 없으면 아직 파일을 확보하지 못한 항목이다. */
   downloadLinks?: { label: string; file?: string }[];
   /** 원본 페이지 URL — 대조 검증에 쓴다. */
@@ -513,6 +541,7 @@ export const products: Product[] = [
     tags: ["교회", "강당", "라인어레이"],
     keySpecs: [
       { l: "Max. SPL (1m)", v: "128 dB" },
+      { l: "Weight", v: "8 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/MF3A",
     // 원본 하단 구성: DIAGRAM → PICTURE → 동영상 → DOWNLOAD
@@ -529,12 +558,12 @@ export const products: Product[] = [
       "/images/arumtech/thumbnail/20200630/2127d62ed5867.jpg",
     ],
     videoId: "P-sJVso5lSQ",
-    // 원본 DOWNLOAD 4개. 파일 미확보 → 전부 준비중으로 표시된다.
+    // 원본 DOWNLOAD 4개.
     downloadLinks: [
-      { label: "M-F3A Brochure" },
-      { label: "M-F3A 시방서" },
-      { label: "M-F3A 도면" },
-      { label: "GLL Library" },
+      { label: "M-F3A Brochure", file: "M-F3A-brochure.pdf" },
+      { label: "M-F3A 시방서", file: "M-F3A_Array_System_Specification.hwp" },
+      { label: "M-F3A 도면", file: "se_M-F3A.dwg" },
+      { label: "GLL Library", file: "se-M-F3A-v1.60.gll_-1.zip" },
     ],
     // 대표 이미지는 파일 하단 PRODUCT_IMAGES 맵에서 지정한다.
     // 원본의 "Small size, high SPL" ~ SPECIFICATIONS 직전 구간
@@ -542,18 +571,25 @@ export const products: Product[] = [
       {
         title: "Small size, high SPL",
         body: "The M-F3A features small size, same front size as an A4 paper and a weight of only 8kg. Still, one unit of this compact array delivers 123dB SPL max continuously (128dB peak). Advanced cooling and venting measures keep power compression at a minimum.",
+        images: [{ src: "/images/products/m-f3a-w/Small-size-high-SPL.png", w: 246, h: 272 }],
       },
       {
         title: "Plug and play",
         body: "The M-F3A is designed to perfect sound for plug and play. Built in high class SMPS technology, two channel class-D amplifier together with proprietary DSP- filtering and limiting, relives you from head aches which and how settings should be used",
+        images: [{ src: "/images/products/m-f3a-w/Plug-and-play.png", w: 323, h: 354 }],
       },
       {
         title: "Line source",
         body: "Each unit is already a line array in itself with very wide horizontal and precise controlled vertical dispersion.",
+        images: [
+          { src: "/images/products/m-f3a-w/Line-source01.png", w: 355, h: 268 },
+          { src: "/images/products/m-f3a-w/Line-source02.png", w: 355, h: 268 },
+        ],
       },
       {
         title: "Scalable",
         body: "Because of its compact array design from the ground up, M-F3A can be scaled for a great variety of uses and venues. From single wall mounting use up to a 4.8m long array, delivering a continuous max SPL of 135dB and exceptional directivity.",
+        images: [{ src: "/images/products/m-f3a-w/Scalable.png", w: 114, h: 296 }],
       },
     ],
     specIntro: [
@@ -598,13 +634,13 @@ export const products: Product[] = [
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/125",
     accessories: [
-      { title: "M-F3A UB", desc: "The U-Bracket allows users to attach up to two M-F3A PRO units when pole mounted on any of our subwoofers via an M20 thread." },
-      { title: "M-F3A UB", desc: "M20 Pole Support to pole mount an M-F3A or M-F3A PRO on any subwoofer." },
-      { title: "M-F3A SFI S12 / M-F3AW SFI S12", desc: "Stacking frame for ground stacking M-F3A PRO cabinets on either S12 PRO, SUB 112BR or SUB 210BP subwoofers, also available in white." },
-      { title: "M-F3A BF / M-F3AW BF", desc: "Bumper frame for flying up to 16 M-F3A or M-F3A PRO, also available in white" },
-      { title: "M-F3A FS FB / M-F3A FS BFW", desc: "Multi Purpose Rigging Frame for rigging of different combinations of M-F3A and M-F3A FS, also available in white." },
-      { title: "M-F3A FA34 / M-F3A FA 34 W", desc: "3 to 4 point adapter for rigging M-F3A FS and M-F3A (or M-F3A PRO), also available in white." },
-      { title: "M-F3A S12 PRO FC", desc: "Flight Case for four M-F3A or M-F3A PRO." },
+      { title: "M-F3A UB", desc: "The U-Bracket allows users to attach up to two M-F3A PRO units when pole mounted on any of our subwoofers via an M20 thread.", image: "/images/products/m-line-accessory/1-m-f3a-ub.png" },
+      { title: "M-F3 SPS20", desc: "M20 Pole Support to pole mount an M-F3A or M-F3A PRO on any subwoofer.", image: "/images/products/m-line-accessory/2-m-f3-sps20.png" },
+      { title: "M-F3A SFI S12", desc: "Stacking frame for ground stacking M-F3A PRO cabinets on either S12 PRO, SUB 112BR or SUB 210BP subwoofers, also available in white.", image: "/images/products/m-line-accessory/3-m-f3a-sfi-s12.png" },
+      { title: "M-F3A BF", desc: "Bumper frame for flying up to 16 M-F3A or M-F3A PRO, also available in white", image: "/images/products/m-line-accessory/4-m-f3a-bf.png" },
+      { title: "M-F3 FS FB", desc: "Multi Purpose Rigging Frame for rigging of different combinations of M-F3A and M-F3A FS, also available in white.", image: "/images/products/m-line-accessory/5-m-f3-fs-fb.png" },
+      { title: "M-F3A 34", desc: "3 to 4 point adapter for rigging M-F3A FS and M-F3A (or M-F3A PRO), also available in white.", image: "/images/products/m-line-accessory/6-m-f3a-34.png" },
+      { title: "M-F3 S12 PRO FC", desc: "Flight Case for four M-F3A or M-F3A PRO.", image: "/images/products/m-line-accessory/7-m-f3-s12-pro-fc.png" },
     ],
   },
   {
@@ -618,6 +654,62 @@ export const products: Product[] = [
     tags: ["강당", "교회", "라인어레이"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/MF3",
+    tagline: {
+      headline: "Small Size, High SPL",
+      sub: "2.1 Active Array system",
+    },
+    intro: {
+      title: "Small Size, High SPL 2.1 Active Array system",
+      sections: [
+        {
+          body: 'M-F3 is a compact and modular active all-in one array system which is composed of a double 10" active sub, a four-channel amplifier & single processor and two passive full range speakers. Although being of small size, this system provides high power output by adopting line array principles. Single speaker can be used independently to support the whole system and a combination of the speakers can also be used as a line array system. With built-in DSP, Feedback destroy switch, frequency knob and also high shelf knob, the amplifier has greatly facilitated the system\'s ability to conduct tuning and feedback suppression in complex environments.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Small Size, High SPL",
+        body: "The speaker matches A4 paper dimensions and weighs only 8 kg. A single unit delivers 119 dB continuous SPL and 126 dB peak SPL, while advanced cooling keeps power compression at a minimum. Paired with the M-F3 SUB, it forms a compact 2.1 system.",
+        images: [{ src: "/images/products/m-f3/driver.jpeg", w: 300, h: 300 }],
+      },
+      {
+        title: "Amplifier & Signal Processor",
+        body: "With built-in DSP, feedback destroy and high shelf filter, the Class-D amplifier has the ability to conduct tuning and feedback suppression in complex environments.",
+      },
+      {
+        title: "Line Source",
+        body: "Each unit functions as its own line array with wide horizontal dispersion and precisely controlled vertical coverage.",
+      },
+      {
+        title: "Versatile Mounting",
+        body: "The lightweight design with 14 rigging points and a supporting base enables flying, wall-mounting, or ground-stacking configurations.",
+      },
+    ],
+    diagramGrid: [
+      { image: "/images/products/m-f3/diagram-amp.gif", label: "M-F3 AMP" },
+      { image: "/images/products/m-f3/diagram-sat.gif", label: "M-F3 SAT" },
+      { image: "/images/products/m-f3/diagram-sub.gif", label: "M-F3 SUB" },
+    ],
+    diagramFooter: "/images/products/m-f3/mounting.jpg",
+    accessories: [
+      { title: '3/8"Adaptor', desc: "", image: "/images/products/m-f3/acc/1-adaptor.gif" },
+      { title: "SPS-20", desc: "", image: "/images/products/m-f3/acc/2-sps20.gif" },
+      { title: "M-F3 LC", desc: "", image: "/images/products/m-f3/acc/3-m-f3-lc.gif" },
+      { title: "SMB", desc: "", image: "/images/products/m-f3/acc/4-smb.gif" },
+      { title: "CM", desc: "", image: "/images/products/m-f3/acc/5-cm.gif" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/m-f3/amp.jpg",
+      "/images/products/m-f3/sub.jpg",
+      "/images/products/m-f3/sat.jpg",
+      "/images/products/m-f3/main.jpg",
+    ],
+    downloadLinks: [
+      { label: "M-F3 User's Manual", file: "/files/M-F3/M-F3_Users_Manual.pdf" },
+      { label: "M-F3 시방서", file: "/files/M-F3/M-F3_Array_System_Specification.hwp" },
+      { label: "M-F3 dwg", file: "/files/M-F3/M-F3.dwg" },
+    ],
     specColumns: ["M-F3"],
     specGroups: [
       {
@@ -685,6 +777,45 @@ export const products: Product[] = [
     tags: ["강당", "공연장", "서브우퍼"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/S12PRO",
+    tagline: {
+      headline: "A compact and functional ground support for the M-Line",
+    },
+    intro: {
+      title: "A Compact and Functional Ground Support for the M-Line",
+      sections: [
+        {
+          body: 'The S12 PRO is a compact active subwoofer designed especially for the M-Line systems. It is composed by a single 12" driver in a bassreflex configuration, powered by an 800 W Class-D amplifier. Its efficient design and compact size guarantees flexible placement in all kinds of environments. In addition, a two-point SE rigging system allows for safe and easy stacking. The unit contains a newly designed 800 W Class-D power amplifier and is equipped with 24-bit/48 kHz DSP.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Built-in power amplifier & DSP",
+        body: "Each S12 PRO subwoofer is equipped with an 800W class-D power amplifier with switching-mode power supply for minimum weight and maximum flexibility anywhere in the world. Additionally to that our 24bit/48kHz DSP processor provides signal filtering and ensures maximum driver protection.",
+        images: [{ src: "/images/products/s12-pro/feat-amp-dsp.png" }],
+      },
+      {
+        title: "DSP Presets",
+        body: "Integrated presets help to quickly load different system setups to be used with various M-F3A and M-F3A Pro configurations. Setting up an end-fire or cardioid setup e.g. can be done by choosing dedicated factory presets.",
+        images: [{ src: "/images/products/s12-pro/feat-dsp-presets.png" }],
+      },
+      {
+        title: "Integrated Rigging",
+        body: "S12 PRO subwoofers are equipped with two-point SE stacking system that compromises 2 pieces of slide & lock mechanisms to connect two stacked subwoofers to each other. The same system is used to connect optional M-F3A SF stacking frame.",
+        images: [{ src: "/images/products/s12-pro/feat-rigging.jpg" }],
+      },
+      {
+        title: "Cardioid subwoofer setups",
+        body: "Due to the intelligent stacking design, it is possible to operate our S12 subwoofers as a cardioid setup without any problems.",
+        images: [{ src: "/images/products/s12-pro/feat-cardioid.png" }],
+      },
+      {
+        title: "EASE® Ready",
+        body: "AFMG® EASE® and EASE® Focus 3 GLL are available for the whole M-F3A PRO family. This allows users to simulate and calculate various parameters such as audience coverage, SPL, frequency response, splay angles, delay times and more.",
+        images: [{ src: "/images/products/s12-pro/feat-ease.jpg" }],
+      },
+    ],
+    specImage: "/images/products/s12-pro/spec.png",
     specColumns: ["S12 PRO / S12 PRO W"],
     specGroups: [
       {
@@ -712,6 +843,21 @@ export const products: Product[] = [
         ],
       },
     ],
+    accessoryImageHeight: 270,
+    accessories: [
+      { title: "", desc: "", image: "/images/products/s12-pro/acc1.png" },
+      { title: "", desc: "", image: "/images/products/s12-pro/acc2.png" },
+      { title: "", desc: "", image: "/images/products/s12-pro/acc3.png" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/s12-pro/picture.png"],
+    downloadLinks: [
+      { label: "S12 PRO Data Sheet", file: "/files/s12-pro/S12_PRO_Data_Sheet.pdf" },
+      { label: "M-Line Brochure", file: "/files/s12-pro/M-Line_Brochure.pdf" },
+      { label: "M-Line Manual", file: "/files/s12-pro/M-Line_Manual.pdf" },
+      { label: "S12 PRO 시방서", file: "/files/s12-pro/S12_PRO_Specification.hwp" },
+      { label: "S12 PRO 도면", file: "/files/s12-pro/se_M-F3A_S12_PRO.dwg" },
+    ],
   },
   {
     slug: "s15-pro",
@@ -724,6 +870,45 @@ export const products: Product[] = [
     tags: ["강당", "공연장", "서브우퍼"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/S15PRO",
+    tagline: {
+      headline: "A louder and reliable ground support for the M-Line",
+    },
+    intro: {
+      title: "A Louder and Reliable Ground Support for the M-Line",
+      sections: [
+        {
+          body: 'The S15 PRO is a compact active subwoofer designed especially for the M-Line systems. It is composed by a single 15" driver in a bassreflex configuration, powered by an 800 W Class-D amplifier. Its efficient design and compact size guarantees flexible placement in all kinds of environments. In addition, a two-point SE rigging system allows for safe and easy stacking. The unit contains a newly designed 800 W Class-D power amplifier and is equipped with 24-bit/48 kHz DSP. By using the LCD screen and rotary encoder, users can control various system parameters such as delay, EQ, filters and more.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Built-in power amplifier & DSP",
+        body: "Each S15 PRO subwoofer is equipped with an 800W class-D power amplifier with switching-mode power supply for minimum weight and maximum flexibility anywhere in the world. Additionally to that our 24bit/48kHz DSP processor provides signal filtering and ensures maximum driver protection.",
+        images: [{ src: "/images/products/s12-pro/feat-amp-dsp.png" }],
+      },
+      {
+        title: "DSP Presets",
+        body: "Integrated presets help to quickly load different system setups to be used with various M-F3A and M-F3A Pro configurations. Setting up an end-fire or cardioid setup e.g. can be done by choosing dedicated factory presets.",
+        images: [{ src: "/images/products/s12-pro/feat-dsp-presets.png" }],
+      },
+      {
+        title: "Integrated Rigging",
+        body: "S15 PRO subwoofers are equipped with two-point SE stacking system that compromises 2 pieces of slide & lock mechanisms to connect two stacked subwoofers to each other. The same system is used to connect optional M-F3A SF stacking frame.",
+        images: [{ src: "/images/products/s12-pro/feat-rigging.jpg" }],
+      },
+      {
+        title: "Cardioid subwoofer setups",
+        body: "Due to the intelligent stacking design, it is possible to operate our S15 subwoofers as a cardioid setup without any problems.",
+        images: [{ src: "/images/products/s12-pro/feat-cardioid.png" }],
+      },
+      {
+        title: "EASE® Ready",
+        body: "AFMG® EASE® and EASE® Focus 3 GLL are available for the whole M-F3A PRO family. This allows users to simulate and calculate various parameters such as audience coverage, SPL, frequency response, splay angles, delay times and more.",
+        images: [{ src: "/images/products/s12-pro/feat-ease.jpg" }],
+      },
+    ],
+    specImage: "/images/products/s15-pro/spec.png",
     specColumns: ["S15 PRO / S15 PRO W"],
     specGroups: [
       {
@@ -750,6 +935,21 @@ export const products: Product[] = [
           { k: "Weight", v: ["32 kg"] },
         ],
       },
+    ],
+    accessoryImageHeight: 270,
+    accessories: [
+      { title: "", desc: "", image: "/images/products/s15-pro/acc1.png" },
+      { title: "", desc: "", image: "/images/products/s15-pro/acc2.png" },
+      { title: "", desc: "", image: "/images/products/s15-pro/acc3.png" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/s15-pro/picture.png"],
+    downloadLinks: [
+      { label: "M-Line Data Sheet" },
+      { label: "M-Line Brochure", file: "/files/s15-pro/M-Line_Brochure.pdf" },
+      { label: "M-Line Manual", file: "/files/s15-pro/M-Line_Manual.pdf" },
+      { label: "S15 PRO 시방서", file: "/files/s15-pro/S15_PRO_Specification.hwp" },
+      { label: "S15 PRO 도면", file: "/files/s15-pro/se_M-F3A_S15_PRO.dwg" },
     ],
   },
   {
@@ -801,6 +1001,37 @@ export const products: Product[] = [
       { l: "Net weight", v: "3.6 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/138",
+    tagline: {
+      headline: "Overcome the limitations of space",
+      sub: "With the L 35, line arrays can also be set up in low-ceilinged rooms.",
+    },
+    intro: {
+      title: "Overcome the limitations of space",
+      sections: [
+        {
+          body: "With the L 35, line arrays can also be set up in low-ceilinged rooms. Unobtrusive! And still sounds like a rocket launch. The L 35 is loud. Especially when its lightweight construction is taken into account: The 2-way speaker weighs an astounding 3.6 kg. Yet, the 2-way speaker is as small as the mission description in the flight manual. And all that with a weight of just 3.6 kg! At the same time, this system boasts an incredible 129 dB max. SPL. This is a respectable figure even for significantly bigger systems. L 35 means tangible savings: More space in the shuttle. Weightless assembly. Save time while rigging.",
+        },
+      ],
+    },
+    introVideoId: "rttirimgZR4",
+    features: [
+      {
+        title: "Internal values",
+        body: "Ultra-compact line array with a robust front panel made of die-cast aluminium. Two powerful 3.5-inch neodymium drivers. 1-inch compression driver. A solo device providing a 123 dB sound pressure – with excellent sound reproduction.",
+      },
+      {
+        title: "Quick to assemble",
+        body: 'Save valuable time! Despite its two 3.5" woofers, its 1" compression driver and the rig, the L 35 line array weighs only an astounding 3,6 kg. Being a small size and a flyweight will save space in transport and protect your back. Build quickly with fewer staff!',
+      },
+      {
+        title: "Light-weight",
+        body: "3,6 kg in total weight simply means that you will never again need to worry about the statics. That many L 35 s already grind on the floor before they would be too heavy for a rig.",
+      },
+      {
+        title: "Sparkly and new for the outdoors",
+        body: "The L 35 line array is available in black and white. The Outdoor versions are also protected with a grille. Thus, the speakers and housing are securely covered. If required, covers can be fitted for cable connections as well.",
+      },
+    ],
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -848,6 +1079,29 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with IA 402D amplifier and 2L35 preset ** Whole space, 1W / 1m, on axis *** According to EIA-426B Standard (based on RMS Voltage) **** For 4 units measured with IA 402D amplifier and 4L35 preset + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessories: [
+      { title: "L 35 BF", desc: "", image: "/images/products/l-35/acc-bf.png" },
+      { title: "L 35 UB", desc: "", image: "/images/products/l-35/acc-ub.png" },
+      { title: "SPS 20", desc: "", image: "/images/products/l-35/acc-sps20.png" },
+    ],
+    slider: [
+      "/images/products/l-35/slide1.png",
+      "/images/products/l-35/slide2.png",
+      "/images/products/l-35/slide3.png",
+      "/images/products/l-35/slide4.png",
+    ],
+    downloadLinks: [
+      { label: "L-Line Brochure", file: "/files/l-35/SE-AUDIOTECHNIK_L-Line_brochure_v2.7.pdf" },
+      { label: "L-35 / IA402D Manual", file: "/files/l-35/L35_IA402D_ApplicationGuide_v210316_EN.pdf" },
+      { label: "LA-804D Data Sheet", file: "/files/l-35/SE-LA804D-SpecSheet-v1.0p.pdf" },
+      { label: "L-35 Data Sheet", file: "/files/l-35/L35-SpecSheet_1.pdf" },
+      { label: "L-35 FS Data Sheet", file: "/files/l-35/L35FS-SpecSheet.pdf" },
+      { label: "L-35 시방서", file: "/files/l-35/L-35_Specification.hwp" },
+      { label: "L-65 시방서", file: "/files/l-35/L-65_Specification.hwp" },
+      { label: "LA-804D 시방서", file: "/files/l-35/LA-804D_Specification.hwp" },
+      { label: "L-35 도면", file: "/files/l-35/se_L_35_R.dwg" },
+    ],
   },
   {
     slug: "l-35-fs",
@@ -863,6 +1117,28 @@ export const products: Product[] = [
       { l: "Net weight", v: "9,4 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/139",
+    tagline: {
+      headline: "The smart bass extension for the L 35",
+      sub: "Not on the ground, but immediately suspended along the array.",
+    },
+    intro: {
+      title: "The smart bass extension for the L 35",
+      sections: [
+        {
+          body: 'L 35 FS is the smart bass extension for the L 35 – not on the ground, but immediately suspended along the array. At only 8 kg, the ultra-compact Flysub weighs as little as a Champions League trophy. Its impact should however never be underestimated: This tiny unit generates 128 dB SPL for a glorious round, powerful sound. The standard housing features an 8" driver. Upwards of 47 Hz, you\'ll be sure to hear it. With its mini size, the L 35 FS is suitable for Light and Sound Rental companies, professional bands and fixed installations with high level requirements. For planning professionals, it is ideal if you need something to be loud in a small space, but where visual discretion is required.',
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Space saving compact design",
+        body: 'The L 35 Flysub is the most compact, flyable subwoofer. With its 8" woofer, it weighs only 8 kg. In terms of size, it resembles a small overnight bag. This makes it extremely transportable. A dozen subwoofers like this will fit easily into any small car!',
+      },
+      {
+        title: "Outdoor version",
+        body: "The L 35 FS subwoofer is available in black and white and as an outdoor version, just like the entire L-Line. Outdoor is equipped with a stable grille. Thus, the speakers and housing are securely covered and protected.",
+      },
+    ],
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -905,6 +1181,25 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with IA 402D amplifier and L35FS+SAT preset ** Whole space, 1W / 1m, on axis *** According to EIA-426B Standard (based on RMS Voltage) **** For 2 flysubs measured with IA 402D amplifier and L35FS+SAT preset + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessories: [
+      {
+        title: "L 35 BF",
+        desc: "The L 35 BF universal bumper frame can be used for hanging, ground stacking or together with a pole.",
+        image: "/images/products/l-35-fs/acc-bf.png",
+      },
+    ],
+    slider: [
+      "/images/products/l-35-fs/slide1.png",
+      "/images/products/l-35-fs/slide2.png",
+      "/images/products/l-35-fs/slide3.png",
+      "/images/products/l-35-fs/slide4.png",
+    ],
+    downloadLinks: [
+      { label: "L-Line Brochure", file: "/files/l-35-fs/L-Line_Brochure.pdf" },
+      { label: "L-Line Application Guide", file: "/files/l-35-fs/L35_IA402D_ApplicationGuide_v210316_EN.pdf" },
+      { label: "L 35 FS dwg", file: "/files/l-35-fs/se_L_35FS_R.dwg" },
+    ],
   },
   {
     slug: "l-65",
@@ -920,6 +1215,62 @@ export const products: Product[] = [
       { l: "Net weight", v: "22.7 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/140",
+    tagline: {
+      headline: "Ground Control to Major Tom",
+      sub: "With the L 65, you'll make a safe landing!",
+    },
+    intro: {
+      title: "Ground Control to Major Tom",
+      sections: [
+        {
+          body: "Ground Control to Major Tom: With the L 65, you'll make a safe landing! Our passive 3-way line array is a reliable all-rounder for light and sound rental companies, professional bands and fixed installations with high level requirements. With an SPL of 137 dB at a weight of less than 23 kg, the sound is galactic, without tearing black holes in the cash register.",
+        },
+        {
+          body: "The rigging is easy – because of its simple suspension and low weight in relation to its performance. Thus you can dock anywhere quickly.",
+        },
+        {
+          body: "For thunderous sound like that of a rocket engine, SE Audiotechnik uses a passive 3-way system in the L 65 with a value for money that is out of this world.",
+        },
+        {
+          body: "The three drivers provide for an assertive, neutral sound through the entire frequency range – the ideal launch pad for exciting space manoeuvres. Thanks to the passive construction, up to three L 65 can be used on a 4Ω channel power amplifier. This is a massive saving on amplifiers!",
+        },
+        {
+          body: "We developed the L 65 in Germany and manufacture them in our own factory. Therefore, all components are matched to one another precisely and deliver maximum sound pressure with minimal distortion.",
+        },
+        {
+          body: "Since we do not outsource our production, we also retain full quality control. Therefore, our clients get more for less.",
+        },
+        {
+          body: "With their tough outer skin, low weight and fast assembly and disassembly, the L 65 is the ideal tour companion. It is not cumbersome to transport and represents a wonderful starting point in the mix.",
+        },
+        {
+          body: "Its homogeneous sound characteristics can perfectly combine with other elements of the L-Line. And treat yourself to the flying bass L 65 FS to round it off.",
+        },
+        {
+          heading: "Max. configuration:",
+          body: "1x LA 10.4D (4 ch mode) / 12x L 65 (3 pcs/ ch)",
+        },
+      ],
+    },
+    featuresTopImage: "/images/products/l-65/features-top.png",
+    features: [
+      {
+        title: "Homogeneous directivity",
+        body: "It continues beyond the horizon… The symmetrical layout generates a wonderfully homogeneous horizontal coverage!",
+      },
+      {
+        title: "Passive crossovers",
+        body: "The L 65 will save you from buying additional amplifiers: With the L 65's passive crossovers, fewer amplifier channels are required.",
+      },
+      {
+        title: "3-way",
+        body: "Optimised throughout the entire frequency range. Each driver is automatically assigned its frequency range without being overloaded.",
+      },
+      {
+        title: "Easy to combine",
+        body: "The L 65 can be easily combined with our series. It is half as tall as the L 65 FS and twice as tall as our compact L 35. This enables easy integration into existing systems.",
+      },
+    ],
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -966,6 +1317,23 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Whole space, 1W / 1m, on axis ** According to EIA-426B Standard (based on RMS Voltage) *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessories: [
+      { title: "L 65 BF", desc: "", image: "/images/products/l-65/acc-bf.png" },
+      { title: "L 65 UFB", desc: "", image: "/images/products/l-65/acc-ufb.png" },
+    ],
+    slider: [
+      "/images/products/l-65/slide1.png",
+      "/images/products/l-65/slide2.png",
+      "/images/products/l-65/slide3.png",
+      "/images/products/l-65/slide4.png",
+    ],
+    downloadLinks: [
+      { label: "L-Line Brochure", file: "/files/l-65/L-Line_Brochure.pdf" },
+      { label: "L-Line Application Guide", file: "/files/l-65/L35_IA402D_ApplicationGuide_v210316_EN.pdf" },
+      { label: "L라인 메뉴얼", file: "/files/l-65/L-Line_Manual.pdf" },
+      { label: "L 65 dwg", file: "/files/l-65/se_L_65.dwg" },
+    ],
   },
   {
     slug: "l-65-fs",
@@ -981,6 +1349,49 @@ export const products: Product[] = [
       { l: "Net weight", v: "30 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/141",
+    tagline: {
+      headline: "The brilliant flysub for every mission",
+      sub: "A slim flying subwoofer for the L 65 line array.",
+    },
+    intro: {
+      title: "The brilliant flysub for every mission",
+      sections: [
+        {
+          body: "When you have no room for floor subwoofers in front of the stage, and you need a wide dispersion, the L 65 FS is a brilliant solution. This slim flysub in the L 65 line array provides a massive boost in lofty highs and punchy and clear bass from 45 Hz upwards. This makes it suitable for light and sound rental companies, live events and fixed installations with high level requirements.",
+        },
+        {
+          body: "The powerful 15\" driver with neodymium magnet provides a stable bass foundation – thus the L 65 FS remains pleasantly light. At only 30 kg, it is easy to transport and allows for an uncomplicated assembly. Even with a two-man outdoor team and extremely low load allowances for the rigging.",
+        },
+        {
+          body: "Its compact shape, easy set-up thanks to the low weight and its sound pressure of 134 dB make the L 65 FS a reliable companion on tour. An uncomplicated 4-point rigging allows for a quick integration. Both in terms of the sound characteristics and the dimensions, it is ideal as a complement to L 65 array. Angles of up to 8° provide additional flexibility to align fly systems.",
+        },
+        {
+          body: 'Thanks to its versatile mounting options and balanced sound characteristics, the L 65 FS is also a sophisticated and aesthetic solution for installations. With fixed installations, its compact size and minimal weight come to the fore – and it also sounds much "heavier" than it is!',
+        },
+        {
+          body: "Furthermore, in theatres where seating is close to the stage, you will appreciate flying this lightweight, powerful bass. Wherever the journey takes you, this flysub is the brilliant solution for every mission.",
+        },
+      ],
+    },
+    featuresTopImage: "/images/products/l-65-fs/features-top.png",
+    features: [
+      {
+        title: "Punch and dynamics",
+        body: 'The powerful 15" neodymium speakers in the L 65 FS ensures punchy and dynamic sound from 45 Hz upwards.',
+      },
+      {
+        title: "Mega Sound – Mini Weight",
+        body: 'Despite its performance, the L 65 FS is an absolute lightweight. Thanks to the powerful 15" neodymium woofer, it weighs only 30 kg. On many missions, this will be a deciding factor.',
+      },
+      {
+        title: "Perfect in terms of combinations",
+        body: "The L 65 FS is twice as tall as the L 65 and four times as tall as our compact L 35. This allows you to easily integrate it into existing systems.",
+      },
+      {
+        title: "Safely protected when outdoors",
+        body: "The L 65 FS is available in black and white. In the outdoor version, a grille safely covers speakers and housing. Additionally you can install rear panels.",
+      },
+    ],
     specGroups: [
       {
         rows: [
@@ -1024,6 +1435,23 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with a 6th-order Butterworth low-pass filter applied at 130 Hz ** Whole space, 1W / 1m, on axis. Measured with Pink Noise from 50 Hz to 160 Hz *** According to EIA-426B Standard (based on RMS Voltage) **** Max Peak SPL = Max RMS SPL + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessories: [
+      { title: "L 65 BF", desc: "", image: "/images/products/l-65/acc-bf.png" },
+      { title: "L 65 UFB", desc: "", image: "/images/products/l-65/acc-ufb.png" },
+    ],
+    slider: [
+      "/images/products/l-65-fs/slide1.png",
+      "/images/products/l-65-fs/slide2.png",
+      "/images/products/l-65-fs/slide3.png",
+      "/images/products/l-65-fs/slide4.png",
+    ],
+    downloadLinks: [
+      { label: "L-Line Brochure", file: "/files/l-65-fs/L-Line_Brochure.pdf" },
+      { label: "L-Line Application Guide", file: "/files/l-65-fs/L35_IA402D_ApplicationGuide_v210316_EN.pdf" },
+      { label: "EU declaration of conformity", file: "/files/l-65-fs/EU_Declaration_of_Conformity.pdf" },
+      { label: "L 65 FS dwg", file: "/files/l-65-fs/se_L_65_FS_R.dwg" },
+    ],
   },
   {
     slug: "b-15",
@@ -1036,6 +1464,39 @@ export const products: Product[] = [
     tags: ["강당", "렌탈", "서브우퍼"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/112",
+    tagline: {
+      headline: "Multipurpose | Low Distortion | Easy Handling",
+      sub: "B-15 / B-15A / B-15A FS",
+    },
+    intro: {
+      title: "Multipurpose | Low Distortion | Easy Handling",
+      sections: [
+        {
+          body: "The B 15 comprises a single 15″ driver mounted in a vented box, with a sophisticated adaptive port that optimises the airflow and improves its response. This technology, developed through exhaustive research, enables a lower cut-off frequency while having smaller volume. This translates into deeper and dynamic bass from a compact enclosure. In addition to the speakON® connectors on the back, the subwoofer includes two additional located on the front. This guarantees wiring flexibility and ease of use, reducing setup time even in large configurations. Finally, the set of accessories specially designed for the B-Line, makes their setup and transportation easier, safer and more comfortable.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Built-in Amplifier",
+        body: "The great advantage of powered speakers is the built in amplifier. So there is no need for an external device – the internal amp is optimally matched to the woofer! In the B 15A and the B 15A FS, an 800 W (peak) Class-D amplifier is at work. Integrated DSP presets allow loading of preset system setups that are optimally matched to SE Audiotechnik products. Thus, the entire system is quickly and easily set up and perfectly adjusted. The directivity can be effortlessly changed in a flash from normal to cardioid or end-fire configuration via the large display and the push/rotary controller. Parameters such as EQ, Delay, Sensitivity and Phase can be adjusted and stored in your own User Presets.",
+        images: [{ src: "/images/products/b-15/feat1.png" }],
+      },
+      {
+        title: "Flying Subwoofer Configuration",
+        body: "If there is no room for floor subwoofers in front of or under the stage, but low frequencies need to be reproduced cleanly and powerfully, then you have to fly the sub. That's why we've given the B 15A a flying harness, making the B 15A FS the most versatile model of the B-Line. Like the B 15A, it can be operated on the ground or in a stack, but can also be flown by means of a quick and easy-to-attach flying grid. From 34 Hz upwards, the flying subwoofer provides support from lofty heights with rich bass, if required. The B 15A FS delivers 133 dB max SPL and is impressively powered by an 800 W (peak) Class-D amp with a wide range of adjustment options.",
+        images: [{ src: "/images/products/b-15/feat2.png" }],
+      },
+    ],
+    productsSliderTitle: "Products of the 15'' - Series",
+    productsSlider: [
+      "/images/products/b-15/slide1.png",
+      "/images/products/b-15/slide2.png",
+      "/images/products/b-15/slide3.png",
+      "/images/products/b-15/slide4.png",
+    ],
+    specImage: "/images/products/b-15/spec.png",
+    specColumns: ["B 15", "B 15A", "B 15A FS"],
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -1081,6 +1542,18 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with a 6th-order Butterworth low-pass filter applied at 130 Hz ** Half space, 1W / 1m, on axis **** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    accessoriesImage: "/images/products/b-15/accessories.png",
+    downloadLinks: [
+      { label: "B-Line Data Sheet", file: "/files/b-15/B-Line_data-sheet.pdf" },
+      { label: "B-Line Brochure", file: "/files/b-15/B_line_EN_WEB_V2.pdf" },
+      { label: "B-15 시방서", file: "/files/b-15/B-15_Specification.hwp" },
+      { label: "B-Line User Manual", file: "/files/b-15/B-Line_Manual_v210127_EN.pdf" },
+      { label: "EU declaration of conformity", file: "/files/b-15/CE-Declaration-General-Passive-Loudspeakers.pdf" },
+      { label: "EASE® GLL", file: "/files/b-15/se-B_15A-v1.00.gll" },
+      { label: "B 15 dwg", file: "/files/b-15/se_B_15.dwg" },
+      { label: "B 15 A dwg", file: "/files/b-15/se_B_15A.dwg" },
+      { label: "B 15 A FS dwg", file: "/files/b-15/se_B_15A_FS.dwg" },
+    ],
   },
   {
     slug: "b-18",
@@ -1093,6 +1566,27 @@ export const products: Product[] = [
     tags: ["공연장", "렌탈", "서브우퍼"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/B-18",
+    tagline: {
+      headline: "Here comes the Boom",
+      sub: "B-18 / B-18A",
+    },
+    intro: {
+      title: "Here comes the Boom",
+      sections: [
+        {
+          body: "The B 18 comprises a single 18″ driver mounted in a vented box, with a sophisticated adaptive port that optimises the airflow and improves its response. This technology, developed through exhaustive research, enables a lower cut-off frequency while having smaller volume. This translates into deeper and dynamic bass from a compact enclosure. In addition to the speakON® connectors on the back, the subwoofer includes two additional located on the front. This guarantees wiring flexibility and ease of use, reducing setup time even in large configurations. Finally, the set of accessories specially designed for the B-Line, makes their setup and transportation easier, safer and more comfortable.",
+        },
+      ],
+    },
+    featuresTopImage: "/images/products/b-18/banner.png",
+    features: [
+      {
+        title: "Built-in Amplifier",
+        body: "The great advantage of powered speakers is the built in amplifier. So there is no need for an external device – the internal amp is optimally matched to the woofer! The B 18A is driven by a mighty 1,600 W (peak) Class-D amplifier. Integrated DSP presets allow loading of preset system setups that are optimally matched to SE Audiotechnik products. Thus, the entire system is quickly and easily set up and perfectly adjusted. The directivity can be effortlessly changed in a flash from normal to cardioid or end-fire configuration via the large display and the push/rotary controller. Parameters such as EQ, Delay, Sensitivity and Phase can be adjusted and stored in your own User Presets.",
+        images: [{ src: "/images/products/b-18/feat-amp.png" }],
+      },
+    ],
+    specColumns: ["B 18", "B 18A"],
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -1139,6 +1633,22 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with a 6th-order Butterworth low-pass filter applied at 130 Hz ** Half space, 1W / 1m, on axis *** According to EIA-426B Standard (based on RMS Voltage **** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessories: [
+      { title: "B18 SFi M", desc: "", image: "/images/products/b-18/acc-sfi-m.png" },
+      { title: "B18 SFi L35", desc: "", image: "/images/products/b-18/acc-sfi-l35.png" },
+      { title: "SPS 20", desc: "", image: "/images/products/b-18/acc-sps20.png" },
+      { title: "B18 TD", desc: "", image: "/images/products/b-18/acc-td.png" },
+    ],
+    downloadLinks: [
+      { label: "B-Line Data Sheet", file: "/files/b-18/190409_SE-AUDIOTECHNIK_B-Line_data-sheet_PLS-Frankfurt_2019_CMYK.pdf" },
+      { label: "B-Line Brochure", file: "/files/b-18/SE_B-Line_Folder_EN-2.pdf" },
+      { label: "B-Line Manual", file: "/files/b-18/B-Line_Manual_v210127_EN.pdf" },
+      { label: "B-18 시방서", file: "/files/b-18/B-18_Specification.hwp" },
+      { label: "B-Line 시방서", file: "/files/b-18/B-21_Specification.hwp" },
+      { label: "B 18 A dwg", file: "/files/b-18/se_B_18A.dwg" },
+      { label: "B 18 SFi M", file: "/files/b-18/se_B_18_SFi_M.dwg" },
+    ],
   },
   {
     slug: "ic-32",
@@ -1154,6 +1664,36 @@ export const products: Product[] = [
       { l: "Net weight", v: "2 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/148",
+    tagline: {
+      headline: "Intelligent installation",
+      sub: "I-Line Column Speaker",
+    },
+    intro: {
+      title: "Intelligent installation",
+      sections: [
+        {
+          body: "The I-Line is designed for fixed installations with ambitious requirements regarding aesthetics, speech reproduction and music playback. The system comprises two different sized column speakers, an adjustable mounting bracket, a dedicated subwoofer and two system amplifiers. No matter if you want to fill a conference room, the sales area of a shop or a bar with sound – this lineup offers you freedom of choice to compose a setup which suits your needs best. All speakers are available in both black and white finishes.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Easy Mounting",
+        body: "I-Line column speakers are built to be used together with SE AUDIOTECHNIK SMB Smart Mounting Bracket. Together with this bracket a quick and intuitive speaker placement and aiming can be achieved in any installation. IC 32 is equipped with one mounting position on the center of the back panel that allows for both vertical and horizontal orientation.",
+        images: [{ src: "/images/products/ic-32/feat1.jpg" }],
+      },
+      {
+        title: "Die-cast Aluminum Body",
+        body: "The cabinet of IC 32 is made from solid die-cast aluminum for maximum rigidity and to ensure that the speakers last for years to come. Aluminum also allowed us to create an elegant form and design that will easily fit in many environments. All I-Line speakers are available in black and white color.",
+        images: [{ src: "/images/products/ic-32/feat2.png" }],
+      },
+      {
+        title: "Connectivity",
+        body: "All I-Line column speakers are equipped with Phoenix MSTB 4-pin input and link connectors for quick and easy connection. Additionally they all have built-in 2-way switch that allows users to select between two signal channels. Cost-saving, improved looks and faster installation times are the most significant benefits when used with 4-wire cables. Our IA 202D and IA 402D power amplifiers have dual-channel output to make installations easy and care-free.",
+        images: [{ src: "/images/products/ic-32/feat3.jpg" }],
+      },
+    ],
+    specImage: "/images/products/ic-32/spec.png",
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -1198,6 +1738,33 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Whole space, 1W / 1m, on axis. With dedicated IA 402D amplifier´s preset. ** According to EIA-426B Standard (based on RMS Voltage) *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessoriesBeforeSpec: true,
+    accessories: [
+      {
+        title: "SMB",
+        desc: "The SMB – Smart Mounting Bracket – was developed for uncomplicated, time-saving installation and the greatest possible flexibility in alignment. With this bracket, the speakers can be installed quickly and easily almost anywhere and at an ideal angle. The SMB is included with every I-Line speaker. An SMB mounted column speaker can be adjusted on both axes by up to ± 90° in 10° steps. Maximum load-bearing capacity: 10 kg.",
+        image: "/images/products/ic-32/acc-smb.png",
+      },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/ic-32/related1.png",
+      "/images/products/ic-32/related2.png",
+      "/images/products/ic-32/related3.png",
+      "/images/products/ic-32/related4.png",
+    ],
+    downloadLinks: [
+      { label: "IC32 Data Sheet", file: "/files/ic-32/IC-32-SpecSheet.pdf" },
+      { label: "IC34 Data Sheet", file: "/files/ic-32/IC-34-Spec.pdf" },
+      { label: "IC38 Data Sheet", file: "/files/ic-32/IC-38X_Data_Sheet.pdf" },
+      { label: "I-Line Brochure", file: "/files/ic-32/I-Line_Brochure.pdf" },
+      { label: "I-Line Manual", file: "/files/ic-32/I-Line_Manual_v210330_EN.pdf" },
+      { label: "IC32 시방서", file: "/files/ic-32/IC-32_Specification.hwp" },
+      { label: "IC34 시방서", file: "/files/ic-32/IC-34_Specification.hwp" },
+      { label: "IC32 dwg", file: "/files/ic-32/se_IC_32_20191106.dwg" },
+      { label: "IC34 dwg", file: "/files/ic-32/se_IC_34_20191106.dwg" },
+    ],
   },
   {
     slug: "ic-34",
@@ -1213,6 +1780,36 @@ export const products: Product[] = [
       { l: "Net weight", v: "4 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/IC34",
+    tagline: {
+      headline: "Intelligent installation",
+      sub: "I-Line Column Speaker",
+    },
+    intro: {
+      title: "Intelligent installation",
+      sections: [
+        {
+          body: "The I-Line is designed for fixed installations with ambitious requirements regarding aesthetics, speech reproduction and music playback. The system comprises two different sized column speakers, an adjustable mounting bracket, a dedicated subwoofer and two system amplifiers. No matter if you want to fill a conference room, the sales area of a shop or a bar with sound – this lineup offers you freedom of choice to compose a setup which suits your needs best. All speakers are available in both black and white finishes.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Easy Mounting",
+        body: "I-Line column speakers are built to be used together with SE AUDIOTECHNIK SMB Smart Mounting Bracket. Together with this bracket a quick and intuitive speaker placement and aiming can be achieved in any installation. IC 34 is equipped with one mounting position on the center of the back panel that allows for both vertical and horizontal orientation.",
+        images: [{ src: "/images/products/ic-32/feat1.jpg" }],
+      },
+      {
+        title: "Die-cast Aluminum Body",
+        body: "The cabinet of IC 34 is made from solid die-cast aluminum for maximum rigidity and to ensure that the speakers last for years to come. Aluminum also allowed us to create an elegant form and design that will easily fit in many environments. All I-Line speakers are available in black and white color.",
+        images: [{ src: "/images/products/ic-32/feat2.png" }],
+      },
+      {
+        title: "Connectivity",
+        body: "All I-Line column speakers are equipped with Phoenix MSTB 4-pin input and link connectors for quick and easy connection. Additionally they all have built-in 2-way switch that allows users to select between two signal channels. Cost-saving, improved looks and faster installation times are the most significant benefits when used with 4-wire cables. Our IA 202D and IA 402D power amplifiers have dual-channel output to make installations easy and care-free.",
+        images: [{ src: "/images/products/ic-32/feat3.jpg" }],
+      },
+    ],
+    specImage: "/images/products/ic-32/spec.png",
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -1254,6 +1851,24 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Whole space, 1W / 1m, on axis. With dedicated IA 402D amplifier´s preset. ** According to EIA-426B Standard (based on RMS Voltage) *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/ic-34/related1.png",
+      "/images/products/ic-34/related2.png",
+      "/images/products/ic-34/related3.png",
+      "/images/products/ic-34/related4.png",
+    ],
+    downloadLinks: [
+      { label: "IC32 Data Sheet", file: "/files/ic-34/IC-32-SpecSheet.pdf" },
+      { label: "IC34 Data Sheet", file: "/files/ic-34/IC-34-Spec.pdf" },
+      { label: "IC38 Data Sheet", file: "/files/ic-34/IC-38X_Data_Sheet.pdf" },
+      { label: "I-Line Brochure", file: "/files/ic-34/I-Line_Brochure.pdf" },
+      { label: "I-Line Manual", file: "/files/ic-34/I-Line_Manual_v210330_EN.pdf" },
+      { label: "IC32 시방서", file: "/files/ic-34/IC-32_Specification.hwp" },
+      { label: "IC34 시방서", file: "/files/ic-34/IC-34_Specification.hwp" },
+      { label: "IC32 dwg", file: "/files/ic-34/se_IC_32_20191106.dwg" },
+      { label: "IC34 dwg", file: "/files/ic-34/se_IC_34_20191106.dwg" },
+    ],
   },
   {
     slug: "ic-38x",
@@ -1269,6 +1884,36 @@ export const products: Product[] = [
       { l: "Net weight", v: "8.3 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/149",
+    tagline: {
+      headline: "Intelligent installation",
+      sub: "I-Line Steerable Column Array",
+    },
+    intro: {
+      title: "Intelligent installation",
+      sections: [
+        {
+          body: "The I-Line is designed for fixed installations with ambitious requirements regarding aesthetics, speech reproduction and music playback. The system comprises two different sized column speakers, an adjustable mounting bracket, a dedicated subwoofer and two system amplifiers. No matter if you want to fill a conference room, the sales area of a shop or a bar with sound – this lineup offers you freedom of choice to compose a setup which suits your needs best. All speakers are available in both black and white finishes.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Easy Mounting",
+        body: "I-Line column speakers are built to be used together with SE AUDIOTECHNIK SMB Smart Mounting Bracket. Together with this bracket a quick and intuitive speaker placement and aiming can be achieved in any installation. IC 38X is equipped with center and bottom mounting points for the SMBX bracket that allow for flexible and secure placement.",
+        images: [{ src: "/images/products/ic-32/feat1.jpg" }],
+      },
+      {
+        title: "Die-cast Aluminum Body",
+        body: "The cabinet of IC 38X is made from solid die-cast aluminum for maximum rigidity and to ensure that the speakers last for years to come. Aluminum also allowed us to create an elegant form and design that will easily fit in many environments. All I-Line speakers are available in black and white color.",
+        images: [{ src: "/images/products/ic-32/feat2.png" }],
+      },
+      {
+        title: "Connectivity",
+        body: "All I-Line column speakers are equipped with Phoenix MSTB 4-pin input and link connectors for quick and easy connection. Additionally they all have built-in 2-way switch that allows users to select between two signal channels. Cost-saving, improved looks and faster installation times are the most significant benefits when used with 4-wire cables. Our IA 202D and IA 402D power amplifiers have dual-channel output to make installations easy and care-free.",
+        images: [{ src: "/images/products/ic-32/feat3.jpg" }],
+      },
+    ],
+    specImage: "/images/products/ic-38x/spec.png",
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -1312,6 +1957,27 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Whole space, 1W / 1m, on axis. With dedicated IA 402D amplifier´s preset. ** According to EIA-426B Standard (based on RMS Voltage) *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    accessoryImageHeight: 240,
+    accessoriesBeforeSpec: true,
+    accessories: [
+      {
+        title: "SMB",
+        desc: "The SMB – Smart Mounting Bracket – was developed for uncomplicated, time-saving installation and the greatest possible flexibility in alignment. With this bracket, the speakers can be installed quickly and easily almost anywhere and at an ideal angle. The SMB is included with every I-Line speaker. An SMB mounted column speaker can be adjusted on both axes by up to ± 90° in 10° steps. Maximum load-bearing capacity: 10 kg.",
+        image: "/images/products/ic-38x/acc-smb.png",
+      },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/ic-38x/main.png", "/images/products/ic-38x/back.png"],
+    downloadLinks: [
+      { label: "IC32 Data Sheet", file: "/files/ic-38x/IC-32-SpecSheet.pdf" },
+      { label: "IC34 Data Sheet", file: "/files/ic-38x/IC-34-Spec.pdf" },
+      { label: "IC38 Data Sheet", file: "/files/ic-38x/IC-38X_Data_Sheet.pdf" },
+      { label: "I-Line Brochure", file: "/files/ic-38x/I-Line_Brochure.pdf" },
+      { label: "I-Line Manual", file: "/files/ic-38x/I-Line_Manual.pdf" },
+      { label: "IC32 시방서", file: "/files/ic-38x/IC-32_Specification.hwp" },
+      { label: "IC34 시방서", file: "/files/ic-38x/IC-34_Specification.hwp" },
+      { label: "IC 38X dwg", file: "/files/ic-38x/se_IC_38X_20190708.dwg" },
+    ],
   },
   {
     slug: "m-a8",
@@ -1326,6 +1992,37 @@ export const products: Product[] = [
       { l: "Max.SPL (1m)", v: "131 dB" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/MA8",
+    statusLabel: "단종모델",
+    tagline: {
+      headline: "High-power all-in-one column system",
+      sub: "2.1 Active Installation Column System",
+    },
+    intro: {
+      title: "Column System",
+      sections: [
+        {
+          body: "M-A8 is a high-power all-in-one column system which comes with the same plug-and-play and portability features as M-A3+ and M-A5. A special wave guide array with two compression drivers delivers smooth high-frequency performance in near and far field. M-A8 is able to fully meet various application demands with exceptional performance.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Easy operation & Great portability",
+        body: "Each column system consists of three components, those being one subwoofer and two column speakers. They can be assembled and dismantled within seconds due to our patented connection socket technology. Matched with the according backpack for the column speakers and a dolly board for the subwoofer (optional accessories), the system can be conveniently moved from premise to premise.",
+        images: [{ src: "/images/products/m-a8/feat1.jpg" }],
+        rowImages: [
+          "/images/products/m-a8/row1.jpeg",
+          "/images/products/m-a8/row2.jpeg",
+          "/images/products/m-a8/row3.jpeg",
+          "/images/products/m-a8/row4.jpeg",
+        ],
+      },
+      {
+        title: "Wide horizontal sound coverage",
+        body: "The unique 120° horizontal dispersion technique of the cylindrical wave avoids quick sound attenuation and makes the sound performance more stable in different environments by also strongly reducing floor and ceiling reflections.",
+        images: [{ src: "/images/products/m-a8/feat2.jpeg" }],
+      },
+    ],
     specColumns: ["M-A8"],
     specGroups: [
       {
@@ -1391,6 +2088,23 @@ export const products: Product[] = [
           { k: "SAT", v: ["9.5 Kg + 6.5Kg"] },
         ],
       },
+    ],
+    diagramGrid: [{ image: "/images/products/m-a8/diagram.gif", label: "M-A8 diagram" }],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/m-a8/pic1.jpg",
+      "/images/products/m-a8/pic2.jpg",
+      "/images/products/m-a8/pic3.jpg",
+      "/images/products/m-a8/pic4.jpg",
+      "/images/products/m-a8/pic5.jpg",
+      "/images/products/m-a8/pic6.jpg",
+      "/images/products/m-a8/pic7.jpg",
+      "/images/products/m-a8/pic8.jpg",
+    ],
+    downloadLinks: [
+      { label: "M-A8 User's Manual", file: "/files/m-a8/M-A8_Users_Manual.pdf" },
+      { label: "M-A8 시방서", file: "/files/m-a8/M-A8_Specification.hwp" },
+      { label: "M-A8 dwg", file: "/files/m-a8/M-A8.dwg" },
     ],
   },
   {
@@ -2348,16 +3062,23 @@ export const products: Product[] = [
 const PRODUCT_IMAGES: Record<string, string> = {
   "m-f3a-pro": "/images/products/m-f3a-pro/main.png",
   "m-f3a-fs": "/images/products/m-f3a-fs.png",
-  "s15-pro": "/images/products/s15-pro.png",
-  "l-35": "/images/products/l-35.png",
-  "l-65": "/images/products/l-65.png",
-  "b-15": "/images/products/b-15a.png",
-  "b-18": "/images/products/b-18a.png",
-  "ic-38x": "/images/products/ic-38x.png",
-  "m-a8": "/images/products/m-a8.jpg",
+  "s15-pro": "/images/products/s15-pro/main.png",
+  "l-35": "/images/products/l-35/main.png",
+  "l-35-fs": "/images/products/l-35-fs/slide1.png",
+  "l-65": "/images/products/l-65/slide1.png",
+  "l-65-fs": "/images/products/l-65-fs/slide1.png",
+  "b-15": "/images/products/b-15/main.png",
+  "b-18": "/images/products/b-18/main.png",
+  "ic-32": "/images/products/ic-32/main.png",
+  "ic-34": "/images/products/ic-34/main.png",
+  "ic-38x": "/images/products/ic-38x/main.png",
+  "m-a8": "/images/products/m-a8/main.jpg",
   "la-10-4d": "/images/products/la-10-4d.png",
-  // 원본 MF3A 의 DIAGRAM 첫 이미지 (lightbox slide=0, 1000×1000 애니메이션 GIF)
-  "m-f3a-w": "/images/arumtech/thumbnail/20200714/3b041165b0365.gif",
+  // 원본 MF3A 대표 이미지 (직접 업로드)
+  "m-f3a-w": "/images/products/m-f3a-w/main.png",
+  "m-line-accessory": "/images/products/m-line-accessory/main.png",
+  "m-f3": "/images/products/m-f3/main.jpg",
+  "s12-pro": "/images/products/s12-pro/main.png",
 };
 // 맵에 없는 제품까지 undefined 로 덮어쓰면 제품 객체에 직접 적은 image 가 조용히 사라진다.
 products.forEach((p) => {

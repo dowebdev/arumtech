@@ -42,27 +42,85 @@ export default async function ProductDetailPage({
 
   const related = relatedProducts(product, 3);
 
+  /* ACCESSORIES 카드 블록 — 위치(하단 or Specifications 위)를 옵션으로 고를 수 있게 변수로 뺀다. */
+  const accessoriesBlock =
+    product.accessories && product.accessories.length > 0 ? (
+      <div className="mb-14">
+        <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+          ACCESSORIES
+        </h2>
+        <div className="flex flex-wrap justify-center gap-6">
+          {product.accessories.map((a, i) => (
+            <div
+              key={`${a.title}-${i}`}
+              className={`flex flex-col ${
+                product.accessoryImageHeight ? "items-center" : "w-[200px] max-w-full"
+              }`}
+            >
+              {a.image && (
+                <div
+                  className="mb-3 flex items-center justify-center overflow-hidden rounded-xl border border-black/10 bg-white"
+                  style={
+                    product.accessoryImageHeight
+                      ? { height: product.accessoryImageHeight }
+                      : undefined
+                  }
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={a.image}
+                    alt={a.title}
+                    loading="lazy"
+                    className="mx-auto block max-w-full object-contain"
+                    style={
+                      product.accessoryImageHeight
+                        ? { height: "100%", width: "auto" }
+                        : { height: "auto", width: "100%" }
+                    }
+                  />
+                </div>
+              )}
+              {a.title && (
+                <h3 className="m-0 text-center font-mono text-[15px] font-semibold text-ink">
+                  {a.title}
+                </h3>
+              )}
+              {a.desc && (
+                <p className="m-0 mt-1.5 break-keep text-center text-[13.5px] leading-[1.6] text-[#52555b]">
+                  {a.desc}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : null;
+
+  const breadcrumb = (
+    <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 pt-6">
+      <div className="flex items-center gap-2 text-[12.5px] text-[#6e7178]">
+        <Link href="/" className="hover:text-[#52555b]">홈</Link>
+        <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
+        <Link href="/products" className="hover:text-[#52555b]">제품소개</Link>
+        <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
+        <Link
+          href={`/products?line=${encodeURIComponent(product.line)}`}
+          className="hover:text-[#52555b]"
+        >
+          {product.line}
+        </Link>
+        <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
+        <span className="text-accent" aria-current="page">
+          {product.model}
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white text-ink">
       {/* Breadcrumb */}
-      <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 pt-6">
-        <div className="flex items-center gap-2 text-[12.5px] text-[#6e7178]">
-          <Link href="/" className="hover:text-[#52555b]">홈</Link>
-          <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
-          <Link href="/products" className="hover:text-[#52555b]">제품소개</Link>
-          <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
-          <Link
-            href={`/products?line=${encodeURIComponent(product.line)}`}
-            className="hover:text-[#52555b]"
-          >
-            {product.line}
-          </Link>
-          <i className="ph ph-caret-right" style={{ fontSize: 11 }} />
-          <span className="text-accent" aria-current="page">
-            {product.model}
-          </span>
-        </div>
-      </div>
+      {breadcrumb}
 
       {/* HERO */}
       <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-8">
@@ -80,6 +138,11 @@ export default async function ProductDetailPage({
               <span className="rounded-full border border-black/25 px-3 py-1 font-mono text-[11px] font-semibold tracking-[0.1em] text-accent">
                 {product.line}
               </span>
+              {product.statusLabel && (
+                <span className="rounded-full bg-[#6e7178] px-3 py-1 text-[11px] font-semibold tracking-[0.02em] text-white">
+                  {product.statusLabel}
+                </span>
+              )}
             </div>
             <h1 className="m-0 font-mono text-[40px] font-bold tracking-[0.01em] text-ink sm:text-5xl">
               {product.model}
@@ -122,20 +185,7 @@ export default async function ProductDetailPage({
         </div>
       </section>
 
-      {/* KEY SPECS — 원본 사양표에서 확인된 값만 표시한다 */}
-      {product.keySpecs.length > 0 && (
-        <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {product.keySpecs.map((ks) => (
-              <div key={ks.l} className="rounded-[14px] border border-black/10 bg-[#f4f5f7] p-6">
-                <i className="ph ph-check-circle" style={{ fontSize: 24, color: "#6EA921" }} />
-                <div className="mt-3.5 font-mono text-xl font-semibold text-ink">{ks.v}</div>
-                <div className="mt-1 text-[12.5px] text-[#52555b]">{ks.l}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* KEY SPECS 카드 섹션은 히어로 우측 인라인 사양과 중복되어 제거함 */}
 
       {/* INTRO COPY (before the detail gallery) */}
       {product.intro && (
@@ -154,6 +204,21 @@ export default async function ProductDetailPage({
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* INTRO VIDEO (원본: 소개 문구 바로 아래 유튜브 영상) */}
+      {product.introVideoId && (
+        <section className="mx-auto w-full max-w-[1000px] px-5 sm:px-8 py-6">
+          <div className="relative aspect-video overflow-hidden rounded-xl border border-black/10 bg-black">
+            <iframe
+              className="absolute inset-0 h-full w-full"
+              src={`https://www.youtube.com/embed/${product.introVideoId}`}
+              title={`${product.model} 영상`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </section>
       )}
@@ -330,16 +395,97 @@ export default async function ProductDetailPage({
           </div>
         )}
 
+        {/* FEATURES 위 배너 이미지 */}
+        {product.featuresTopImage && (
+          <div className="mx-auto mb-10 w-full max-w-[1000px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.featuresTopImage}
+              alt={`${product.model} 특징 요약`}
+              loading="lazy"
+              className="mx-auto block h-auto max-w-full object-contain"
+            />
+          </div>
+        )}
+
         {/* FEATURES — 원본 순서: 소개 문단 뒤, Specifications 제목 앞 */}
-        {product.features && product.features.length > 0 && (
+        {product.features &&
+          product.features.length > 0 &&
+          (product.features.some((f) => f.images && f.images.length > 0) ? (
           <div className="mx-auto mb-16 flex max-w-[900px] flex-col gap-10">
+            <h2 className="m-0 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              FEATURES
+            </h2>
             {product.features.map((f) => (
-              <div key={f.title}>
-                <h3 className="m-0 mb-3 text-[26px] font-semibold tracking-[-0.01em] text-ink">
-                  {f.title}
-                </h3>
-                <p className="m-0 break-keep text-[16px] leading-[1.8] text-[#52555b]">{f.body}</p>
-              </div>
+              (() => {
+                const imgs = f.images ?? [];
+                // 이미지 여러 장(예: Line source)은 텍스트 아래에 가로로 배치, 그 외는 좌측 이미지/우측 텍스트.
+                const stacked = imgs.length > 1;
+                const gallery = imgs.length > 0 && (
+                  <div className={stacked ? "flex flex-wrap gap-4" : "flex flex-col gap-3"}>
+                    {imgs.map((img) => (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        key={img.src}
+                        src={img.src}
+                        alt={f.title}
+                        loading="lazy"
+                        width={img.w}
+                        height={img.h}
+                        className="block h-auto max-w-full"
+                      />
+                    ))}
+                  </div>
+                );
+                const text = (
+                  <div>
+                    <h3 className="m-0 mb-3 text-[26px] font-semibold tracking-[-0.01em] text-ink">
+                      {f.title}
+                    </h3>
+                    <p className="m-0 break-keep text-[16px] leading-[1.8] text-[#52555b]">{f.body}</p>
+                  </div>
+                );
+                // 특징 본문 아래에 한 줄로 나란히 넣는 보조 이미지들
+                const rowImagesBlock = f.rowImages && f.rowImages.length > 0 && (
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    {f.rowImages.map((src) => (
+                      <div
+                        key={src}
+                        className="overflow-hidden rounded-xl border border-black/10 bg-white"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={src}
+                          alt={f.title}
+                          loading="lazy"
+                          className="block h-auto w-full object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                );
+
+                if (stacked) {
+                  return (
+                    <div key={f.title} className="flex flex-col gap-6">
+                      {text}
+                      {gallery}
+                      {rowImagesBlock}
+                    </div>
+                  );
+                }
+                return (
+                  <div key={f.title} className="flex flex-col gap-8">
+                    <div
+                      className={imgs.length > 0 ? "grid items-center gap-8 sm:grid-cols-2" : undefined}
+                    >
+                      {gallery}
+                      {text}
+                    </div>
+                    {rowImagesBlock}
+                  </div>
+                );
+              })()
             ))}
 
             {product.featureImage && (
@@ -360,10 +506,46 @@ export default async function ProductDetailPage({
               </p>
             ))}
           </div>
+          ) : (
+            /* 이미지 없는 텍스트 특징 — Features 타이틀 밑 카드 그리드 */
+            <div className="mx-auto mb-16 w-full max-w-[1000px]">
+              <h2 className="m-0 mb-8 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+                FEATURES
+              </h2>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                {product.features.map((f) => (
+                  <div
+                    key={f.title}
+                    className="rounded-2xl border border-black/10 bg-[#f7f8fa] p-7"
+                  >
+                    <h3 className="m-0 mb-2.5 text-[20px] font-semibold tracking-[-0.01em] text-ink">
+                      {f.title}
+                    </h3>
+                    <p className="m-0 break-keep text-[15.5px] leading-[1.75] text-[#52555b]">
+                      {f.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+        {/* PRODUCTS 슬라이더 — Features 와 Specifications 사이 */}
+        {product.productsSlider && product.productsSlider.length > 0 && (
+          <div className="mx-auto mb-16 w-full max-w-[1000px]">
+            {product.productsSliderTitle && (
+              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+                {product.productsSliderTitle}
+              </h2>
+            )}
+            <ProductSlider images={product.productsSlider} alt={`${product.model} 시리즈`} />
+          </div>
         )}
 
+        {product.accessoriesBeforeSpec && accessoriesBlock}
+
         {product.specGroups && (
-          <h2 className="m-0 mb-7 text-[28px] font-semibold tracking-[-0.01em] text-ink">
+          <h2 className="m-0 mb-7 text-center text-[28px] font-semibold tracking-[-0.01em] text-ink">
             Specifications
           </h2>
         )}
@@ -452,39 +634,6 @@ export default async function ProductDetailPage({
         )}
       </section>
 
-      {/* ACCESSORIES */}
-      {product.accessories && product.accessories.length > 0 && (
-        <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <h2 className="m-0 mb-7 text-[28px] font-semibold tracking-[-0.01em] text-ink">
-            ACCESSORIES
-          </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {product.accessories.map((a, i) => (
-              <div key={`${a.title}-${i}`} className="flex flex-col">
-                {a.image && (
-                  <div className="mb-4 overflow-hidden rounded-xl border border-black/10 bg-white">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={a.image}
-                      alt={a.title}
-                      loading="lazy"
-                      className="mx-auto block h-auto max-w-full object-contain"
-                    />
-                  </div>
-                )}
-                <div className="flex items-center gap-2.5">
-                  <span className="h-3.5 w-[3px] rounded-sm bg-accent" />
-                  <h3 className="m-0 font-mono text-[15px] font-bold text-ink">{a.title}</h3>
-                </div>
-                <p className="m-0 mt-2.5 break-keep text-[14.5px] leading-[1.65] text-[#52555b]">
-                  {a.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* REFERENCES */}
       {product.references && product.references.length > 0 && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
@@ -546,8 +695,31 @@ export default async function ProductDetailPage({
       )}
 
       {/* DIAGRAM → PICTURE → 동영상 → DOWNLOAD (원본 하단 구성) */}
-      {(product.diagram || product.slider || product.videoId || product.downloadLinks) && (
+      {(product.diagram ||
+        product.diagramGrid ||
+        product.accessories ||
+        product.accessoriesImage ||
+        product.slider ||
+        product.videoId ||
+        product.downloadLinks) && (
         <section className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:px-8">
+          {product.accessoriesImage && (
+            <div className="mb-14">
+              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+                ACCESSORIES
+              </h2>
+              <div className="overflow-hidden rounded-xl border border-black/10 bg-white p-4 sm:p-8">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={product.accessoriesImage}
+                  alt={`${product.model} 액세서리`}
+                  loading="lazy"
+                  className="mx-auto block h-auto max-w-full object-contain"
+                />
+              </div>
+            </div>
+          )}
+
           {product.diagram && product.diagram.length > 0 && (
             <div className="mb-14">
               <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
@@ -571,6 +743,53 @@ export default async function ProductDetailPage({
               </div>
             </div>
           )}
+
+          {product.diagramGrid && product.diagramGrid.length > 0 && (
+            <div className="mb-14">
+              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+                DIAGRAM
+              </h2>
+              <div
+                className={`grid grid-cols-1 gap-6 ${
+                  product.diagramGrid.length >= 3
+                    ? "sm:grid-cols-3"
+                    : product.diagramGrid.length === 2
+                      ? "sm:grid-cols-2"
+                      : "mx-auto max-w-[560px]"
+                }`}
+              >
+                {product.diagramGrid.map((d) => (
+                  <div key={d.label}>
+                    <div className="overflow-hidden rounded-xl border border-black/10 bg-white">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={d.image}
+                        alt={d.label}
+                        loading="lazy"
+                        className="mx-auto block h-auto max-w-full object-contain"
+                      />
+                    </div>
+                    <div className="mt-3 text-center font-mono text-[15px] font-semibold text-ink">
+                      {d.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {product.diagramFooter && (
+                <div className="mt-6 overflow-hidden rounded-xl border border-black/10 bg-white">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={product.diagramFooter}
+                    alt={`${product.model} 설치 방식`}
+                    loading="lazy"
+                    className="mx-auto block h-auto max-w-full object-contain"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {!product.accessoriesBeforeSpec && accessoriesBlock}
 
           {product.slider && product.slider.length > 0 && (
             <>

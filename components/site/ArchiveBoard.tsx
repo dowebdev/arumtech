@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { fetchContentsList, ContentsConfigError, type ContentItem } from "@/lib/contents";
+import Pagination from "./Pagination";
 
 /** 아름텍 자료실 카테고리 (기존 사이트 기준). */
 const CATEGORIES = ["전체", "메뉴얼", "물가정보", "카탈로그", "기술자료", "도면자료", "시방서"] as const;
+const PER_PAGE = 12;
 
 type State =
   | { status: "loading" }
@@ -15,10 +17,11 @@ type State =
 export default function ArchiveBoard() {
   const [state, setState] = useState<State>({ status: "loading" });
   const [category, setCategory] = useState<string>("전체");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     let alive = true;
-    fetchContentsList("archive", { limit: 48 })
+    fetchContentsList("archive", { limit: 100 })
       .then((res) => {
         if (alive) setState({ status: "ready", items: res.items });
       })
@@ -43,6 +46,14 @@ export default function ArchiveBoard() {
     [items, category]
   );
 
+  const totalPage = Math.ceil(filtered.length / PER_PAGE);
+  const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  const selectCategory = (c: string) => {
+    setCategory(c);
+    setPage(1);
+  };
+
   return (
     <>
       {/* 카테고리 필터 */}
@@ -53,7 +64,7 @@ export default function ArchiveBoard() {
             <button
               key={c}
               type="button"
-              onClick={() => setCategory(c)}
+              onClick={() => selectCategory(c)}
               className="cursor-pointer whitespace-nowrap rounded-md border px-[18px] py-[9px] text-[16px] transition-colors"
               style={{
                 fontWeight: active ? 600 : 500,
@@ -90,37 +101,41 @@ export default function ArchiveBoard() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {filtered.map((item) => (
-              <Link
-                key={item.idx}
-                href={`/downloads/${item.idx}`}
-                className="group flex items-center gap-4 rounded-xl border border-black/10 bg-white px-6 py-5 transition-colors hover:border-accent"
-              >
-                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-accent/[0.08] transition-colors group-hover:bg-accent">
-                  <i
-                    className="ph ph-file-text text-accent transition-colors group-hover:text-white"
-                    style={{ fontSize: 20 }}
-                  />
-                </span>
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-[16px] font-medium text-ink">{item.title}</span>
-                  <span className="mt-0.5 flex items-center gap-2 font-mono text-[12.5px] text-[#9aa0a6]">
-                    {item.category && (
-                      <span className="rounded bg-black/[0.05] px-1.5 py-0.5 font-sans text-[11px] font-semibold text-[#6e7178]">
-                        {item.category}
-                      </span>
-                    )}
-                    {item.date.slice(0, 10)}
+          <>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {paged.map((item) => (
+                <Link
+                  key={item.idx}
+                  href={`/downloads/${item.idx}`}
+                  className="group flex items-center gap-4 rounded-xl border border-black/10 bg-white px-6 py-5 transition-colors hover:border-accent"
+                >
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-accent/[0.08] transition-colors group-hover:bg-accent">
+                    <i
+                      className="ph ph-file-text text-accent transition-colors group-hover:text-white"
+                      style={{ fontSize: 20 }}
+                    />
                   </span>
-                </span>
-                <i
-                  className="ph ph-download-simple flex-shrink-0 text-[#9aa0a6] transition-colors group-hover:text-accent"
-                  style={{ fontSize: 18 }}
-                />
-              </Link>
-            ))}
-          </div>
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="truncate text-[16px] font-medium text-ink">{item.title}</span>
+                    <span className="mt-0.5 flex items-center gap-2 font-mono text-[12.5px] text-[#9aa0a6]">
+                      {item.category && (
+                        <span className="rounded bg-black/[0.05] px-1.5 py-0.5 font-sans text-[11px] font-semibold text-[#6e7178]">
+                          {item.category}
+                        </span>
+                      )}
+                      {item.date.slice(0, 10)}
+                    </span>
+                  </span>
+                  <i
+                    className="ph ph-download-simple flex-shrink-0 text-[#9aa0a6] transition-colors group-hover:text-accent"
+                    style={{ fontSize: 18 }}
+                  />
+                </Link>
+              ))}
+            </div>
+
+            <Pagination page={page} totalPage={totalPage} onChange={setPage} />
+          </>
         ))}
     </>
   );

@@ -5,7 +5,7 @@ import ContactForm from "@/components/site/ContactForm";
 export const metadata: Metadata = {
   title: "문의하기",
   description:
-    "견적문의·제품상담·설치상담·A/S·제휴 문의. 공간 규모와 용도를 알려주시면 전문 엔지니어가 직접 상담해드립니다.",
+    "A/S·제품·설치 문의. 제품 도입과 A/S를 전문 담당자가 직접 응대해드립니다.",
 };
 
 export default function ContactPage() {
