@@ -116,12 +116,14 @@ export interface Product {
   featureNotes?: string[];
   /** Specifications 제목 바로 위에 오는 소개 문단 */
   specIntro?: string[];
-  /** 사양표 위 이미지 (치수 도면 등) */
-  specImage?: string;
+  /** 사양표 위 이미지 (치수 도면 등). 모델이 둘이면 도면도 둘이라 배열도 받는다. */
+  specImage?: string | string[];
   /** 사양표 위 모델 라벨 ("Model: M-F3A PRO") */
   specModelLabel?: string;
   /** 악세사리 (제품 상세 그리드 / 악세사리 전용 페이지 공용) */
   accessories?: Accessory[];
+  /** ACCESSORIES 카드 위에 오는 도입 문구 (원본의 "Maximum Versatility" 등) */
+  accessoriesIntro?: { title?: string; body: string };
   /** References — 도입 사례 · 매체 리뷰 */
   references?: ProductReference[];
   /** References 뒤에 붙는 이미지 (지면 리뷰 스캔 등) */
@@ -652,7 +654,10 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: ["강당", "교회", "라인어레이"],
-    keySpecs: [],
+    keySpecs: [
+      { l: "Max. SPL (M-F3 SAT)", v: "126 dB" },
+      { l: "Max. SPL (M-F3 SUB)", v: "129 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/MF3",
     tagline: {
       headline: "Small Size, High SPL",
@@ -775,7 +780,10 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: ["강당", "공연장", "서브우퍼"],
-    keySpecs: [],
+    keySpecs: [
+      { l: "Max SPL (@1m)", v: "133 dB" },
+      { l: "Weight", v: "23 kg" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/S12PRO",
     tagline: {
       headline: "A compact and functional ground support for the M-Line",
@@ -868,7 +876,10 @@ export const products: Product[] = [
     badge: null,
     featured: true,
     tags: ["강당", "공연장", "서브우퍼"],
-    keySpecs: [],
+    keySpecs: [
+      { l: "Max SPL (@1m)", v: "136 dB" },
+      { l: "Weight", v: "32 kg" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/S15PRO",
     tagline: {
       headline: "A louder and reliable ground support for the M-Line",
@@ -1462,7 +1473,8 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: ["강당", "렌탈", "서브우퍼"],
-    keySpecs: [],
+    // B 15 / B 15A / B 15A FS 모두 같은 값이라 모델별로 나누지 않는다.
+    keySpecs: [{ l: "Maximum Peak SPL", v: "136 dB" }],
     sourceUrl: "https://www.arumtech.co.kr/112",
     tagline: {
       headline: "Multipurpose | Low Distortion | Easy Handling",
@@ -1564,7 +1576,8 @@ export const products: Product[] = [
     badge: null,
     featured: true,
     tags: ["공연장", "렌탈", "서브우퍼"],
-    keySpecs: [],
+    // B 18 / B 18A 모두 같은 값이라 모델별로 나누지 않는다.
+    keySpecs: [{ l: "Maximum Peak SPL", v: "138 dB" }],
     sourceUrl: "https://www.arumtech.co.kr/B-18",
     tagline: {
       headline: "Here comes the Boom",
@@ -2115,8 +2128,26 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "Max. SPL (1M)", v: "136 dB" },
+      { l: "Net Weight (V-L8)", v: "27.5 kg" },
+      { l: "Net Weight (V-LPS215B)", v: "81.5 kg" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/VL8-VLPS215B",
+    tagline: {
+      headline: "LINE ARRAY V-L8 / V-LPS215B",
+    },
+    intro: {
+      title: "LINE ARRAY V-L8 / V-LPS215B",
+      sections: [
+        {
+          body: 'The V-L8 is dual 8" vertical line source concert system with variable curvature, primarily designed for live performances from small to large indoor and outdoor venuse. The power handling is 650W RMS each top.',
+        },
+        {
+          body: 'The V-LPS215B is a dual 15", bandpass subwoofer with 1200W RMS. Offering plenty of tight and punchy bass, the V-LPS215B blends beautifully with the V-L8 or V-L4 and form an excellent full range response with high SPL and clear sound.',
+        },
+      ],
+    },
     specColumns: ["V-L8","V-LPS215B"],
     specGroups: [
       {
@@ -2161,6 +2192,30 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/v-l8-vlps215b/diagram-options.jpg", label: "V-L8 Operation Options" },
+      { image: "/images/products/v-l8-vlps215b/diagram-dimensions.jpg", label: "V-L8 / V-LPS215B 치수" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/v-l8-vlps215b/pic1.jpg",
+      "/images/products/v-l8-vlps215b/pic2.jpg",
+      "/images/products/v-l8-vlps215b/pic3.jpg",
+      "/images/products/v-l8-vlps215b/pic4.jpg",
+      "/images/products/v-l8-vlps215b/pic5.jpg",
+      "/images/products/v-l8-vlps215b/pic6.jpg",
+      "/images/products/v-l8-vlps215b/pic7.jpg",
+    ],
+    downloadLinks: [
+      {
+        label: "V-L8 / V-LPS215B Brochure",
+        file: "/files/v-l8-vlps215b/V-L8_V-LPS215B.pdf",
+      },
+      { label: "V-L8 시방서", file: "/files/v-l8-vlps215b/V-L8_Specification.hwp" },
+      { label: "V-LPS 215B 시방서", file: "/files/v-l8-vlps215b/V-LPS215B_Specification.hwp" },
+      { label: "V-L8 dwg", file: "/files/v-l8-vlps215b/se_V-L8_.dwg" },
+      { label: "V-LPS215B dwg", file: "/files/v-l8-vlps215b/se_V-LPS215_20181130.dwg" },
+    ],
   },
   {
     slug: "v-8",
@@ -2177,6 +2232,19 @@ export const products: Product[] = [
       { l: "Net Weight", v: "12 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/V8",
+    tagline: {
+      headline: "FULL RANGE V-8",
+      sub: '8" Two Way Passive / Active Full Range Loudspeaker',
+    },
+    intro: {
+      title: "FULL RANGE V-8",
+      sections: [
+        {
+          body: 'The V-8 is a two way passive full range loudspeaker with 250W RMS. The series consists of 8", 10", 12" and 15" multi-purpose speakers for an excellent price/value relation. The uniquely designed cabinets are all made of multiplex and pained with the Polyurea coating which helps stand up to the tough daily demands of touring and live applications.',
+        },
+      ],
+    },
+    specImage: "/images/products/v-8/spec-graphs.jpeg",
     specColumns: ["V-8"],
     specGroups: [
       {
@@ -2200,6 +2268,18 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [{ image: "/images/products/v-8/diagram.gif", label: "V-8 diagram" }],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/v-8/pic1.jpg",
+      "/images/products/v-8/pic2.jpg",
+      "/images/products/v-8/pic3.jpg",
+    ],
+    downloadLinks: [
+      { label: "V-8 / V-8A brochure", file: "/files/V-8/SE_10_11_V8.pdf" },
+      { label: "V-8 시방서", file: "/files/V-8/V-8_Specification.hwp" },
+      { label: "V-8 dwg", file: "/files/V-8/se_V-8.dwg" },
+    ],
   },
   {
     slug: "v-10",
@@ -2216,6 +2296,19 @@ export const products: Product[] = [
       { l: "Net Weight", v: "16.3 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/V10",
+    tagline: {
+      headline: "FULL RANGE V-10",
+      sub: '10" Two Way Passive / Active Full Range Loudspeaker (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE V-10",
+      sections: [
+        {
+          body: 'The V-10 is a two way full range loudspeaker with 350W RMS. The series consists of 8", 10", 12" and 15" multi-purpose speakers for an excellent price/value relation. The uniquely designed cabinets are all made of multiplex and pained with the Polyurea coating which helps stand up to the tough daily demands of touring and live applications.',
+        },
+      ],
+    },
+    specImage: "/images/products/v-10/spec-graphs.jpeg",
     specColumns: ["V-10"],
     specGroups: [
       {
@@ -2240,6 +2333,17 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/v-10/diagram-dimensions.gif", label: "V-10 치수" },
+      { image: "/images/products/v-10/diagram-options.gif", label: "V-LINE Operation Options" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/v-10/pic1.jpg", "/images/products/v-10/pic2.jpg"],
+    downloadLinks: [
+      { label: "V-10 / V-10A brochure", file: "/files/V-10/SE_12_13_V10.pdf" },
+      { label: "V-10 시방서", file: "/files/V-10/V-10_Specification.hwp" },
+      { label: "V-10 dwg", file: "/files/V-10/se_V-10.dwg" },
+    ],
   },
   {
     slug: "v-12",
@@ -2256,6 +2360,19 @@ export const products: Product[] = [
       { l: "Net Weight", v: "22.5 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/V12",
+    tagline: {
+      headline: "FULL RANGE V-12",
+      sub: '12" Two Way Passive / Active Full Range Loudspeaker (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE V-12",
+      sections: [
+        {
+          body: 'The V-12 is a two way full range loudspeaker with 500W RMS. The series consists of 8", 10", 12" and 15" multi-purpose speakers for an excellent price/value relation. The uniquely designed cabinets are all made of multiplex and painted with the Polyurea coating which helps stand up to the tough daily demands of touring and live applications.',
+        },
+      ],
+    },
+    specImage: "/images/products/v-12/spec-graphs.jpeg",
     specColumns: ["V-12"],
     specGroups: [
       {
@@ -2280,6 +2397,24 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/v-12/diagram-dimensions.gif", label: "V-12" },
+      { image: "/images/products/v-12/diagram-options.gif", label: "V-Line Operation Options" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/v-12/pic1.jpg",
+      "/images/products/v-12/pic2.jpg",
+      "/images/products/v-12/pic3.jpg",
+      "/images/products/v-12/pic4.jpg",
+      "/images/products/v-12/pic5.jpg",
+      "/images/products/v-12/pic6.jpg",
+    ],
+    downloadLinks: [
+      { label: "V-12 / V-12A brochure", file: "/files/V-12/V12.pdf" },
+      { label: "V-12 시방서", file: "/files/V-12/V-12_Specification.hwp" },
+      { label: "V-12 dwg", file: "/files/V-12/se_V-12_.dwg" },
+    ],
   },
   {
     slug: "v-15",
@@ -2296,6 +2431,23 @@ export const products: Product[] = [
       { l: "Net Weight", v: "31.5 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/99",
+    tagline: {
+      headline: "FULL RANGE V-15",
+      sub: '15" Two Way Passive / Active Full Range Loudspeaker (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE V-15",
+      sections: [
+        {
+          body: 'The V-15 is a two way full range loudspeaker with 650W RMS. The series consists of 8", 10", 12" and 15" multi-purpose speakers for an excellent price/value relation. The uniquely designed cabinets are all made of multiplex and painted with the Polyurea coating which helps stand up to the tough daily demands of touring and live applications.',
+        },
+        {
+          heading: "Application",
+          body: "· Band performance, pub, concert hall, church\n· Theater, multifunctional hall",
+        },
+      ],
+    },
+    specImage: "/images/products/v-15/spec-graphs.jpeg",
     specColumns: ["V-15"],
     specGroups: [
       {
@@ -2320,6 +2472,21 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [{ image: "/images/products/v-15/diagram.png", label: "V-15" }],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/v-15/pic1.jpg",
+      "/images/products/v-15/pic2.jpg",
+      "/images/products/v-15/pic3.jpg",
+      "/images/products/v-15/pic4.jpg",
+      "/images/products/v-15/pic5.jpg",
+      "/images/products/v-15/pic6.jpg",
+    ],
+    downloadLinks: [
+      { label: "V-15 / V-15A brochure", file: "/files/V-15/V15.pdf" },
+      { label: "V-15 시방서", file: "/files/V-15/V-15_Specification.hwp" },
+      { label: "V-15 dwg", file: "/files/V-15/se_V-15.dwg" },
+    ],
   },
   {
     slug: "v-118b-218b",
@@ -2331,8 +2498,31 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: ["공연장", "렌탈", "서브우퍼"],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (V-118B)", v: "135 dB" },
+      { l: "MAX SPL (V-218B)", v: "136 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/V118B-V218B",
+    tagline: {
+      headline: "FULL RANGE V-118B / V-218B",
+    },
+    intro: {
+      title: "FULL RANGE V-118B / V-218B",
+      sections: [
+        {
+          heading: 'The V-118B is a 18" bandpass subwoofer with 800W RMS and 135 dB Max SPL.',
+          body: "Engineered with CATAR technology (Clear audio time aligned responds) it provides an outstanding sound reproduction. Offering plenty of tight and punchy bass, the V-218B blends beautifully with the V-LINE or V-ARRAY and form an excellent full range response with high SPL and clear sound. The uniquely designed cabinets are all made of multiplex and coated with the Polyurea coating-which helps stand up to the tough daily demands of touring and live applications.",
+        },
+        {
+          heading: 'The V-218B is a dual 18" bandpass subwoofer with 1600W RMS and 136dB Max SPL.',
+          body: "Engineered with CATAR technology (Clear audio time aligned responds) it provides an outstanding sound reproduction. Offering plenty of tight and punchy bass, the V-218B blends beautifully with the V-LINE or V-ARRAY and form an excellent full range response with high SPL and clear sound. The uniquely designed cabinets are all made of multiplex and coated with the Polyurea coating-which helps stand up to the tough daily demands of touring and live applications.",
+        },
+      ],
+    },
+    specImage: [
+      "/images/products/v-118b-218b/diagram-v118b.jpg",
+      "/images/products/v-118b-218b/diagram-v218b.jpg",
+    ],
     specColumns: ["V-118B","V-218B"],
     specGroups: [
       {
@@ -2352,6 +2542,25 @@ export const products: Product[] = [
         ],
       },
     ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/v-118b-218b/pic1.jpg",
+      "/images/products/v-118b-218b/pic2.jpg",
+      "/images/products/v-118b-218b/pic3.jpg",
+      "/images/products/v-118b-218b/pic4.jpg",
+      "/images/products/v-118b-218b/pic5.jpg",
+      "/images/products/v-118b-218b/pic6.jpg",
+      "/images/products/v-118b-218b/pic7.jpg",
+    ],
+    downloadLinks: [
+      {
+        label: "V-118B / V-218B Brochure",
+        file: "/files/v-118b-218b/V-118B_V-218B_data_sheet.pdf",
+      },
+      { label: "V-118B 시방서", file: "/files/v-118b-218b/V-118B_Specification.hwp" },
+      { label: "V-218B 시방서", file: "/files/v-118b-218b/V-218B_Specification.hwp" },
+      { label: "V-118B dwg", file: "/files/v-118b-218b/se_V-118B_.dwg" },
+    ],
   },
   {
     slug: "cv-10i-12i-15i",
@@ -2362,8 +2571,27 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (CV-10i)", v: "125 dB" },
+      { l: "MAX SPL (CV-12i)", v: "129 dB" },
+      { l: "MAX SPL (CV-15i)", v: "131 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/CV10i-12i-15i",
+    tagline: {
+      headline: "FULL RANGE CV-10i / 12i / 15i",
+      sub: '10" / 12" / 15" Two way full range passive loudspeaker',
+    },
+    intro: {
+      title: "FULL RANGE CV-10i / 12i / 15i",
+      sections: [
+        {
+          body: "The CV-10i is a two way full range loudspeaker with 250W RMS power handling.\nThe CV-12i is a two way full range loudspeaker with 375W RMS power handling.\nThe CV-15i is a two way full range loudspeaker with 450W RMS power handling.",
+        },
+        {
+          body: "The 18pcs of M8 rigging points are equipped to help meet various requirements of fixed installation.",
+        },
+      ],
+    },
     specColumns: ["CV-10i","CV-12i","CV-15i"],
     specGroups: [
       {
@@ -2387,6 +2615,28 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/cv-10i-12i-15i/diagram-10i.gif", label: "CV-10i Diagram" },
+      { image: "/images/products/cv-10i-12i-15i/diagram-12i.gif", label: "CV-12i Diagram" },
+      { image: "/images/products/cv-10i-12i-15i/diagram-15i.gif", label: "CV-15i Diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/cv-10i-12i-15i/pic1.jpg",
+      "/images/products/cv-10i-12i-15i/pic2.jpg",
+      "/images/products/cv-10i-12i-15i/pic3.jpg",
+      "/images/products/cv-10i-12i-15i/pic4.jpg",
+      "/images/products/cv-10i-12i-15i/pic5.jpg",
+    ],
+    downloadLinks: [
+      { label: "CV-LINE Data Sheet", file: "/files/cv-10i-12i-15i/CV-10i_CV-12i_CV-15i.pdf" },
+      { label: "CV-10 시방서", file: "/files/cv-10i-12i-15i/CV-10_Specification.hwp" },
+      { label: "CV-12 시방서", file: "/files/cv-10i-12i-15i/CV-12_Specification.hwp" },
+      { label: "CV-15 시방서", file: "/files/cv-10i-12i-15i/CV-15_Specification.hwp" },
+      { label: "CV-10i dwg", file: "/files/cv-10i-12i-15i/se_CV-10i_.dwg" },
+      { label: "CV-12i dwg", file: "/files/cv-10i-12i-15i/se_CV-12i_20181130.dwg" },
+      { label: "CV-15i dwg", file: "/files/cv-10i-12i-15i/se_CV-15i_.dwg" },
+    ],
   },
   {
     slug: "cv-212",
@@ -2401,6 +2651,26 @@ export const products: Product[] = [
       { l: "Net weight", v: "35 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/143",
+    tagline: {
+      headline: "FULL RANGE CV-212",
+    },
+    intro: {
+      title: "FULL RANGE CV-212",
+      sections: [
+        {
+          body: "The CV 212 is a powerful yet compact 2-way passive loudspeaker, designed to fulfill the most demanding requirements in a wide range of PA, monitoring and installation applications.",
+        },
+        {
+          body: 'Two 12” woofers mounted in a fine-tuned vented housing, generate twice SPL levels over the lower frequencies, while keeping ample headroom for maximal performance. In addition, a 1.4" compression driver with horn covers the mid and high frequencies for defined reproduction across the entire audible frequency range. With a continuous power handling of 800 W, this speaker is capable of delivering high quality sound with a wide dynamic range up to a maximum sound pressure level of 135 dB.',
+        },
+        {
+          body: "The CV 212 is equipped with a rotatable horn that allows the vertical and horizontal coverage to be swapped. The two speakON® NL4 connectors simplify cabling and signal distribution. In addition, the special housing design offers various set-up options and orientations. Handling and installation is as easy as it is safe thanks to the ergonomic handles, the 14 M10 flying points, the lower M20 pole thread and the special CV 212 UB U-bracket.",
+        },
+        {
+          body: "From touring events to theaters and houses of worship, either as a floor, standing or suspended sound system, many venues and applications benefit from this exceptional loudspeaker. CV 212 can be expanded with SE subwoofers such as CV-118, CV-218, B 18 or B 21.",
+        },
+      ],
+    },
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -2444,6 +2714,13 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Half space, 1W / 1m, on axis ** According to EIA-426B Standard *** Max Peak SPL = Max. Cont. SPL (Cont. Power / 1m) + 12 dB Crest Factor",
+    // 원본은 Related Products 가 사양표 뒤 · DOWNLOAD 앞에 온다 → 하단 슬라이더 자리를 쓴다.
+    sliderTitle: "Related Products",
+    slider: ["/images/products/cv-212/rel1.png", "/images/products/cv-212/rel2.png"],
+    downloadLinks: [
+      { label: "CV-212 Data Sheet", file: "/files/CV-212/SE-CV-Line-CV212-EDS-EN-v202205.pdf" },
+      { label: "CV-212 메뉴얼", file: "/files/CV-212/SE-CV-Line-CV212-Manual-EN-v202107.pdf" },
+    ],
   },
   {
     slug: "k-10i-12i-15i",
@@ -2454,8 +2731,23 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (K-10i)", v: "124 dB" },
+      { l: "MAX SPL (K-12i)", v: "127 dB" },
+      { l: "MAX SPL (K-15i)", v: "130 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/K10i-12i-15i",
+    tagline: {
+      headline: "FULL RANGE K-10i / 12i / 15i",
+    },
+    intro: {
+      title: "FULL RANGE K-10i / 12i / 15i",
+      sections: [
+        {
+          body: 'With crystal clear sound penetration, K-series two way full range loudspeakers can be used for indoor sound reinforcement of KTVs, conference rooms or other venues of similar size. The 50 -100°×55° constant directional unsymmetric rotary compression horn enables both vertical and horizontal installations of the speaker boxes. Flat frequency response together with accurate crossover guarantees excellent sound effect. Blended with 15" active or 18" passive subwoofers, the two way full range loudspeakers are able to produce different styles of music perfectly.',
+        },
+      ],
+    },
     specColumns: ["K-10i","K-12i","K-15i"],
     specGroups: [
       {
@@ -2479,6 +2771,25 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/k-10i-12i-15i/diagram-10i.gif", label: "K-10i Diagram" },
+      { image: "/images/products/k-10i-12i-15i/diagram-12i.gif", label: "K-12i Diagram" },
+      { image: "/images/products/k-10i-12i-15i/diagram-15i.gif", label: "K-15i Diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/k-10i-12i-15i/pic1.jpg"],
+    downloadLinks: [
+      {
+        label: "K-10i / K-12i / K-15i Brochure",
+        file: "/files/k-10i-12i-15i/K-Line_Brochure.pdf",
+      },
+      { label: "K-10i 시방서", file: "/files/k-10i-12i-15i/K-10i_Specification.hwp" },
+      { label: "K-12i 시방서", file: "/files/k-10i-12i-15i/K-12i_Specification.hwp" },
+      { label: "K-15i 시방서", file: "/files/k-10i-12i-15i/K-15i_Specification.hwp" },
+      { label: "K-10i dwg", file: "/files/k-10i-12i-15i/se_K-10i_20181130.dwg" },
+      { label: "K-12i dwg", file: "/files/k-10i-12i-15i/se_K-12i_.dwg" },
+      { label: "K-15i dwg", file: "/files/k-10i-12i-15i/se_K-15i_20181130.dwg" },
+    ],
   },
   {
     slug: "k-18b",
@@ -2494,6 +2805,18 @@ export const products: Product[] = [
       { l: "Net Weight", v: "43.5Kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/K18B",
+    tagline: {
+      headline: "SUBWOOFER K-18B",
+      sub: '18" Bass-Reflex Subwoofer',
+    },
+    intro: {
+      title: "SUBWOOFER K-18B",
+      sections: [
+        {
+          body: 'K-18B is a 18" bassreflex subwoofer with RMS 600W. It blends beautifully with K series and form an excellent full range response with high SPL and clear sound, which stands up to the tough daily demands of touring and live applications.',
+        },
+      ],
+    },
     specColumns: ["K-18B"],
     specGroups: [
       {
@@ -2512,6 +2835,21 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [{ image: "/images/products/k-18b/diagram.gif", label: "K-18B Diagram" }],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/k-18b/pic1.jpg",
+      "/images/products/k-18b/pic2.jpg",
+      "/images/products/k-18b/pic3.jpg",
+      "/images/products/k-18b/pic4.jpg",
+      "/images/products/k-18b/pic5.jpg",
+      "/images/products/k-18b/pic6.jpg",
+    ],
+    downloadLinks: [
+      { label: "K-18B Brochure", file: "/files/K-18B/SE_30_31_K-18B_M-12AB.pdf" },
+      { label: "K-18B 시방서", file: "/files/K-18B/K-18B_Specification.hwp" },
+      { label: "K-18B dwg", file: "/files/K-18B/se_K-18B_.dwg" },
+    ],
   },
   {
     slug: "c-10",
@@ -2527,6 +2865,19 @@ export const products: Product[] = [
       { l: "Net Weight", v: "15.5 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/C10",
+    tagline: {
+      headline: "FULL RANGE C-10",
+      sub: "Two way passive full range loudspeaker",
+    },
+    intro: {
+      title: "FULL RANGE C-10",
+      sections: [
+        {
+          heading: "Two way passive full range loudspeaker",
+          body: "C-LINE engineering fixed-installations featured with high quality, wide dynamic range, high SPL and extended frequency response. It is reliable enough to be not only used for sound reinforcement of small-sized system, but also for zoned sound reinforcement of large-sized system. The uniquely designed cabinets are made of selected multiplex and coated with resistant water-soluble spot painting in black. Equipped with a complete set of fly ware, the series product can be perfectly applied to engineering fixed-installation. Additionally, the 90°×60° rotating horn realizes flexible switch in both horizontal and vertical direction, which helps meet the demands of multi-functional and sound reinforcement applications.",
+        },
+      ],
+    },
     specColumns: ["C-10"],
     specGroups: [
       {
@@ -2549,6 +2900,14 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [{ image: "/images/products/c-10/diagram.jpg", label: "C-10 Diagram" }],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/c-10/pic1.jpg"],
+    downloadLinks: [
+      { label: "C-10 Data Sheet", file: "/files/C-10/C-8_C-10_Catalogues.pdf" },
+      { label: "C-10 시방서", file: "/files/C-10/C-10_Specification.hwp" },
+      { label: "C-10 dwg", file: "/files/C-10/se_C-10.dwg" },
+    ],
   },
   {
     slug: "c-12-c-15",
@@ -2559,8 +2918,24 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (C-12)", v: "129 dB" },
+      { l: "MAX SPL (C-15)", v: "131 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/C12-C15",
+    tagline: {
+      headline: "FULL RANGE C-12 / C-15",
+      sub: "Two way passive full range loudspeaker",
+    },
+    intro: {
+      title: "FULL RANGE C-12 / C-15",
+      sections: [
+        {
+          heading: "Two way passive full range loudspeaker",
+          body: "C-LINE engineering fixed-installations featured with high quality, wide dynamic range, high SPL and extended frequency response. It is reliable enough to be not only used for sound reinforcement of small-sized system, but also for zoned sound reinforcement of large-sized system. The uniquely designed cabinets are made of selected multiplex and coated with resistant water-soluble spot painting in black. Equipped with a complete set of fly ware, the series product can be perfectly applied to engineering fixed-installation. Additionally, the 90°×60° rotating horn realizes flexible switch in both horizontal and vertical direction, which helps meet the demands of multi-functional and sound reinforcement applications.",
+        },
+      ],
+    },
     specColumns: ["C-12","C-15"],
     specGroups: [
       {
@@ -2583,6 +2958,19 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/c-12-c-15/diagram-c12.jpg", label: "C-12 Diagram" },
+      { image: "/images/products/c-12-c-15/diagram-c15.jpg", label: "C-15 Diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/c-12-c-15/pic1.jpg"],
+    downloadLinks: [
+      { label: "C-12 / C-15 Data Sheet", file: "/files/C-12C-15/C-12_C-15_Catalogues.pdf" },
+      { label: "C-12 시방서", file: "/files/C-12C-15/C-12_Specification.hwp" },
+      { label: "C-15 시방서", file: "/files/C-12C-15/C-15_Specification.hwp" },
+      { label: "C-12 dwg", file: "/files/C-12C-15/se_C-12_.dwg" },
+      { label: "C-15 dwg", file: "/files/C-12C-15/se_C-15_.dwg" },
+    ],
   },
   {
     slug: "cox-8-cox-12",
@@ -2596,6 +2984,44 @@ export const products: Product[] = [
       { l: "Maximum Peak SPL", v: "132 dB" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/COX8-COX12",
+    tagline: {
+      headline: "FULL RANGE COX 8 MKII / COX 12 MKII",
+    },
+    intro: {
+      title: "FULL RANGE COX 8 MKII / COX 12 MKII",
+      sections: [
+        {
+          body: "Introducing COX 8 MKII – an 8”/1.75” coaxial loudspeaker system – a great solution for any sound application. Whether you are looking for a high-quality audio system for your installation projects or need a compact portable setup for mobile and monitoring applications, this loudspeaker has you covered.",
+        },
+        {
+          body: "With its 8” woofer and 1.75” PEN compression driver in coaxial configuration with a co-magnetic design, this compact and versatile loudspeaker delivers a clear and coherent sound with an excellent sound localization and uniform sound dispersion. Thanks to its versatility, compact dimensions and unobtrusive appearance, the system is suitable for a wide range of applications.",
+        },
+        {
+          body: "In terms of installation, COX 8 MKII is easy to set up and can be used as either a floor, standing, wall mounted or suspended sound system. The SE AUDIOTECHNIK IA amplifiers provide the necessary power for the unique, balanced COX 8 MKII sound. As a low bass extension, the SE subwoofers C6 SE, S12 PRO, S15 PRO, S112i PRO and B 15(A) are a great choice.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Performance",
+        body: "8” woofer (2” VC), 1.75” PEN compression driver, 2-way coaxial system | 250 W continuous power handling (1,000 W peak) | up to 132 dB SPL | 96 dB sensitivity (1W/1m) | 74 Hz – 20 kHz usable frequency range | only 7.8 kg",
+      },
+      {
+        title: "Versatility",
+        body: "Can be used on the floor, standing, suspended or wall mounted | Smart Mounting Bracket (SMB) option | M8/M5 flying points | expandable with SE subwoofer lines | matches perfect with SE IA installation power amplifiers | speakON® and 4-pin Phoenix connectors | audio signal pass through",
+      },
+      {
+        title: "Reliability",
+        body: "Wooden enclosure | polyurea coating | rugged front grille | multifunctional enclosure shape",
+      },
+      {
+        title: "Application",
+        body: "Suitable for installations, conference rooms, bars, stage monitoring, side and front fills, architectural sound and small mobile sound applications",
+      },
+    ],
+    // 원본의 "Applications" 설치 방식 도해 (특징 블록 뒤 · 사양표 앞)
+    featureImage: "/images/products/cox-8-cox-12/applications.png",
+    specModelLabel: "Model: COX 8 MKII",
     specGroups: [
       {
         title: "ELECTRO-ACOUSTICAL",
@@ -2639,6 +3065,29 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without notice. * Full space, 1W / 1m, on axis ** Coverage angles at 4 kHz *** Coverage angles mean value (800 Hz – 6 kHz) **** According to EIA-426B Standard (based on RMS Voltage) ***** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/cox-8-cox-12/pic1.png",
+      "/images/products/cox-8-cox-12/pic2.png",
+      "/images/products/cox-8-cox-12/pic3.png",
+      // 원본은 상단에 정면·후면을 나란히 보여준다. 후면은 히어로에 못 담아 여기에 둔다.
+      "/images/products/cox-8-cox-12/rear.png",
+    ],
+    downloadLinks: [
+      {
+        label: "COX 8 MK2 Data Sheet",
+        file: "/files/cox-8-cox-12/SE-COX-Line-COX8MKII-EDS-IT-v202403.pdf",
+      },
+      {
+        label: "COX 12 MK2 Data Sheet",
+        file: "/files/cox-8-cox-12/SE-COX-Line-COX12MKII-EDS-EN-v202403.pdf",
+      },
+      { label: "COX 12 MK2 Manual", file: "/files/cox-8-cox-12/cox-12_mk2.pdf" },
+      { label: "COX-8 시방서", file: "/files/cox-8-cox-12/COX-8_Specification.hwp" },
+      { label: "COX-12 시방서", file: "/files/cox-8-cox-12/COX-12_Specification.hwp" },
+      { label: "COX-8 dwg", file: "/files/cox-8-cox-12/se_COX_8_MKII.dwg" },
+      { label: "COX-12 dwg", file: "/files/cox-8-cox-12/se_COX_12_MKII.dwg" },
+    ],
   },
   {
     slug: "m-42g2-242g2",
@@ -2649,8 +3098,27 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (M-42(W)G2)", v: "103 dB" },
+      { l: "MAX SPL (M-242(W)G2)", v: "108 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/M42WG2-242WG2",
+    tagline: {
+      headline: "FULL RANGE M-42(W)G2 / 242(W)G2",
+      sub: '4" Two Way Passive Installation Loudspeaker (sealed) (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE M-42(W)G2 / 242(W)G2",
+      sections: [
+        {
+          heading: '4" Two Way Passive Installation Loudspeaker (sealed) (Not Available in Europe)',
+          body: "M-42(W)G2 is ideal for use either as a full-range speaker for smaller installations, cafes, bistros, fashion shops or as a satellite in combination with M-88B & M-88AB. The attractive design features a sturdy MDF housing with a very durable textured finish. Optimal installation is ensured by the included Smart-Mounting-Bracket. White colour is available!",
+        },
+        {
+          body: 'The M-242G2 features 2 x 4" woofers. It offers higher SPL and an attractive and compact design. Smart-Mounting-Bracket included. White colour is available!',
+        },
+      ],
+    },
     specColumns: ["M-42(W)G2","M-242(W)G2"],
     specGroups: [
       {
@@ -2673,6 +3141,29 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      {
+        image: "/images/products/m-42g2-242g2/diagram-m42.gif",
+        label: "M-42(W)G2 Structural Diagram",
+      },
+      {
+        image: "/images/products/m-42g2-242g2/diagram-m242.gif",
+        label: "M-242(W)G2 Structural Diagram",
+      },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/m-42g2-242g2/pic1.jpg",
+      "/images/products/m-42g2-242g2/pic2.jpg",
+    ],
+    downloadLinks: [
+      {
+        label: "M-42(W)G2 / M-242(W)G2 Brochure",
+        file: "/files/m-42g2-242g2/M-42WG2_M-242WG2_Brochure.pdf",
+      },
+      { label: "M-42G2 시방서", file: "/files/m-42g2-242g2/M-42WG2_Specification.hwp" },
+      { label: "M-42G2 dwg", file: "/files/m-42g2-242g2/m-42g2.dwg" },
+    ],
   },
   {
     slug: "m-62g2",
@@ -2683,8 +3174,31 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    keySpecs: [
+      { l: "MAX SPL (M-62(W)G2)", v: "108 dB" },
+      { l: "MAX SPL (M-62A(W)G2)", v: "107 dB" },
+      { l: "MAX SPL (M-62 100V(W)G2)", v: "108 dB" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/M62WG2-M62AWG2-M62100VWG2",
+    tagline: {
+      headline: "FULL RANGE M-62(W)G2 / M-62 100VG2",
+      sub: '6" Two Way Passive Installation Loudspeaker (vented) (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE M-62(W)G2 / M-62 100VG2",
+      sections: [
+        {
+          heading: '6" Two Way Passive Installation Loudspeaker (vented) (Not Available in Europe)',
+          body: "M-62 is just like the big, strong brother of the M-42(W)G2. It offering higher power capacity and better sound quality, As well as being used independently, the M-62(W)G2 can also manifest excellent performance. White colour is available.",
+        },
+        {
+          body: "M-62A(W)G2 is perfect active monitor for many applications. The 50W RMS powered cabinet has a built in Auto Power Mode which will go after 3 minutes without any signal into the standby mode. White colour is available.",
+        },
+        {
+          body: "M-62A 100V(W)G2 with built in 25W transformer, adjustable in 4 steps. Installation is ensured by the included SMB(Smart-Mounting-Bracket). White colour is available.",
+        },
+      ],
+    },
     specColumns: ["M-62 (W)G2","M-62A(W)G2","M-62 100V(W)G2"],
     specGroups: [
       {
@@ -2707,6 +3221,26 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      {
+        image: "/images/products/m-62g2/diagram-100v.gif",
+        label: "M-62 100V(W)G2 Structural Diagram",
+      },
+      { image: "/images/products/m-62g2/diagram-62a.gif", label: "M-62A(W)G2 Structural Diagram" },
+      { image: "/images/products/m-62g2/diagram-62.gif", label: "M-62(W)G2 Structural Diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/m-62g2/pic1.jpg", "/images/products/m-62g2/pic2.jpg"],
+    downloadLinks: [
+      {
+        label: "M-62(W)G2 / M-62A(W)G2 / M-62 100V(W)G2 Brochure",
+        file: "/files/m-62g2/M-62_Series_Brochure.pdf",
+      },
+      { label: "M-62(W)G2 시방서", file: "/files/m-62g2/M-62WG2_Specification.hwp" },
+      { label: "M-62A(W)G2 시방서", file: "/files/m-62g2/M-62AWG2_Specification.hwp" },
+      { label: "M-62(W)G2 dwg", file: "/files/m-62g2/se_M-62G2.dwg" },
+      { label: "M-62AG2 dwg", file: "/files/m-62g2/se_M-62AG2.dwg" },
+    ],
   },
   {
     slug: "m-82g2-82ag2",
@@ -2717,8 +3251,26 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: [],
-    keySpecs: [],
+    // 두 모델 모두 같은 값이라 모델별로 나누지 않는다.
+    keySpecs: [{ l: "MAX SPL (1M)", v: "114 dB" }],
     sourceUrl: "https://www.arumtech.co.kr/M82WG2-M82AWG2",
+    tagline: {
+      headline: "FULL RANGE M-82(W)G2 / M-82AG2",
+      sub: '8" Two Way Active Installation Loudspeaker (vented) (Not Available in Europe)',
+    },
+    intro: {
+      title: "FULL RANGE M-82(W)G2 / M-82AG2",
+      sections: [
+        {
+          heading: "M-82(W)G2 Allround Installation Loudspeaker",
+          body: "M-82(W)G2 which features the well-known and compact design of the M series is the powerful alternative to M-62(W)G2 speaker systems. The attractive design features a sturdy MDF housing and a very durable textured finish. The M-82(W)G2 is an excellent full range speaker with a deep bass fundament and a large frequency range which enable a very precise sound reproduction.\nWhite colour is available!",
+        },
+        {
+          heading: "M-82A(W)G2 Allround Sound Box",
+          body: "It is also available as an active version with an integrated 80W Class A / B amplification module.\nInstallation is ensured by the included SMB(Smart-Mounting-Bracket).",
+        },
+      ],
+    },
     specColumns: ["M-82 (W)G2","M-82A(W)G2"],
     specGroups: [
       {
@@ -2741,6 +3293,31 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      {
+        image: "/images/products/m-82g2-82ag2/diagram-82.gif",
+        label: "M-82(W)G2 Structural Diagram",
+      },
+      {
+        image: "/images/products/m-82g2-82ag2/diagram-82a.gif",
+        label: "M-82A(W)G2 Structural Diagram",
+      },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/m-82g2-82ag2/pic1.jpg",
+      "/images/products/m-82g2-82ag2/pic2.jpg",
+    ],
+    downloadLinks: [
+      {
+        label: "M-82(W)G2 / M-82A(W)G2 Brochure",
+        file: "/files/m-82g2-82ag2/M-82_Series_Brochure.pdf",
+      },
+      { label: "M-82(W)G2 시방서", file: "/files/m-82g2-82ag2/M-82WG2_Specification.hwp" },
+      { label: "M-82A(W)G2 시방서", file: "/files/m-82g2-82ag2/M-82AWG2_Specification.hwp" },
+      { label: "M-82G2 dwg", file: "/files/m-82g2-82ag2/se_M-82G2.dwg" },
+      { label: "M-82AG2 dwg", file: "/files/m-82g2-82ag2/se_M-82AG2.dwg" },
+    ],
   },
   {
     slug: "m-121among2",
@@ -2756,6 +3333,21 @@ export const products: Product[] = [
       { l: "Net Weight", v: "17.8 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/M-121AMONG2",
+    tagline: {
+      headline: "STAGE MONITOR M-121AMONG2",
+      sub: '12" Two Way Co-axial Active Stage Monitor (Not Available in Europe)',
+    },
+    intro: {
+      title: "STAGE MONITOR M-121AMONG2",
+      sections: [
+        {
+          body: 'M-121AMONG2 features a high end 12" co-axial speaker with a compression driver and offers precise sound reproduction of various instruments. The Volex power supply system allows a secure connection of further active monitors, this feature enables the installation of a big active stage monitor system while using only one power plug. The monitor also features a soft clip-limiter as well as a volume control. The housing was built out of high-quality plywood with black polyurea coating. The monitor angle is 35°.',
+        },
+        {
+          body: 'M-121AMON2는 압축 드라이버를 사용한 하이엔드 12" 동축 스피커가 특징이며 다양한 악기를 정밀한 음성으로 재현할 수 있습니다. Volex 전원 공급 시스템은 액티브 모니터를 안전하게 연결할 수 있으며, 이 기능을 통해 하나의 전원 플러그만 사용하여 대형 무대 모니터 시스템을 구축할 수 있습니다. 모니터에는 볼륨 조절뿐만 아니라 부드러운 클립 제한 장치도 있습니다. 하우징은 검은색 폴리우레아 코팅이 된 고급 합판으로 만들어 졌으며, 모니터 각도는 35° 입니다.',
+        },
+      ],
+    },
     specColumns: ["M-121A MONG2"],
     specGroups: [
       {
@@ -2778,6 +3370,19 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/m-121among2/diagram.gif", label: "M-121AMONG2 diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/m-121among2/main.jpg",
+      "/images/products/m-121among2/rear.jpg",
+    ],
+    downloadLinks: [
+      { label: "M-121AMONG2 Brochure", file: "/files/M-121AMONG2/M-121A_MONG2.pdf" },
+      { label: "M-121AMONG2 시방서", file: "/files/M-121AMONG2/M-121A_MONG2_Specification.hwp" },
+      { label: "M-121AMONG2 dwg", file: "/files/M-121AMONG2/se_M-121AMONG2.dwg" },
+    ],
   },
   {
     slug: "smx-12a",
@@ -2794,6 +3399,65 @@ export const products: Product[] = [
       { l: "Net weight", v: "22 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/SMX12-SMX12A",
+    tagline: {
+      headline: "STAGE MONITOR SMX-12A",
+    },
+    intro: {
+      title: "STAGE MONITOR SMX-12A",
+      sections: [
+        {
+          body: 'The active SMX 12A is a compact, extremely versatile 2-way coaxial monitor in bass reflex design. Thanks to the built-in 12" LF with powerful 3" voice coil and a 1" HF with a 1.7" voice coil, the SMX 12A monitor is powerful and assertive in any mix and feature a harmonious, neutral sound character. This allows any musician to hear themselves better and bring out every nuance of their performance. The clearly audible signal in the 80° x 80° coverage angle is easy on any singer’s voice – the more precise they hear themselves, the less effort is required for their performance. At the same time, the SMX 12A monitor remains uncomplicated and feedback-proof.',
+        },
+        {
+          body: "The SMX 12A boasts a 2-channel Class-D amplifier with a total power of 484 W (LF: 416 W @ 6.5 Ω, HF: 68 W @ 14 Ω) on board. So there is no need for an external device – the internal amp is optimally matched to the speakers and brings eight DSP presets to make the set-up as short and simple as possible.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: '12" High efficiency woofer',
+        body: "SMX 12A is a compact yet powerful tool for various monitoring requirements on and off stage.",
+      },
+      {
+        title: "8 intelligent DSP presets",
+        body: "Gain and a special preset selector with 8 practical factory settings increase the application range.",
+      },
+      {
+        title: "Recessed connector panel",
+        body: "Due to the recessed I/O panel of the monitoring system, no connectors are visible to the viewer.",
+      },
+    ],
+    accessoriesBeforeSpec: true,
+    accessoriesIntro: {
+      title: "Maximum Versatility",
+      body: "SMX 12 and SMX 12A are excellent stage monitors – and much more. The extensive accessories allow for a large number of different applications besides classic monitoring. The centrepiece is the SMX 12 UB mounting frame – it allows the SMX 12 and SMX 12A to be tilted steplessly, for example, for wall mounting. With the SMX 12A mounting pole, the SMX monitors can be mounted on a subwoofer in a flash and thus become an ultra-portable PA system or a quickly set-up side fill. Rigging is also possible with the SMX 12 or SMX 12A flown as front fill, for example. In short, using the speakers of the SMX Series exclusively as monitors is an excellent choice – but almost a waste.",
+    },
+    accessories: [
+      {
+        title: "SMX 12UB",
+        desc: "This U-bracket provides mounting holes for wall mounting or pole support adapter PS35 or other industry-standard hardware, like truss clamp.",
+      },
+      {
+        title: "PS35",
+        desc: "Pole support adapter, model PS35, M10 to 35 mm speaker poles.",
+      },
+      {
+        title: "SPS 20",
+        desc: "Distance bar/pole support to connect from M20 thread in subwoofers to PS35.",
+      },
+      {
+        title: "SMX 12TC",
+        desc: "SMX 12 transport and storage protection cover",
+      },
+    ],
+    productsSliderTitle: "Related products",
+    productsSlider: [
+      "/images/products/smx-12a/rel1.png",
+      "/images/products/smx-12a/rel2.png",
+      "/images/products/smx-12a/rel3.jpg",
+      "/images/products/smx-12a/rel4.png",
+    ],
+    specImage: "/images/products/smx-12a/dimensions.png",
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -2846,6 +3510,12 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * Measured with 12 dB Crest factor Pink Noise, Whole space ** Total power value is the sum of all individual channel output power",
+    downloadLinks: [
+      { label: "SMX 12A Datasheet", file: "/files/SMX-12A/SMX12A-EDS-EN-v202208.pdf" },
+      { label: "SMX 12A Owner Manual", file: "/files/SMX-12A/SE-SMX-SMX12A-Manual-EN-v202201.pdf" },
+      { label: "SMX Brochure", file: "/files/SMX-12A/SMX_Brochure.pdf" },
+      { label: "SMX-12 dwg", file: "/files/SMX-12A/se_SMX_12_20200414.dwg" },
+    ],
   },
   {
     slug: "smx-12",
@@ -2861,6 +3531,54 @@ export const products: Product[] = [
       { l: "Net weight", v: "19 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/150",
+    tagline: {
+      headline: "STAGE MONITOR SMX-12",
+    },
+    intro: {
+      title: "STAGE MONITOR SMX-12",
+      sections: [
+        {
+          body: 'The SMX 12 is a compact, extremely versatile 2-way passive coaxial monitor in bass reflex design. Thanks to the built-in 12"-LF with powerful 3" voice coil and a 1"-HF with 1.7" voice coil, the SMX 12 monitor is powerful and assertive in any mix and has a harmonious, neutral sound character. This allows any musician to hear themselves better and bring out every nuance of their performance. The clearly audible signal in the 80° x 80° coverage angle is easy on any singer’s voice – the more precise they hear themselves, the less effort is required for their performance. At the same time, the SMX 12 monitor remains uncomplicated and feedback-proof.',
+        },
+        {
+          body: "With a power handling of 1,600 W (peak) and 136 dB max. SPL (peak), the SMX 12 boasts an impressive stage presence, yet keeps distortion at an extremely low level over the entire frequency range from 60 Hz to 20 kHz. The high sensitivity of 99 dB enables smooth, powerful reproduction throughout the entire dynamic range.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: '12" High efficiency woofer',
+        body: "SMX 12 is a compact yet powerful tool for various monitoring requirements on and off stage.",
+      },
+      {
+        title: "3 handles for easy handling in all situations",
+        body: "Gain and a special preset selector with 8 practical factory settings increase the application range.",
+      },
+      {
+        title: "Recessed connector panel",
+        body: "Due to the recessed I/O panel of the monitoring system, no connectors are visible to the viewer.",
+      },
+    ],
+    accessoriesBeforeSpec: true,
+    accessoriesIntro: {
+      title: "Maximum Versatility",
+      body: "SMX 12 and SMX 12A are excellent stage monitors – and much more. The extensive accessories allow for a large number of different applications besides classic monitoring. The centrepiece is the SMX 12 UB mounting frame – it allows the SMX 12 and SMX 12A to be tilted steplessly, for example, for wall mounting. With the SMX 12A mounting pole, the SMX monitors can be mounted on a subwoofer in a flash and thus become an ultra-portable PA system or a quickly set-up side fill. Rigging is also possible with the SMX 12 or SMX 12A flown as front fill, for example. In short, using the speakers of the SMX Series exclusively as monitors is an excellent choice – but almost a waste.",
+    },
+    accessories: [
+      {
+        title: "SMX 12UB",
+        desc: "This U-bracket provides mounting holes for wall mounting or pole support adapter PS35 or other industry-standard hardware, like truss clamp.",
+      },
+      {
+        title: "PS35",
+        desc: "Pole support adapter, model PS35, M10 to 35 mm speaker poles.",
+      },
+      {
+        title: "SMX 12TC",
+        desc: "SMX 12 transport and storage protection cover",
+      },
+    ],
+    specImage: "/images/products/smx-12/dimensions.png",
     specGroups: [
       {
         title: "ACOUSTICAL",
@@ -2905,6 +3623,12 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * 1 Whole space, 1W / 1m, on-axis ** According to EIA-426B Standard *** Max Peak SPL = Sensitivity + 10log10(Continuous Power) + 12 dB Crest Factor",
+    downloadLinks: [
+      { label: "SMX 12A Datasheet", file: "/files/SMX-12/SMX12A-EDS-EN-v202208.pdf" },
+      { label: "SMX 12A Owner Manual", file: "/files/SMX-12/SE-SMX-SMX12A-Manual-EN-v202201.pdf" },
+      { label: "SMX Brochure", file: "/files/SMX-12/SMX_Brochure.pdf" },
+      { label: "SMX-12 dwg", file: "/files/SMX-12/se_SMX_12_20200414.dwg" },
+    ],
   },
   {
     slug: "la-10-4d",
@@ -2919,6 +3643,57 @@ export const products: Product[] = [
       { l: "Net weight", v: "14.5 kg" },
     ],
     sourceUrl: "https://www.arumtech.co.kr/142",
+    tagline: {
+      headline: "L-Line LA 10.4D",
+      sub: "A light in the dark? We developed the LA 10.4D so that you remain in control at all times.",
+    },
+    intro: {
+      title: "L-Line LA 10.4D",
+      sections: [
+        {
+          body: "A light in the dark? We developed the LA 10.4D so that you remain in control at all times. A 4-channel amplifier with more than 4x 2,500 W specifically for line array systems of the L-Line. Lots of power in a tiny space – for up to 16 speakers per amp! The user-friendly software sets everything up immediately.",
+        },
+        {
+          body: "Your personal chief assistant allows for full performance monitoring. In this amplifier, signal processing is optimised – all parameters can be set centrally and the operation of the system is constantly monitored.",
+        },
+        {
+          body: "With this core piece, you will keep the overview: Your Power Station features a high-quality processed integrated DSP, a Dante® network audio connection and remote network control. To optimise the system, you can count on reliable tools: Limiters, parametric EQ to adapt to the room, Delay and FIR filtering.",
+        },
+        {
+          body: "Now we come to the pulse: The LA 10.4D is a four-channel amplifier system with a capacity of 4x 2,500 W per channel. Thanks to the minimum impedance of 4 Ω, you can connect up to 16 speakers.",
+        },
+        {
+          body: "The intuitive user interface ensures your supremacy. Optimise your personal work flow by means of the network control! Adjustments can be saved just how you like it. The professional Audio Toolkit saves valuable time. The multiple-users compatibility ensures maximum security – the settings are stored in the amp and not in the computer. Simply reposition, done.",
+        },
+        {
+          body: "Future-proofed software allows you to plan, analyse and run your application. Control all parameters centrally. Monitor what is happening on your computer. In short, this amp is your power plant. Enjoy your full supremacy!",
+        },
+      ],
+    },
+    featuresTopImage: "/images/products/la-10-4d/features-row.png",
+    features: [
+      {
+        title: "Flexible connectors",
+        body: "The power amplifier serves the three most widely used audio formats. Specifically: 4 analogue XLR inputs with link outputs, in combination with 4 AES EBU inputs, plus 4 DANTE® inputs. And in the output range: 4x Neutrik speakON® NL4 connectors. Remain maximally flexible!",
+      },
+      {
+        title: "DSP integrated security",
+        body: "The 48/96kHz DSP processor provides precise Filter, EQ and Limiter settings for all L-line speakers. Thus, you have full control at the mixing desk. Thanks to the speaker Presets, EQ controller and Delay set up your system quickly and easily.",
+      },
+      {
+        title: "Network-ready, touch screen and memory",
+        body: "Control of the system is done centrally from the cockpit via the computer. If necessary, the chief assistant supports a 3.5 inch display. It provides all the information and is intuitive to operate. Touch the screen and turn the knob… The library will deliver safe, consistent results.",
+      },
+      {
+        title: "An overview that makes sense",
+        body: "Change important settings even in low-light environments. Thanks to the LED lighting, you can quickly access the mute buttons and the most important parameters are always in plain sight.",
+      },
+      {
+        title: "Everything in the flow",
+        body: "Floating point processor. High-resolution signal flow. High dynamic range. High signal-to-noise ratio. The LA 10.4D turns you into a Master of the Universe.",
+      },
+    ],
+    specModelLabel: "Model: LA 10.4D",
     specGroups: [
       {
         title: "ELECTRICAL",
@@ -2981,6 +3756,20 @@ export const products: Product[] = [
       },
     ],
     specNote: "All product specifications are subject to change without prior notice. * According to CEA-2006.",
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/la-10-4d/main.png", "/images/products/la-10-4d/rear.png"],
+    downloadLinks: [
+      { label: "L-Line 브로슈어", file: "/files/la-10-4d/SE-L-Line-Brochure-EN-v202506-11.pdf" },
+      { label: "LA 10.4D 메뉴얼", file: "/files/la-10-4d/SE-L-Line-L10.4D-Manual-EN-v202301-4.pdf" },
+      {
+        label: "SE Mission Control 1.2 (macOS)",
+        file: "/files/la-10-4d/se_mission_control_-_1.2.dmg_.zip",
+      },
+      {
+        label: "SE Mission Control 1.2 (Windows)",
+        file: "/files/la-10-4d/se_mission_control_-_1.2_win_setup.exe_.zip",
+      },
+    ],
   },
   {
     slug: "ia-402d",
@@ -2991,8 +3780,42 @@ export const products: Product[] = [
     badge: null,
     featured: false,
     tags: ["앰프", "DSP", "설치"],
-    keySpecs: [],
+    keySpecs: [
+      { l: "SNR (At rated power)", v: "95 dB" },
+      { l: "Weight", v: "4.7 kg" },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/IA202D-402D",
+    tagline: {
+      headline: "COLUMN SYSTEM IA 402D",
+      sub: "Noticeable quiet | Efficient | Effortless",
+    },
+    intro: {
+      title: "COLUMN SYSTEM IA 402D",
+      sections: [
+        {
+          body: "Noticeable quiet | Efficient | Effortless — The necessary power is provided by two 2-channel Class D power amplifiers optimally tuned to the I-Line column speakers – the IA 202D with 2x 250 W at 8 Ω and the IA 402D with either 2x 200 W at 8 Ω or 2x 400 W at 4 Ω.",
+        },
+        {
+          body: "The built-in 24bit/48kHz DSP processor supplies all I-Line speakers with customised and precise filter, EQ and limiter settings. A rotary push-button on the front panel conveniently controls pre-set speaker presets, delay and other functions. This ensures fast, uncomplicated and carefree system setup and tuning.",
+        },
+        {
+          body: "Both amplifiers operate the speakers remarkably quietly – made possible by a sensor-controlled fan, an aerodynamically optimised front to back airflow, and a very low idle power. Ideal for quiet environments!",
+        },
+        {
+          body: "The I-Line amplifiers are equipped with the three most common analogue input and output connectors. 2-channel XLR inputs with link outputs in conjunction with Phoenix MSTB 3-pin inputs cover the majority of all input requirements. Maximum flexibility at the outputs is provided by 3x Neutrik speakON® connectors in parallel to 4-pin Phoenix MSTB connectors.",
+        },
+      ],
+    },
+    features: [
+      {
+        title: "Connectivity",
+        body: "IA 202D & 402D power amplifier are equipped with 3 most widely used analog input and output connections in professional audio. 2 channel XLR inputs with link outputs together with Phoenix MSTB 3-pin inputs will cover most of the input needs. Outputs are equipped with 3x Neutrik speakON® connectors in parallel with 4-pin Phoenix MSTB connectors for maximum flexibility.",
+      },
+      {
+        title: "DSP",
+        body: "24bit/48kHz DSP processor provides all I-line speakers with correct and precise filter, EQ and limiter settings. As always - good sounding and well protected speaker systems are the ultimate aim of the SE AUDIOTECHNIK engineering team. Built-in speaker presets, EQ control, delay and other features allow for an easy, cost-effective and quick system setup and tuning.",
+      },
+    ],
     specGroups: [
       {
         rows: [
@@ -3018,6 +3841,25 @@ export const products: Product[] = [
         ],
       },
     ],
+    references: [
+      {
+        title: "I-Line Review in Production Partner Magazine 1|2021",
+        body: "With the I-Line, the Solingen-based manufacturer SE Audiotechnik presents a series of compact loudspeakers with sets consisting of two tops in column design, two DSP amplifiers and an active 12” subwoofer. How will this combination perform in fixed installations?",
+        image: "/images/products/ia-402d/review-approved.png",
+      },
+    ],
+    sliderTitle: "PICTURE",
+    slider: ["/images/products/ia-402d/pic-402d.png", "/images/products/ia-402d/pic-202d.png"],
+    downloadLinks: [
+      { label: "I-Line Data Sheet", file: "/files/402D/IA-402D-SpecSheet.pdf" },
+      {
+        label: "I-Line Brochure",
+        file: "/files/402D/SE-AUDIOTECHNIK_I-Line-brochure-v.2_web-rev.1.pdf",
+      },
+      { label: "IA 402D Manual", file: "/files/402D/IA_202D-IA402D_Instruction_Manual_20180417.pdf" },
+      { label: "IA 402D 시방서", file: "/files/402D/IA-402D_Specification.hwp" },
+      { label: "IA 402D dwg", file: "/files/402D/se_IA_202D(402D).dwg" },
+    ],
   },
   {
     slug: "ma-2000",
@@ -3030,6 +3872,21 @@ export const products: Product[] = [
     tags: ["앰프", "시스템"],
     keySpecs: [],
     sourceUrl: "https://www.arumtech.co.kr/MA2000Series",
+    tagline: {
+      headline: "AMPLIFIERS MA 2000 Series",
+      sub: "Dual-channel Pro Power Amplifier",
+    },
+    intro: {
+      title: "AMPLIFIERS MA 2000 Series",
+      sections: [
+        {
+          body: "Dual-channel Pro Power Amplifier — MA 2000 series power amplifier is equipped with DDT compression and double overheating protection system by adopting German technology. It possesses functions of mute switch protection and also startup protection for overheating/DC/short circuit/overloading. The series has been modified in terms of appearance design, internal structure, circuit design and sound performance so as to provide extraordinary sound quality. With features of high power, multifunction, high quality, stability and reliability, the series is a kind of class AB pro power amplifier which is able to fulfill the demands of both indoor and outdoor applications.",
+        },
+        {
+          body: "MA 2000 시리즈 파워앰프는 독일 기술을 채택해 DDT 압축과 이중과열 방지 시스템을 탑재했습니다. 음소거 스위치 보호 기능, overheating/DC/short circuit/overloading 등 시동 보호 기능도 갖췄습니다. 이 시리즈는 뛰어난 음질을 제공하도록 외관 설계, 내부 구조, 회로 설계 및 음향 성능 측면에서 고안되었습니다. 고출력, 다기능, 고품질, 안정성, 신뢰성이 특징인 이 시리즈는 AB 프로 파워앰프의 일종으로 실내 및 실외 적용으로 모두의 수요를 충족시킬 수 있습니다.",
+        },
+      ],
+    },
     specColumns: ["MA 2300","MA 2400","MA 2600","MA 2800","MA 21200"],
     specGroups: [
       {
@@ -3055,6 +3912,27 @@ export const products: Product[] = [
         ],
       },
     ],
+    diagramGrid: [
+      { image: "/images/products/ma-2000/diagram.gif", label: "MA 2000 Series diagram" },
+    ],
+    sliderTitle: "PICTURE",
+    slider: [
+      "/images/products/ma-2000/pic1.jpg",
+      "/images/products/ma-2000/pic2.jpg",
+      "/images/products/ma-2000/pic3.jpg",
+    ],
+    downloadLinks: [
+      { label: "MA 2000 series Brochure", file: "/files/ma-2000/SE_82_83_MA_SERIES.pdf" },
+      { label: "MA 2300 시방서", file: "/files/ma-2000/MA-2300_Specification.hwp" },
+      { label: "MA 2400 시방서", file: "/files/ma-2000/MA-2400_Specification.hwp" },
+      { label: "MA 2600 시방서", file: "/files/ma-2000/MA-2600_Specification.hwp" },
+      { label: "MA 2800 시방서", file: "/files/ma-2000/MA-2800_Specification.hwp" },
+      {
+        label: "MA 2300(2400/2600/2800) dwg",
+        file: "/files/ma-2000/se_MA-2300(2400_2600_2800)_20181130.dwg",
+      },
+      { label: "MA-LINE 메뉴얼", file: "/files/ma-2000/SE-MA-Line-Manual-EN-v202302-15.pdf" },
+    ],
   },
 ];
 
@@ -3073,12 +3951,33 @@ const PRODUCT_IMAGES: Record<string, string> = {
   "ic-34": "/images/products/ic-34/main.png",
   "ic-38x": "/images/products/ic-38x/main.png",
   "m-a8": "/images/products/m-a8/main.jpg",
-  "la-10-4d": "/images/products/la-10-4d.png",
+  "la-10-4d": "/images/products/la-10-4d/main.png",
+  "ia-402d": "/images/products/ia-402d/main.png",
+  "ma-2000": "/images/products/ma-2000/main.jpg",
+  "v-l8-vlps215b": "/images/products/v-l8-vlps215b/main.png",
+  "v-8": "/images/products/v-8/main.jpg",
+  "v-10": "/images/products/v-10/main.jpg",
+  "v-12": "/images/products/v-12/main.jpg",
+  "v-15": "/images/products/v-15/main.jpg",
+  "v-118b-218b": "/images/products/v-118b-218b/main.jpg",
+  "cv-10i-12i-15i": "/images/products/cv-10i-12i-15i/main.jpg",
+  "cv-212": "/images/products/cv-212/main.png",
+  "k-10i-12i-15i": "/images/products/k-10i-12i-15i/main.jpg",
+  "k-18b": "/images/products/k-18b/main.jpg",
+  "c-10": "/images/products/c-10/main.jpg",
+  "c-12-c-15": "/images/products/c-12-c-15/main.jpg",
+  "cox-8-cox-12": "/images/products/cox-8-cox-12/main.png",
+  "m-42g2-242g2": "/images/products/m-42g2-242g2/main.jpg",
+  "m-62g2": "/images/products/m-62g2/main.jpg",
+  "m-82g2-82ag2": "/images/products/m-82g2-82ag2/main.jpg",
   // 원본 MF3A 대표 이미지 (직접 업로드)
   "m-f3a-w": "/images/products/m-f3a-w/main.png",
   "m-line-accessory": "/images/products/m-line-accessory/main.png",
   "m-f3": "/images/products/m-f3/main.jpg",
   "s12-pro": "/images/products/s12-pro/main.png",
+  "m-121among2": "/images/products/m-121among2/main.jpg",
+  "smx-12a": "/images/products/smx-12a/main.png",
+  "smx-12": "/images/products/smx-12/main.png",
 };
 // 맵에 없는 제품까지 undefined 로 덮어쓰면 제품 객체에 직접 적은 image 가 조용히 사라진다.
 products.forEach((p) => {

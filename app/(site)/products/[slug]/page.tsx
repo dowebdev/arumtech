@@ -49,6 +49,18 @@ export default async function ProductDetailPage({
         <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
           ACCESSORIES
         </h2>
+        {product.accessoriesIntro && (
+          <div className="mx-auto mb-10 w-full max-w-[900px] text-center">
+            {product.accessoriesIntro.title && (
+              <h3 className="m-0 mb-3 text-[22px] font-semibold tracking-[-0.01em] text-ink">
+                {product.accessoriesIntro.title}
+              </h3>
+            )}
+            <p className="m-0 break-keep text-[15.5px] leading-[1.75] text-[#52555b]">
+              {product.accessoriesIntro.body}
+            </p>
+          </div>
+        )}
         <div className="flex flex-wrap justify-center gap-6">
           {product.accessories.map((a, i) => (
             <div
@@ -200,7 +212,10 @@ export default async function ProductDetailPage({
                   {s.heading && (
                     <h3 className="m-0 mb-2 text-[20px] font-semibold text-accent">{s.heading}</h3>
                   )}
-                  <p className="m-0 text-[18px] leading-[1.85] text-[#52555b]">{s.body}</p>
+                  {/* whitespace-pre-line: 원본이 줄바꿈으로 나열한 항목(예: V-15 Application)을 살린다 */}
+                  <p className="m-0 whitespace-pre-line text-[18px] leading-[1.85] text-[#52555b]">
+                    {s.body}
+                  </p>
                 </div>
               ))}
             </div>
@@ -512,11 +527,16 @@ export default async function ProductDetailPage({
               <h2 className="m-0 mb-8 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
                 FEATURES
               </h2>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {/* 3개짜리는 한 줄에 3열로 — 폭이 좁아지는 만큼 카드를 세로로 키운다. */}
+              <div
+                className={`grid grid-cols-1 gap-5 ${
+                  product.features.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"
+                }`}
+              >
                 {product.features.map((f) => (
                   <div
                     key={f.title}
-                    className="rounded-2xl border border-black/10 bg-[#f7f8fa] p-7"
+                    className="flex min-h-[260px] flex-col rounded-2xl border border-black/10 bg-[#f7f8fa] p-7"
                   >
                     <h3 className="m-0 mb-2.5 text-[20px] font-semibold tracking-[-0.01em] text-ink">
                       {f.title}
@@ -527,10 +547,25 @@ export default async function ProductDetailPage({
                   </div>
                 ))}
               </div>
+
+              {/* 특징 뒤 이미지 — 이미지 없는 특징에도 붙는다 (예: COX 의 Applications 도해) */}
+              {product.featureImage && (
+                <div className="mt-10 overflow-hidden rounded-xl border border-black/10 bg-white">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={product.featureImage}
+                    alt={`${product.model} 상세 이미지`}
+                    loading="lazy"
+                    className="mx-auto block h-auto max-w-full object-contain"
+                  />
+                </div>
+              )}
             </div>
           ))}
 
-        {/* PRODUCTS 슬라이더 — Features 와 Specifications 사이 */}
+        {product.accessoriesBeforeSpec && accessoriesBlock}
+
+        {/* PRODUCTS 슬라이더 — Accessories 와 Specifications 사이 */}
         {product.productsSlider && product.productsSlider.length > 0 && (
           <div className="mx-auto mb-16 w-full max-w-[1000px]">
             {product.productsSliderTitle && (
@@ -542,23 +577,37 @@ export default async function ProductDetailPage({
           </div>
         )}
 
-        {product.accessoriesBeforeSpec && accessoriesBlock}
-
         {product.specGroups && (
           <h2 className="m-0 mb-7 text-center text-[28px] font-semibold tracking-[-0.01em] text-ink">
             Specifications
           </h2>
         )}
 
+        {/* 사양표 위 이미지. 모델이 둘이면 도면도 둘이라(예: V-118B / V-218B) 배열도 받는다. */}
         {product.specImage && (
-          <div className="mb-7 overflow-hidden rounded-xl border border-black/10 bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={product.specImage}
-              alt={`${product.model} 치수 도면`}
-              loading="lazy"
-              className="mx-auto block h-auto max-w-full object-contain"
-            />
+          <div
+            className={`mb-7 grid gap-6 ${
+              Array.isArray(product.specImage) && product.specImage.length > 1
+                ? "grid-cols-1 sm:grid-cols-2"
+                : "grid-cols-1"
+            }`}
+          >
+            {(Array.isArray(product.specImage) ? product.specImage : [product.specImage]).map(
+              (src, i) => (
+                <div
+                  key={src}
+                  className="overflow-hidden rounded-xl border border-black/10 bg-white"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={src}
+                    alt={`${product.model} 치수 도면 ${i + 1}`}
+                    loading="lazy"
+                    className="mx-auto block h-auto max-w-full object-contain"
+                  />
+                </div>
+              )
+            )}
           </div>
         )}
 
@@ -755,7 +804,7 @@ export default async function ProductDetailPage({
                     ? "sm:grid-cols-3"
                     : product.diagramGrid.length === 2
                       ? "sm:grid-cols-2"
-                      : "mx-auto max-w-[560px]"
+                      : /* 도면 1장짜리는 560px → 30% 키운 728px */ "mx-auto max-w-[728px]"
                 }`}
               >
                 {product.diagramGrid.map((d) => (
