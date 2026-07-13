@@ -39,3 +39,6 @@ next-env.d.ts
 /sample*.jpg
 **/archive/_source-page.html
 **/archive/_image-urls.txt
+
+# 제품 다운로드 파일 (PDF/DWG/HWP) — iwinv 파일서버에서 서빙, 저장소에 넣지 않는다
+/public/downloads

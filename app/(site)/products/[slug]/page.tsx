@@ -13,6 +13,18 @@ import {
   downloadFmtColor,
 } from "@/lib/data";
 
+/**
+ * 제품 다운로드 파일의 호스트.
+ * 비어 있으면 public/downloads 에서 그대로 서빙한다 (로컬 개발).
+ * 운영에서는 파일서버(iwinv)를 가리킨다 — 대용량 PDF/DWG 를 저장소에 넣지 않기 위함.
+ */
+const FILE_BASE = process.env.NEXT_PUBLIC_PRODUCT_FILE_URL ?? "";
+
+/** data.ts 의 "/downloads/..." 경로를 실제 다운로드 URL 로 바꾼다. */
+function downloadUrl(file: string) {
+  return file.startsWith("/") ? `${FILE_BASE}${file}` : `${FILE_BASE}/downloads/${file}`;
+}
+
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
@@ -281,7 +293,7 @@ export default async function ProductDetailPage({
                   </div>
                 </div>
                 <a
-                  href={`/files/m-f3a-pro/${d.file}`}
+                  href={downloadUrl(`m-f3a-pro/${d.file}`)}
                   download={`${d.title}.${d.fmt.toLowerCase()}`}
                   className="inline-flex flex-shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-accent px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-accent-hover"
                 >
@@ -879,7 +891,11 @@ export default async function ProductDetailPage({
                     <a
                       key={d.label}
                       /* "/" 로 시작하면 절대경로 — 다른 제품과 파일을 공유할 때 쓴다 */
-                      href={d.file.startsWith("/") ? d.file : `/files/${product.slug}/${d.file}`}
+                      href={
+                        d.file.startsWith("/")
+                          ? downloadUrl(d.file)
+                          : downloadUrl(`${product.slug}/${d.file}`)
+                      }
                       download
                       className="group flex items-center gap-3 rounded-xl border border-black/10 bg-white px-5 py-4 transition-colors hover:border-accent"
                     >
