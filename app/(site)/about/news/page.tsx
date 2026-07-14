@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import NoticeBoard from "@/components/site/NoticeBoard";
+import BoardWriteButton from "@/components/site/BoardWriteButton";
 
 export const metadata: Metadata = {
   title: "NEWS",
@@ -16,6 +17,7 @@ export default function AboutNewsPage() {
             아름텍 소식
           </h2>
         </div>
+        <BoardWriteButton href="/about/news/write" />
         <NoticeBoard />
       </section>
     </div>

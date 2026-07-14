@@ -2,19 +2,15 @@
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
-import { fetchContentsList, ContentsConfigError, type ContentItem } from "@/lib/contents";
+import {
+  fetchContentsList,
+  ContentsConfigError,
+  BOARD_CATEGORIES,
+  type ContentItem,
+} from "@/lib/contents";
 import Pagination from "./Pagination";
 
-/** 아름텍 설치사례 카테고리 (기존 사이트 기준). */
-const CATEGORIES = [
-  "전체",
-  "Domestic",
-  "International",
-  "강당/공연장",
-  "관공서/학교",
-  "기업/상업시설",
-  "종교시설",
-] as const;
+const CATEGORIES = ["전체", ...BOARD_CATEGORIES.cases] as const;
 const PER_PAGE = 12;
 
 type State =

@@ -1,0 +1,247 @@
+/**
+ * 게시판 쓰기 클라이언트 — woori `/contents`·`/files` API. **관리자 로그인 필요**.
+ * 읽기는 lib/contents.ts 가 담당한다 (인증 불필요).
+ *
+ *   등록  POST   {API}/contents  { module_idx, title, content, is_html, extras, date_start, date_end, file_idx[] }
+ *   수정  PUT    {API}/contents  { idx, ..., file_idx_add[], file_idx_delete[] }
+ *   삭제  DELETE {API}/contents  { idx }                       ← 본문(JSON)으로 idx 를 보낸다
+ *   첨부  POST   {FILE}/files/post.php (multipart) → POST {API}/files (메타 등록) → 파일 idx
+ *
+ * 모든 요청에 Authorization: Bearer {access_token} 을 싣는다.
+ */
+
+import { BOARDS, type BoardKey } from "./contents";
+
+const API_URL = process.env.NEXT_PUBLIC_WOORI_API_URL;
+const SITE_ID = process.env.NEXT_PUBLIC_WOORI_SITE_ID;
+/** 첨부파일이 실제로 올라가는 파일서버 (iwinv). */
+const FILE_URL = process.env.NEXT_PUBLIC_WOORI_FILE_URL ?? "";
+
+/** woori FILE_TYPE — 1: 일반(다운로드용), 3: 이미지. */
+export const FILE_TYPE = { general: 1, image: 3 } as const;
+/** 공개 파일 (비로그인 조회 가능). */
+const PERMIT_PUBLIC = 0;
+/** 게시글 종료일. 상시 노출시키려고 먼 미래로 둔다 (한강미디어와 동일). */
+const DATE_END_FAR = "2099-12-31";
+
+/** 저장 실패 — message 는 사용자에게 그대로 보여줄 수 있다. */
+export class BoardWriteError extends Error {}
+
+export interface BoardDraft {
+  title: string;
+  content: string;
+  /** 본문을 HTML 로 저장할지. 기존 이관 글은 HTML, 새 글은 평문이 기본. */
+  isHtml: boolean;
+  /** 상단 고정 (공지사항) */
+  pinned?: boolean;
+  /** 카테고리 (자료실·설치사례) */
+  category?: string;
+}
+
+/** 업로드가 끝나 게시글에 붙일 수 있는 첨부. */
+export interface UploadedFile {
+  idx: string;
+  name: string;
+}
+
+interface ApiResult {
+  statusCode?: number;
+  message?: string[] | string;
+  data?: { idx?: string } | null;
+}
+
+function firstMessage(message: ApiResult["message"]): string | undefined {
+  if (Array.isArray(message)) return message.find((m) => typeof m === "string" && m);
+  return typeof message === "string" && message ? message : undefined;
+}
+
+function requireConfig() {
+  if (!API_URL || !SITE_ID) {
+    throw new BoardWriteError("게시판 API 설정이 완료되지 않았습니다.");
+  }
+}
+
+/** /contents 요청 공통. 실패하면 서버 메시지를 담은 BoardWriteError 를 던진다. */
+async function request(
+  method: "POST" | "PUT" | "DELETE",
+  body: Record<string, unknown>,
+  token: string,
+  failMessage: string
+): Promise<ApiResult> {
+  requireConfig();
+
+  let json: ApiResult;
+  try {
+    const res = await fetch(`${API_URL}/contents`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        "x-site": SITE_ID as string,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+    json = (await res.json()) as ApiResult;
+  } catch {
+    throw new BoardWriteError("서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+  }
+
+  if (json.statusCode !== 200) {
+    throw new BoardWriteError(firstMessage(json.message) ?? failMessage);
+  }
+  return json;
+}
+
+/** YYYY-MM-DD */
+function today(): string {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/** 목록·상세가 읽는 extras(JSON 문자열)를 만든다. lib/contents.ts 의 parseExtras 와 짝을 이룬다. */
+function buildExtras(draft: BoardDraft): string {
+  return JSON.stringify({
+    isPinned: draft.pinned ? 1 : 0,
+    category: draft.category ?? "",
+  });
+}
+
+/** 게시글 등록. 새 글의 idx 를 돌려준다. */
+export async function createContent(
+  board: BoardKey,
+  draft: BoardDraft,
+  fileIdxs: string[],
+  token: string
+): Promise<string> {
+  const json = await request(
+    "POST",
+    {
+      module_idx: BOARDS[board],
+      title: draft.title,
+      content: draft.content,
+      is_html: draft.isHtml ? 1 : 0,
+      extras: buildExtras(draft),
+      date_start: today(),
+      date_end: DATE_END_FAR,
+      is_hidden_list: 0,
+      ...(fileIdxs.length ? { file_idx: fileIdxs } : {}),
+    },
+    token,
+    "등록에 실패했습니다."
+  );
+
+  const idx = json.data?.idx;
+  if (!idx) throw new BoardWriteError("등록은 됐지만 글 번호를 받지 못했습니다.");
+  return idx;
+}
+
+/** 게시글 수정. 첨부는 추가/삭제할 것만 넘긴다. */
+export async function updateContent(
+  idx: string,
+  draft: BoardDraft,
+  files: { add: string[]; remove: string[] },
+  token: string
+): Promise<void> {
+  await request(
+    "PUT",
+    {
+      idx,
+      title: draft.title,
+      content: draft.content,
+      is_html: draft.isHtml ? 1 : 0,
+      extras: buildExtras(draft),
+      ...(files.add.length ? { file_idx_add: files.add } : {}),
+      ...(files.remove.length ? { file_idx_delete: files.remove } : {}),
+    },
+    token,
+    "저장에 실패했습니다."
+  );
+}
+
+/** 게시글 삭제. */
+export async function deleteContent(idx: string, token: string): Promise<void> {
+  await request("DELETE", { idx }, token, "삭제에 실패했습니다.");
+}
+
+/**
+ * 첨부 업로드 — 2단계.
+ *   1) 파일서버(iwinv)에 실제 파일을 올리고 메타데이터를 받는다.
+ *   2) 그 메타데이터를 API 에 등록해 파일 idx 를 받는다. 이 idx 를 게시글에 붙인다.
+ */
+export async function uploadFile(
+  file: File,
+  opts: { board: BoardKey; type: (typeof FILE_TYPE)[keyof typeof FILE_TYPE] },
+  token: string
+): Promise<UploadedFile> {
+  requireConfig();
+  if (!FILE_URL) {
+    throw new BoardWriteError("파일서버 설정(NEXT_PUBLIC_WOORI_FILE_URL)이 없습니다.");
+  }
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("file_path", opts.board);
+  form.append("file_type", String(opts.type));
+  form.append("permit_level", String(PERMIT_PUBLIC));
+
+  // Content-Type 은 브라우저가 boundary 와 함께 채우도록 비워둔다.
+  const headers = {
+    "x-site": SITE_ID as string,
+    Authorization: `Bearer ${token}`,
+  };
+
+  interface StorageMeta {
+    file_ext?: string;
+    file_name_origin?: string;
+    file_name_real?: string;
+    file_path?: string;
+    file_size?: number;
+    file_type?: number;
+    permit_level?: number;
+  }
+
+  let meta: StorageMeta | undefined;
+  try {
+    const res = await fetch(`${FILE_URL}/files/post.php`, {
+      method: "POST",
+      headers,
+      body: form,
+    });
+    const json = (await res.json()) as { data?: StorageMeta };
+    meta = json.data;
+  } catch {
+    throw new BoardWriteError("파일 업로드에 실패했습니다.");
+  }
+
+  if (!meta?.file_name_real) {
+    throw new BoardWriteError("파일 업로드에 실패했습니다.");
+  }
+
+  let registered: ApiResult;
+  try {
+    const res = await fetch(`${API_URL}/files`, {
+      method: "POST",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        file_ext: meta.file_ext,
+        file_name_origin: meta.file_name_origin,
+        file_name_real: meta.file_name_real,
+        file_path: meta.file_path,
+        file_size: meta.file_size,
+        file_type: meta.file_type,
+        permit_level: meta.permit_level,
+      }),
+    });
+    registered = (await res.json()) as ApiResult;
+  } catch {
+    throw new BoardWriteError("파일 등록에 실패했습니다.");
+  }
+
+  const idx = registered.data?.idx;
+  if (!idx) {
+    throw new BoardWriteError(firstMessage(registered.message) ?? "파일 등록에 실패했습니다.");
+  }
+
+  return { idx, name: meta.file_name_origin || file.name };
+}

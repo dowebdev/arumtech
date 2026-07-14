@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { fetchContentsList, ContentsConfigError, type ContentItem } from "@/lib/contents";
+import {
+  fetchContentsList,
+  ContentsConfigError,
+  BOARD_CATEGORIES,
+  type ContentItem,
+} from "@/lib/contents";
 import Pagination from "./Pagination";
 
-/** 아름텍 자료실 카테고리 (기존 사이트 기준). */
-const CATEGORIES = ["전체", "메뉴얼", "물가정보", "카탈로그", "기술자료", "도면자료", "시방서"] as const;
+const CATEGORIES = ["전체", ...BOARD_CATEGORIES.archive] as const;
 const PER_PAGE = 12;
 
 type State =

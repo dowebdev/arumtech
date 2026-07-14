@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CasesBoard from "@/components/site/CasesBoard";
+import BoardWriteButton from "@/components/site/BoardWriteButton";
 import PageHero from "@/components/site/PageHero";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function CasesPage() {
       />
 
       <section className="container-site py-8 pb-24">
+        <BoardWriteButton href="/cases/write" label="설치사례 등록" />
         <CasesBoard />
       </section>
     </div>

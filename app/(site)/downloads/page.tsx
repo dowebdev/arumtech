@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ArchiveBoard from "@/components/site/ArchiveBoard";
+import BoardWriteButton from "@/components/site/BoardWriteButton";
 import PageHero from "@/components/site/PageHero";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function DownloadsPage() {
       />
 
       <section className="container-site py-8">
+        <BoardWriteButton href="/downloads/write" label="자료 등록" />
         <ArchiveBoard />
 
         <div className="mb-24 mt-12 flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-black/10 bg-[#f4f5f7] px-10 py-8">

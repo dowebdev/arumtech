@@ -22,6 +22,15 @@ export const BOARDS = {
 
 export type BoardKey = keyof typeof BOARDS;
 
+/**
+ * 게시판별 카테고리 (기존 사이트 기준). 목록 필터와 작성 폼이 같은 값을 써야 하므로 여기서 관리한다.
+ * 공지사항은 카테고리 대신 상단 고정(pinned)만 쓴다.
+ */
+export const BOARD_CATEGORIES = {
+  archive: ["메뉴얼", "물가정보", "카탈로그", "기술자료", "도면자료", "시방서"],
+  cases: ["Domestic", "International", "강당/공연장", "관공서/학교", "기업/상업시설", "종교시설"],
+} as const;
+
 /** 게시판 목록의 한 항목. */
 export interface ContentItem {
   idx: string;
