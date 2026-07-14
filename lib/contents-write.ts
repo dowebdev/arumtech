@@ -185,12 +185,6 @@ export async function uploadFile(
   form.append("file_type", String(opts.type));
   form.append("permit_level", String(PERMIT_PUBLIC));
 
-  // Content-Type 은 브라우저가 boundary 와 함께 채우도록 비워둔다.
-  const headers = {
-    "x-site": SITE_ID as string,
-    Authorization: `Bearer ${token}`,
-  };
-
   interface StorageMeta {
     file_ext?: string;
     file_name_origin?: string;
@@ -203,9 +197,15 @@ export async function uploadFile(
 
   let meta: StorageMeta | undefined;
   try {
+    // 헤더를 하나도 붙이지 않는다.
+    //
+    // 파일서버(iwinv)는 사이트와 다른 출처라 브라우저가 CORS 를 건다. 그런데 파일서버가
+    // 허용하는 헤더는 `Content-Type, Authorization` 뿐이어서, x-site 를 실으면 프리플라이트가
+    // 막히고 업로드가 통째로 실패한다. post.php 는 인증도 사이트 헤더도 보지 않으므로
+    // (파일·file_path·file_type·permit_level 만 읽는다) 아무것도 보낼 필요가 없다.
+    // Content-Type 도 비워둬야 브라우저가 multipart boundary 를 채운다.
     const res = await fetch(`${FILE_URL}/files/post.php`, {
       method: "POST",
-      headers,
       body: form,
     });
     const json = (await res.json()) as { data?: StorageMeta };
@@ -218,11 +218,17 @@ export async function uploadFile(
     throw new BoardWriteError("파일 업로드에 실패했습니다.");
   }
 
+  // 파일서버는 파일을 보관만 한다. 게시글에 붙이려면 그 메타데이터를 API 에 등록해 idx 를 받아야 한다.
+  // 이쪽은 woori API 라 평소대로 x-site 와 토큰이 필요하다.
   let registered: ApiResult;
   try {
     const res = await fetch(`${API_URL}/files`, {
       method: "POST",
-      headers: { ...headers, "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-site": SITE_ID as string,
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         file_ext: meta.file_ext,
         file_name_origin: meta.file_name_origin,
