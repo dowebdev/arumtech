@@ -130,10 +130,30 @@ interface RawItem {
 
 const IMAGE_EXT = /^(jpe?g|png|gif|webp|bmp|svg)$/i;
 
-/** 대표 이미지 — 본문 HTML 첫 이미지, 없으면 첨부 이미지 첫 장. content_load 조회 시에만 구해진다. */
+/**
+ * HTML 속성값을 실제 문자열로 되돌린다.
+ *
+ * 본문에서 정규식으로 뽑은 src 는 HTML 소스 그대로라 엔티티가 섞여 있다. 파일서버 URL 은
+ * 쿼리스트링(get.php?permit_level=0&file_path=...)이라 `&` 가 `&amp;` 로 들어오는데, 이걸
+ * 그대로 <img src> 에 쓰면 파라미터 이름이 `amp;file_path` 가 되어 서버가 파일을 못 찾는다.
+ * (에러 JSON 이 200 으로 돌아오므로 이미지 자리가 조용히 비어 보인다.)
+ */
+function decodeEntities(value: string): string {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+/**
+ * 대표 이미지(목록 썸네일) — 본문 HTML 의 **가장 위 이미지**, 없으면 첨부 이미지 첫 장.
+ * content_load·file_load 로 조회할 때만 구해진다.
+ */
 function firstImage(raw: RawItem): string | undefined {
   const m = raw.content?.match(/<img[^>]+src="([^"]+)"/i);
-  if (m) return m[1];
+  if (m) return decodeEntities(m[1]);
   const img = raw.files?.find((f) => IMAGE_EXT.test(f.file_ext ?? ""));
   if (img?.file_url) return `${FILE_URL}${img.file_url}`;
   return undefined;

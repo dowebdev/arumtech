@@ -132,8 +132,11 @@ export default function BoardForm({
         // 첨부 자체는 떼지 않는다 — 파일 등록을 지우면 파일서버의 실물까지 사라질 수 있어서다.
         // 대신 상세 페이지가 HTML 글(=에디터 글)의 이미지 첨부는 따로 그리지 않으므로 중복되지 않는다.
         const body = toEditorHtml(item.content, item.isHtml);
+        // 본문 HTML 안의 URL 은 `&` 가 `&amp;` 로 들어 있다. 그대로 비교하면 이미 본문에 있는
+        // 이미지를 "없다"고 보고 또 붙인다.
+        const bodyUrls = body.replace(/&amp;/g, "&");
         const orphanImages = item.files
-          .filter((f) => IMAGE_EXT.test(f.ext) && f.url && !body.includes(f.url))
+          .filter((f) => IMAGE_EXT.test(f.ext) && f.url && !bodyUrls.includes(f.url))
           .map((f) => `<p><img src="${f.url}"></p>`)
           .join("");
         setContent(body + orphanImages);
