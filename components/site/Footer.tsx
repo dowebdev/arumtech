@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import AdminAccess from "./AdminAccess";
 import { SITE } from "@/lib/data";
 
 const SOCIALS = [
@@ -116,13 +117,7 @@ export default function Footer() {
             <span className="text-[11.5px] text-dim">
               개인정보처리방침 · 이용약관 · 오시는 길
             </span>
-            <Link
-              href="/admin/inquiries"
-              className="flex items-center gap-[5px] rounded-md border border-cream/10 px-[11px] py-[5px] text-[11.5px] text-dim transition-colors hover:border-cream/40 hover:text-accent"
-            >
-              <i className="ph ph-lock-simple" />
-              관리자
-            </Link>
+            <AdminAccess />
           </div>
         </div>
       </div>
