@@ -436,16 +436,35 @@ function ProductPreview({ line }: { line: ProductLine }) {
 
   const body = (
     <>
-      <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-cream/10 bg-white">
-        <ProductImage
-          // 라인이 바뀌면 이미지를 새로 그린다 (이전 이미지가 남아 보이지 않게)
-          key={preview.href}
-          src={preview.image}
-          alt={preview.model}
-          className="h-full w-full"
-          pad="p-5"
-          iconSize={48}
-        />
+      {/*
+        일반 제품 이미지는 배경을 지운 컷이라 흰 배경에 놓는다.
+        외부 링크(M-F3A PRO MAX)는 검은 배경의 비주얼 이미지라, 검정 바탕에 아주 연한 테두리만 둔다.
+      */}
+      <div
+        className={`relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border ${
+          preview.external ? "border-cream/15 bg-black" : "border-cream/10 bg-white"
+        }`}
+      >
+        {preview.external ? (
+          // ProductImage 는 내부에서 흰 배경을 칠하므로 검은 배경에는 쓸 수 없다. 직접 그린다.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={preview.href}
+            src={preview.image}
+            alt={preview.model}
+            className="h-full w-full object-contain"
+          />
+        ) : (
+          <ProductImage
+            // 라인이 바뀌면 이미지를 새로 그린다 (이전 이미지가 남아 보이지 않게)
+            key={preview.href}
+            src={preview.image}
+            alt={preview.model}
+            className="h-full w-full"
+            pad="p-5"
+            iconSize={48}
+          />
+        )}
       </div>
       <div className="mt-3 font-mono text-[15px] font-semibold text-cream">{preview.model}</div>
       <div className="mt-0.5 text-xs text-muted">
