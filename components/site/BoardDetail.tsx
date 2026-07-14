@@ -93,26 +93,37 @@ export default function BoardDetail({
 
   return (
     <article>
-      {canManage && (
-        <div className="mb-6 flex justify-end gap-2">
-          <Link
-            href={`${listPath}/${idx}/edit`}
-            className="flex items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
-          >
-            <i className="ph ph-pencil-simple" />
-            수정
-          </Link>
-          <button
-            type="button"
-            onClick={remove}
-            disabled={deleting}
-            className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-danger hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <i className="ph ph-trash" />
-            {deleting ? "삭제 중…" : "삭제"}
-          </button>
-        </div>
-      )}
+      {/* 상단 바 — 왼쪽에 목록으로, 오른쪽에 관리자 버튼. 목록으로는 하단에도 하나 더 있다. */}
+      <div className="mb-6 flex items-center justify-between gap-2">
+        <Link
+          href={listPath}
+          className="flex items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
+        >
+          <i className="ph ph-arrow-left" />
+          목록으로
+        </Link>
+
+        {canManage && (
+          <div className="flex gap-2">
+            <Link
+              href={`${listPath}/${idx}/edit`}
+              className="flex items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
+            >
+              <i className="ph ph-pencil-simple" />
+              수정
+            </Link>
+            <button
+              type="button"
+              onClick={remove}
+              disabled={deleting}
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-danger hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <i className="ph ph-trash" />
+              {deleting ? "삭제 중…" : "삭제"}
+            </button>
+          </div>
+        )}
+      </div>
 
       <header className="border-b border-black/10 pb-7">
         <h1 className="m-0 break-keep text-[26px] font-semibold leading-[1.35] tracking-[-0.01em] text-ink sm:text-[30px]">
