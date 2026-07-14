@@ -308,9 +308,14 @@ export default function Header() {
                   <>
                     <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tracking-[0.02em] text-cream">
                       {line}
-                      {/* 호버할 때만 나타나는 이동 화살표 */}
+                      {/*
+                        호버할 때만 나타나는 연두색 화살표.
+                        → 는 사이트 안의 제품 목록으로 이동, ↗ 는 새 창으로 외부 사이트(M-F3A PRO MAX).
+                      */}
                       <i
-                        className="ph ph-arrow-up-right text-accent opacity-0 transition-opacity group-hover:opacity-100"
+                        className={`${
+                          external ? "ph ph-arrow-up-right" : "ph ph-arrow-right"
+                        } text-accent opacity-0 transition-opacity group-hover:opacity-100`}
                         style={{ fontSize: 14 }}
                         aria-hidden="true"
                       />
