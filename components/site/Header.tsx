@@ -303,11 +303,17 @@ export default function Header() {
               {PRODUCT_LINES.map((line) => {
                 const external = LINE_EXTERNAL_LINKS[line];
                 const cls =
-                  "rounded-md border border-transparent p-3 transition-colors hover:border-cream/25 hover:bg-white/[0.08]";
+                  "group rounded-md border border-transparent p-3 transition-colors hover:border-cream/25 hover:bg-white/[0.08]";
                 const inner = (
                   <>
-                    <div className="font-mono text-sm font-semibold tracking-[0.02em] text-cream">
+                    <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tracking-[0.02em] text-cream">
                       {line}
+                      {/* 호버할 때만 나타나는 이동 화살표 */}
+                      <i
+                        className="ph ph-arrow-up-right text-accent opacity-0 transition-opacity group-hover:opacity-100"
+                        style={{ fontSize: 14 }}
+                        aria-hidden="true"
+                      />
                     </div>
                     <div className="mt-1 text-[11.5px] leading-[1.4] text-muted">
                       {LINE_DESCRIPTIONS[line]}
