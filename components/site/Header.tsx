@@ -10,7 +10,36 @@ import {
   LINE_EXTERNAL_LINKS,
   DOWNLOAD_CATEGORIES,
   SITE,
+  products,
+  type ProductLine,
 } from "@/lib/data";
+import { ProductImage } from "./Visuals";
+
+/**
+ * 제품소개 메가메뉴의 우측 미리보기 — 라인을 호버하면 그 라인의 대표 제품으로 바뀐다.
+ *
+ * 대표 제품은 제품 목록에 그 라인으로 처음 나오는 제품이다. 다만 목록 첫 항목에 이미지가
+ * 없는 라인이 있어(L-Line 의 "software") 미리보기가 빈 칸이 되므로, 이미지가 있는 첫 제품을 쓴다.
+ */
+const LINE_PREVIEW: Partial<
+  Record<ProductLine, { model: string; slug: string; image?: string; desc: string }>
+> = {};
+for (const line of PRODUCT_LINES) {
+  const inLine = products.filter((p) => p.line === line);
+  const p = inLine.find((x) => x.image) ?? inLine[0];
+  if (p) {
+    LINE_PREVIEW[line] = {
+      model: p.model,
+      slug: p.slug,
+      image: p.image,
+      desc: p.kicker ?? LINE_DESCRIPTIONS[line],
+    };
+  }
+}
+
+/** 메뉴를 열었을 때 처음 보여줄 라인. */
+const DEFAULT_PREVIEW_LINE: ProductLine =
+  (PRODUCT_LINES.find((l) => LINE_PREVIEW[l]) as ProductLine) ?? "M-Line";
 
 type MenuItem = { label: string; href: string; desc?: string; external?: boolean };
 type MenuCategory = {
@@ -127,6 +156,8 @@ const SUPPORT_MENU = [
 export default function Header() {
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  /** 제품소개 메가메뉴에서 지금 호버 중인 라인 — 우측 미리보기가 이 라인을 따라간다. */
+  const [previewLine, setPreviewLine] = useState<ProductLine>(DEFAULT_PREVIEW_LINE);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   // true when the section currently behind the bar has a dark background
@@ -169,7 +200,11 @@ export default function Header() {
   return (
     <header
       className="sticky top-0 z-[100]"
-      onMouseLeave={() => setOpenMenu(null)}
+      onMouseLeave={() => {
+        setOpenMenu(null);
+        // 다음에 열 때는 기본 라인부터 보여준다.
+        setPreviewLine(DEFAULT_PREVIEW_LINE);
+      }}
     >
       <div className={`transition-all duration-300 ${scrolled ? "px-3 pt-3 sm:px-4" : ""}`}>
         <div
@@ -279,34 +314,36 @@ export default function Header() {
                     </div>
                   </>
                 );
+                // 라인에 마우스를 올리면 우측 미리보기가 그 라인의 대표 제품으로 바뀐다.
+                const onHover = () => {
+                  if (LINE_PREVIEW[line]) setPreviewLine(line);
+                };
                 return external ? (
-                  <a key={line} href={external} target="_blank" rel="noopener noreferrer" className={cls}>
+                  <a
+                    key={line}
+                    href={external}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cls}
+                    onMouseEnter={onHover}
+                    onFocus={onHover}
+                  >
                     {inner}
                   </a>
                 ) : (
-                  <Link key={line} href={`/products?line=${encodeURIComponent(line)}`} className={cls}>
+                  <Link
+                    key={line}
+                    href={`/products?line=${encodeURIComponent(line)}`}
+                    className={cls}
+                    onMouseEnter={onHover}
+                    onFocus={onHover}
+                  >
                     {inner}
                   </Link>
                 );
               })}
             </div>
-            <div className="border-l border-cream/10 pl-10">
-              <div className="mb-3.5 text-[11px] tracking-[0.2em] text-accent">FEATURED</div>
-              <Link href="/products/m-f3a-pro" className="block">
-                <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-cream/10 bg-white">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/images/products/m-f3a-pro.png"
-                    alt="M-F3A PRO"
-                    className="h-full w-full object-contain p-5"
-                  />
-                </div>
-                <div className="mt-3 font-mono text-[15px] font-semibold text-cream">
-                  M-F3A PRO
-                </div>
-                <div className="mt-0.5 text-xs text-muted">컴팩트 액티브 라인어레이 →</div>
-              </Link>
-            </div>
+            <ProductPreview line={previewLine} />
           </div>
         </div>
       )}
@@ -328,6 +365,39 @@ export default function Header() {
 }
 
 /** Two bold bars that morph into an X when `open`. */
+/** 제품소개 메가메뉴 우측 — 호버 중인 라인의 대표 제품을 보여준다. */
+function ProductPreview({ line }: { line: ProductLine }) {
+  const preview = LINE_PREVIEW[line];
+
+  return (
+    <div className="border-l border-cream/10 pl-10">
+      <div className="mb-3.5 font-mono text-[11px] tracking-[0.2em] text-accent">
+        {line.toUpperCase()}
+      </div>
+
+      {preview ? (
+        <Link href={`/products/${preview.slug}`} className="block">
+          <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-cream/10 bg-white">
+            <ProductImage
+              // 라인이 바뀌면 이미지를 새로 그린다 (이전 이미지가 남아 보이지 않게)
+              key={preview.slug}
+              src={preview.image}
+              alt={preview.model}
+              className="h-full w-full"
+              pad="p-5"
+              iconSize={48}
+            />
+          </div>
+          <div className="mt-3 font-mono text-[15px] font-semibold text-cream">{preview.model}</div>
+          <div className="mt-0.5 text-xs text-muted">{preview.desc} →</div>
+        </Link>
+      ) : (
+        <div className="text-xs text-muted">{LINE_DESCRIPTIONS[line]}</div>
+      )}
+    </div>
+  );
+}
+
 function MenuToggle({ open }: { open: boolean }) {
   const bar =
     "absolute left-0 block h-[2px] w-full bg-current transition-all duration-300 ease-out";
