@@ -45,7 +45,12 @@ export interface ContentItem {
   fileCount: number;
   /** 카테고리 (extras.category) — 설치사례 필터용 */
   category?: string;
-  /** 대표 이미지 — 본문 첫 이미지 또는 첨부 이미지 (withContent 로 목록 조회 시) */
+  /** 관리자가 직접 지정한 목록이미지 (extras.listImage). 없으면 본문에서 자동으로 뽑는다. */
+  listImage?: string;
+  /**
+   * 목록에 실제로 그릴 대표 이미지.
+   * 지정한 목록이미지 → 본문 첫 이미지 → 첨부 이미지 순으로 정한다 (withContent 로 조회할 때만 구해진다).
+   */
   thumbnail?: string;
 }
 
@@ -99,12 +104,20 @@ async function get(path: string, params: Record<string, string | number>): Promi
 }
 
 /** extras JSON 문자열을 안전하게 파싱한다. */
-function parseExtras(extras: unknown): { pinned: boolean; category?: string } {
+function parseExtras(extras: unknown): {
+  pinned: boolean;
+  category?: string;
+  listImage?: string;
+} {
   if (typeof extras !== "string") return { pinned: false };
   try {
     const e = JSON.parse(extras);
-    const category = typeof e?.category === "string" && e.category ? e.category : undefined;
-    return { pinned: e?.isPinned === 1, category };
+    const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
+    return {
+      pinned: e?.isPinned === 1,
+      category: str(e?.category),
+      listImage: str(e?.listImage),
+    };
   } catch {
     return { pinned: false };
   }
@@ -160,7 +173,7 @@ function firstImage(raw: RawItem): string | undefined {
 }
 
 function toItem(raw: RawItem): ContentItem {
-  const { pinned, category } = parseExtras(raw.extras);
+  const { pinned, category, listImage } = parseExtras(raw.extras);
   return {
     idx: raw.idx,
     title: raw.title ?? "",
@@ -169,7 +182,9 @@ function toItem(raw: RawItem): ContentItem {
     views: raw.count_read ?? 0,
     fileCount: raw.files?.length ?? 0,
     category,
-    thumbnail: firstImage(raw),
+    listImage,
+    // 직접 지정한 목록이미지가 우선. 없으면 본문·첨부에서 자동으로 뽑는다.
+    thumbnail: listImage ?? firstImage(raw),
   };
 }
 

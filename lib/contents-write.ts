@@ -36,6 +36,8 @@ export interface BoardDraft {
   pinned?: boolean;
   /** 카테고리 (자료실·설치사례) */
   category?: string;
+  /** 목록 썸네일로 쓸 이미지 URL. 비우면 본문 첫 이미지가 쓰인다. */
+  listImage?: string;
 }
 
 /** 업로드가 끝나 게시글에 붙일 수 있는 첨부. */
@@ -104,6 +106,7 @@ function buildExtras(draft: BoardDraft): string {
   return JSON.stringify({
     isPinned: draft.pinned ? 1 : 0,
     category: draft.category ?? "",
+    listImage: draft.listImage ?? "",
   });
 }
 

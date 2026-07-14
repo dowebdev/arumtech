@@ -47,6 +47,8 @@ const CONFIG = {
     noun: "소식",
     pinned: true,
     categories: null,
+    // 목록이 카드형이라 썸네일을 직접 지정할 수 있다.
+    listImage: true,
     // 사진·동영상은 본문 에디터로 넣는다. 별도 첨부 없음.
     files: null,
   },
@@ -54,12 +56,15 @@ const CONFIG = {
     noun: "자료",
     pinned: false,
     categories: BOARD_CATEGORIES.archive,
+    // 자료실 목록은 파일 아이콘만 쓴다 — 썸네일이 없다.
+    listImage: false,
     files: { label: "다운로드 파일", multiple: false, accept: "", type: FILE_TYPE.general },
   },
   cases: {
     noun: "설치사례",
     pinned: false,
     categories: BOARD_CATEGORIES.cases,
+    listImage: true,
     files: null,
   },
 } as const;
@@ -102,6 +107,9 @@ export default function BoardForm({
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
   const [pinned, setPinned] = useState(false);
+  /** 목록 썸네일로 쓸 이미지 URL. 비우면 본문 첫 이미지가 쓰인다. */
+  const [listImage, setListImage] = useState("");
+  const [listImageUploading, setListImageUploading] = useState(false);
   const [files, setFiles] = useState<FileSlot[]>([]);
   /** 수정 진입 시점의 첨부 — 저장할 때 추가/삭제 차이를 계산한다. */
   const [originalFiles, setOriginalFiles] = useState<FileSlot[]>([]);
@@ -143,6 +151,7 @@ export default function BoardForm({
 
         setCategory(item.category ?? "");
         setPinned(item.pinned);
+        setListImage(item.listImage ?? "");
         const slots = item.files.map((f) => ({ idx: f.idx, name: f.name }));
         setFiles(slots);
         setOriginalFiles(slots);
@@ -193,6 +202,23 @@ export default function BoardForm({
     }
   };
 
+  /** 목록이미지 — 본문에 넣지 않고 URL 만 extras 에 저장한다. */
+  const onPickListImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setError("");
+    setListImageUploading(true);
+    try {
+      setListImage(await uploadMedia(file, { board, type: FILE_TYPE.image }));
+    } catch (err) {
+      setError(err instanceof BoardWriteError ? err.message : "목록이미지 업로드에 실패했습니다.");
+    } finally {
+      setListImageUploading(false);
+    }
+  };
+
   const onImageUpload = (file: File) => insertMedia(file, FILE_TYPE.image);
   const onFileUpload = (file: File) => insertMedia(file, FILE_TYPE.general);
   const onVideoUpload = (file: File, onProgress?: (percent: number) => void) =>
@@ -200,7 +226,7 @@ export default function BoardForm({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (saving || uploading || !session) return;
+    if (saving || uploading || listImageUploading || !session) return;
     if (!title.trim()) {
       setError("제목을 입력하세요.");
       return;
@@ -215,6 +241,7 @@ export default function BoardForm({
       isHtml: true,
       pinned: config.pinned ? pinned : false,
       category: config.categories ? category : "",
+      listImage: config.listImage ? listImage : "",
     };
 
     try {
@@ -256,7 +283,7 @@ export default function BoardForm({
     return <div className="py-24 text-center text-[15px] text-[#6e7178]">불러오는 중…</div>;
   }
 
-  const busy = saving || uploading;
+  const busy = saving || uploading || listImageUploading;
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-6">
@@ -291,6 +318,41 @@ export default function BoardForm({
               </option>
             ))}
           </select>
+        </div>
+      )}
+
+      {config.listImage && (
+        <div className="flex flex-col gap-2">
+          <span className="text-[14px] font-semibold text-ink">
+            목록이미지
+            <span className="ml-2 text-[12.5px] font-normal text-[#6e7178]">
+              목록 카드에 쓸 대표 이미지입니다. 지정하지 않으면 본문의 첫 이미지가 쓰입니다.
+            </span>
+          </span>
+
+          {listImage ? (
+            <div className="flex items-start gap-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={listImage}
+                alt="목록이미지 미리보기"
+                className="h-[120px] w-[160px] rounded-lg border border-black/10 object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => setListImage("")}
+                className="rounded-lg border border-black/15 px-4 py-2.5 text-[13.5px] text-[#52555b] transition-colors hover:border-danger hover:text-danger"
+              >
+                이미지 삭제
+              </button>
+            </div>
+          ) : (
+            <label className="flex w-fit cursor-pointer items-center gap-2 rounded-lg border border-dashed border-black/25 px-5 py-3 text-[14px] text-[#52555b] transition-colors hover:border-accent hover:text-accent">
+              <input type="file" hidden accept="image/*" onChange={onPickListImage} />
+              <i className="ph ph-image" />
+              {listImageUploading ? "업로드 중…" : "목록이미지 선택"}
+            </label>
+          )}
         </div>
       )}
 
