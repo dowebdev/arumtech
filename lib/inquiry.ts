@@ -17,17 +17,16 @@ const MESSAGE_TYPE_SMS = 2;
 /**
  * 발송에 쓸 메시지 템플릿 번호 — 채널마다 다르다.
  *
- * 이메일: 문의 전용 템플릿(1000). 백엔드에 등록돼 있고, 문의 내용이 표로 정리돼 나간다.
- *   변수: inquiry_type · name · company_name · email · phone_number · content
+ * 둘 다 문의 전용 템플릿(1000)을 쓴다. 백엔드에 등록돼 있다.
+ *   이메일 — 문의 내용이 표로 정리돼 나간다.
+ *            변수: inquiry_type · name · email · phone_number · content
+ *   문자   — 본문이 고정 문구("아름텍 문의가 왔습니다")라 변수를 쓰지 않는다.
  *
- * 문자: 문의 전용 템플릿(1000)이 **아직 등록돼 있지 않다** (서버가 501 을 낸다). 그래서 이미
- *   있는 공용 알림 템플릿(2)을 쓴다. 본문이 한 줄이라 문의 내용을 title 에 모아 담는다(summarize).
- *   문자용 1000 템플릿이 등록되면 NEXT_PUBLIC_INQUIRY_SMS_OPTION=1000 만 넣으면 된다.
- *
- * 두 템플릿이 요구하는 변수를 모두 실어 보내므로(payload) 번호만 바꾸면 코드는 그대로 동작한다.
+ * 템플릿이 바뀌어 번호가 달라지면 환경변수로 덮어쓸 수 있다.
+ * 여러 템플릿이 요구하는 변수를 모두 실어 보내므로(payload) 번호만 바꾸면 코드는 그대로 동작한다.
  */
 const EMAIL_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_EMAIL_OPTION ?? 1000);
-const SMS_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_SMS_OPTION ?? 2);
+const SMS_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_SMS_OPTION ?? 1000);
 
 export interface InquiryPayload {
   name: string;
