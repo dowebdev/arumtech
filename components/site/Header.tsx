@@ -22,25 +22,41 @@ import { ProductImage } from "./Visuals";
  * 대표 제품은 제품 목록에 그 라인으로 처음 나오는 제품이다. 다만 목록 첫 항목에 이미지가
  * 없는 라인이 있어(L-Line 의 "software") 미리보기가 빈 칸이 되므로, 이미지가 있는 첫 제품을 쓴다.
  */
-const LINE_PREVIEW: Partial<
-  Record<ProductLine, { model: string; slug: string; image?: string; desc: string }>
-> = {};
+type LinePreview = {
+  model: string;
+  href: string;
+  image?: string;
+  desc: string;
+  /** 새 창으로 나가는 외부 링크 */
+  external?: boolean;
+};
+
+const LINE_PREVIEW: Partial<Record<ProductLine, LinePreview>> = {};
 for (const line of PRODUCT_LINES) {
   const inLine = products.filter((p) => p.line === line);
   const p = inLine.find((x) => x.image) ?? inLine[0];
   if (p) {
     LINE_PREVIEW[line] = {
       model: p.model,
-      slug: p.slug,
+      href: `/products/${p.slug}`,
       image: p.image,
       desc: p.kicker ?? LINE_DESCRIPTIONS[line],
     };
   }
 }
 
+// M-F3A PRO MAX 는 사이트에 제품 페이지가 없고 외부 사이트로 나간다. 그래서 위 루프에서
+// 미리보기가 안 잡히고 우측이 텅 비었다. 전용 이미지로 직접 채운다.
+LINE_PREVIEW["M-F3A PRO MAX"] = {
+  model: "M-F3A PRO MAX",
+  href: LINE_EXTERNAL_LINKS["M-F3A PRO MAX"] as string,
+  image: "/images/products/m-f3a-pro-max-menu.png",
+  desc: LINE_DESCRIPTIONS["M-F3A PRO MAX"],
+  external: true,
+};
+
 /** 메뉴를 열었을 때 처음 보여줄 라인. */
-const DEFAULT_PREVIEW_LINE: ProductLine =
-  (PRODUCT_LINES.find((l) => LINE_PREVIEW[l]) as ProductLine) ?? "M-Line";
+const DEFAULT_PREVIEW_LINE: ProductLine = "M-Line";
 
 type MenuItem = {
   label: string;
@@ -329,16 +345,24 @@ export default function Header() {
                     <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tracking-[0.02em] text-cream">
                       {line}
                       {/*
-                        호버할 때만 나타나는 연두색 화살표.
-                        → 는 사이트 안의 제품 목록으로 이동, ↗ 는 새 창으로 외부 사이트(M-F3A PRO MAX).
+                        호버할 때만 나타나는 화살표.
+                        내부 이동은 연두색 → , 새 창으로 나가는 외부 링크(M-F3A PRO MAX)는
+                        연두색 원 안에 흰색 ↗ — 더 눈에 띄게 구분한다.
                       */}
-                      <i
-                        className={`${
-                          external ? "ph ph-arrow-up-right" : "ph ph-arrow-right"
-                        } text-accent opacity-0 transition-opacity group-hover:opacity-100`}
-                        style={{ fontSize: 14 }}
-                        aria-hidden="true"
-                      />
+                      {external ? (
+                        <span
+                          className="flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-accent opacity-0 transition-opacity group-hover:opacity-100"
+                          aria-hidden="true"
+                        >
+                          <i className="ph ph-arrow-up-right text-white" style={{ fontSize: 11 }} />
+                        </span>
+                      ) : (
+                        <i
+                          className="ph ph-arrow-right text-accent opacity-0 transition-opacity group-hover:opacity-100"
+                          style={{ fontSize: 14 }}
+                          aria-hidden="true"
+                        />
+                      )}
                     </div>
                     <div className="mt-1 text-[11.5px] leading-[1.4] text-muted">
                       {LINE_DESCRIPTIONS[line]}
@@ -395,10 +419,40 @@ export default function Header() {
   );
 }
 
-/** Two bold bars that morph into an X when `open`. */
 /** 제품소개 메가메뉴 우측 — 호버 중인 라인의 대표 제품을 보여준다. */
 function ProductPreview({ line }: { line: ProductLine }) {
   const preview = LINE_PREVIEW[line];
+
+  if (!preview) {
+    return (
+      <div className="border-l border-cream/10 pl-10">
+        <div className="mb-3.5 font-mono text-[11px] tracking-[0.2em] text-accent">
+          {line.toUpperCase()}
+        </div>
+        <div className="text-xs text-muted">{LINE_DESCRIPTIONS[line]}</div>
+      </div>
+    );
+  }
+
+  const body = (
+    <>
+      <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-cream/10 bg-white">
+        <ProductImage
+          // 라인이 바뀌면 이미지를 새로 그린다 (이전 이미지가 남아 보이지 않게)
+          key={preview.href}
+          src={preview.image}
+          alt={preview.model}
+          className="h-full w-full"
+          pad="p-5"
+          iconSize={48}
+        />
+      </div>
+      <div className="mt-3 font-mono text-[15px] font-semibold text-cream">{preview.model}</div>
+      <div className="mt-0.5 text-xs text-muted">
+        {preview.desc} {preview.external ? "↗" : "→"}
+      </div>
+    </>
+  );
 
   return (
     <div className="border-l border-cream/10 pl-10">
@@ -406,29 +460,20 @@ function ProductPreview({ line }: { line: ProductLine }) {
         {line.toUpperCase()}
       </div>
 
-      {preview ? (
-        <Link href={`/products/${preview.slug}`} className="block">
-          <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-cream/10 bg-white">
-            <ProductImage
-              // 라인이 바뀌면 이미지를 새로 그린다 (이전 이미지가 남아 보이지 않게)
-              key={preview.slug}
-              src={preview.image}
-              alt={preview.model}
-              className="h-full w-full"
-              pad="p-5"
-              iconSize={48}
-            />
-          </div>
-          <div className="mt-3 font-mono text-[15px] font-semibold text-cream">{preview.model}</div>
-          <div className="mt-0.5 text-xs text-muted">{preview.desc} →</div>
-        </Link>
+      {preview.external ? (
+        <a href={preview.href} target="_blank" rel="noopener noreferrer" className="block">
+          {body}
+        </a>
       ) : (
-        <div className="text-xs text-muted">{LINE_DESCRIPTIONS[line]}</div>
+        <Link href={preview.href} className="block">
+          {body}
+        </Link>
       )}
     </div>
   );
 }
 
+/** Two bold bars that morph into an X when `open`. */
 function MenuToggle({ open }: { open: boolean }) {
   const bar =
     "absolute left-0 block h-[2px] w-full bg-current transition-all duration-300 ease-out";
