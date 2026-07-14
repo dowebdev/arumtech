@@ -37,21 +37,30 @@ export function CTABand({
           />
         </>
       )}
-      <div className="relative flex flex-wrap items-center justify-between gap-10 px-8 py-12 sm:px-14 sm:py-16">
+      {/* 모바일은 제목·본문·버튼을 한 단계씩 줄인다 (한강미디어 기준). */}
+      <div className="relative flex flex-wrap items-center justify-between gap-6 px-6 py-8 sm:gap-10 sm:px-14 sm:py-16">
         <div>
-          <h2 className="m-0 text-[28px] font-semibold tracking-[-0.02em] text-cream sm:text-[32px]">
+          <h2 className="m-0 text-[20px] font-semibold leading-[1.4] tracking-[-0.02em] text-cream sm:text-[32px] sm:leading-normal">
             {title}
           </h2>
           {desc && (
-            <p className="m-0 mt-4 max-w-[540px] text-base leading-[1.6] text-muted">{desc}</p>
+            <p className="m-0 mt-3 max-w-[540px] text-[14px] leading-[1.6] text-muted sm:mt-4 sm:text-base">
+              {desc}
+            </p>
           )}
         </div>
-        <div className="flex flex-shrink-0 gap-3">
-          <Link href={primaryHref} className="btn-primary">
+        <div className="flex flex-shrink-0 flex-wrap gap-2.5 sm:gap-3">
+          <Link
+            href={primaryHref}
+            className="btn-primary px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+          >
             {primaryLabel}
           </Link>
           {showPhone && (
-            <a href={`tel:${SITE.phone}`} className="btn-outline">
+            <a
+              href={`tel:${SITE.phone}`}
+              className="btn-outline px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+            >
               <i className="ph ph-phone" style={{ color: "#6EA921" }} />
               전화상담 {SITE.phone}
             </a>

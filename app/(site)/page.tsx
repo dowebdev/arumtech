@@ -111,41 +111,45 @@ export default function HomePage() {
       </section>
 
       {/* ===== PRODUCT LINEUP ===== */}
-      <section data-nav-theme="light" className="bg-white py-32">
+      {/* 모바일은 섹션 여백·제목을 크게 줄인다 (제목 42 → 24px, 여백 128 → 56px). */}
+      <section data-nav-theme="light" className="bg-white py-14 sm:py-32">
         <div className="container-site relative z-10">
           <div className="flex flex-col items-center text-center">
-            <div className="mb-3 font-mono text-xs tracking-[0.16em] text-[#6e7178]">
+            <div className="mb-2.5 font-mono text-[11px] tracking-[0.16em] text-[#6e7178] sm:mb-3 sm:text-xs">
               PRODUCT LINEUP
             </div>
-            <h2 className="m-0 text-[42px] font-bold tracking-[-0.02em] text-[#000000]">
+            <h2 className="m-0 text-[24px] font-bold tracking-[-0.02em] text-[#000000] sm:text-[42px]">
               제품 라인업
             </h2>
             <Link
               href="/products"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm text-[#6e7178] transition-colors hover:text-[#000000]"
+              className="mt-3 inline-flex items-center gap-1.5 text-[13px] text-[#6e7178] transition-colors hover:text-[#000000] sm:mt-4 sm:text-sm"
             >
               전체 제품 보기 <i className="ph ph-arrow-right" />
             </Link>
           </div>
         </div>
         {/* pull the carousel up so the title overlaps its empty top-centre area */}
-        <div className="relative z-0 -mt-12">
+        <div className="relative z-0 -mt-4 sm:-mt-12">
           <ProductLensCarousel items={LINEUP_SLIDES} fadeColor="#ffffff" />
         </div>
       </section>
 
       {/* ===== SOLUTIONS ===== */}
-      <section data-nav-theme="dark" className="container-site pt-[168px] pb-[168px]">
-        <div className="mb-10 text-center">
-          <div className="eyebrow">SOLUTIONS BY SPACE</div>
-          <h2 className="m-0 text-[42px] font-bold tracking-[-0.02em] text-cream">
+      <section data-nav-theme="dark" className="container-site py-14 sm:pb-[168px] sm:pt-[168px]">
+        <div className="mb-7 text-center sm:mb-10">
+          <div className="eyebrow !mb-2.5 !text-[11px] sm:!mb-3 sm:!text-xs">SOLUTIONS BY SPACE</div>
+          <h2 className="m-0 text-[24px] font-bold tracking-[-0.02em] text-cream sm:text-[42px]">
             용도별 음향 솔루션
           </h2>
         </div>
         <SolutionsShowcase />
-        <div className="mt-12 flex justify-center">
-          <Link href="/products" className="btn-primary">
-            전체 제품 보기 <i className="ph ph-arrow-right" style={{ fontSize: 17 }} />
+        <div className="mt-8 flex justify-center sm:mt-12">
+          <Link
+            href="/products"
+            className="btn-primary px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+          >
+            전체 제품 보기 <i className="ph ph-arrow-right" style={{ fontSize: 16 }} />
           </Link>
         </div>
       </section>
@@ -153,7 +157,7 @@ export default function HomePage() {
       {/* ===== PRODUCT FILM — M-F3A PRO MAX ===== */}
       <section
         data-nav-theme="dark"
-        className="relative h-[635px] overflow-hidden bg-ink"
+        className="relative h-[240px] overflow-hidden bg-ink sm:h-[635px]"
       >
         <video
           className="block h-full w-full object-cover"
@@ -168,22 +172,22 @@ export default function HomePage() {
 
       {/* ===== CASES ===== */}
       <section data-nav-theme="light" className="bg-white">
-        <div className="container-site py-[168px]">
-          <div className="mb-10 flex flex-col items-center text-center">
-            <div className="mb-3 font-mono text-xs tracking-[0.16em] text-accent">
+        <div className="container-site py-14 sm:py-[168px]">
+          <div className="mb-7 flex flex-col items-center text-center sm:mb-10">
+            <div className="mb-2.5 font-mono text-[11px] tracking-[0.16em] text-accent sm:mb-3 sm:text-xs">
               INSTALLATION REFERENCES
             </div>
-            <h2 className="m-0 text-[42px] font-bold tracking-[-0.02em] text-ink">
+            <h2 className="m-0 text-[24px] font-bold tracking-[-0.02em] text-ink sm:text-[42px]">
               대표 설치사례
             </h2>
             <Link
               href="/cases"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm text-dim transition-colors hover:text-ink"
+              className="mt-3 inline-flex items-center gap-1.5 text-[13px] text-dim transition-colors hover:text-ink sm:mt-4 sm:text-sm"
             >
               전체 사례 보기 <i className="ph ph-arrow-right" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
             {homeCases.map((c) => (
               <CaseCard key={c.slug} study={c} variant="compact" light />
             ))}
@@ -203,7 +207,7 @@ export default function HomePage() {
       </section> */}
 
       {/* ===== DOWNLOADS + CTA (shared full-width background band) ===== */}
-      <section data-nav-theme="dark" className="relative overflow-hidden py-24">
+      <section data-nav-theme="dark" className="relative overflow-hidden py-12 sm:py-24">
         {/* background image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -218,20 +222,22 @@ export default function HomePage() {
               <Link
                 key={d.title}
                 href={d.href}
-                className="flex items-center gap-[18px] rounded-[14px] border border-cream/15 bg-ink/50 px-7 py-[26px] backdrop-blur-md transition-colors hover:border-cream/40 hover:bg-ink/65"
+                className="flex items-center gap-3.5 rounded-[14px] border border-cream/15 bg-ink/50 px-5 py-4 backdrop-blur-md transition-colors hover:border-cream/40 hover:bg-ink/65 sm:gap-[18px] sm:px-7 sm:py-[26px]"
               >
-                <i className={d.icon} style={{ fontSize: 30, color: "#6EA921" }} />
+                <i className={`${d.icon} text-[24px] text-accent sm:text-[30px]`} />
                 <div className="flex-1">
-                  <div className="text-[18px] font-semibold text-cream">{d.title}</div>
-                  <div className="mt-[3px] text-[12.5px] text-muted">{d.desc}</div>
+                  <div className="text-[15px] font-semibold text-cream sm:text-[18px]">
+                    {d.title}
+                  </div>
+                  <div className="mt-[3px] text-[12px] text-muted sm:text-[12.5px]">{d.desc}</div>
                 </div>
-                <i className="ph ph-arrow-up-right" style={{ fontSize: 20, color: "#A7A9AC" }} />
+                <i className="ph ph-arrow-up-right text-[17px] text-muted sm:text-[20px]" />
               </Link>
             ))}
           </div>
 
           {/* CTA band — same background band (glass so the image shows through) */}
-          <div className="mt-12">
+          <div className="mt-8 sm:mt-12">
             <CTABand
               glass
               title="어떤 제품이 적합한지 모르시나요?"

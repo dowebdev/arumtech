@@ -41,13 +41,13 @@ export default function CaseCard({
           </div>
         </div>
         <div
-          className={`mt-4 text-[18px] font-semibold leading-[1.4] ${
+          className={`mt-3 text-[16px] font-semibold leading-[1.4] sm:mt-4 sm:text-[18px] ${
             light ? "text-ink" : "text-cream"
           }`}
         >
           {study.title}
         </div>
-        <div className={`mt-1.5 text-[13px] ${light ? "text-dim" : "text-muted"}`}>
+        <div className={`mt-1.5 text-[12.5px] sm:text-[13px] ${light ? "text-dim" : "text-muted"}`}>
           {usedText}
         </div>
       </Link>
