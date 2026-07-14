@@ -157,8 +157,11 @@ export default function BoardDetail({
           </div>
         ))}
 
-      {/* 이미지 첨부는 다운로드 링크가 아니라 이미지로 보여준다 (NEWS·설치사례). */}
-      {images.length > 0 && (
+      {/*
+        에디터로 쓴 글(isHtml)은 이미지가 본문 HTML 안에 있다. 첨부로도 그리면 같은 사진이 두 번 나온다.
+        에디터 도입 전에 쓴 평문 글만 첨부 이미지를 본문 아래에 보여준다.
+      */}
+      {!item.isHtml && images.length > 0 && (
         <div className="mb-10 flex flex-col gap-4">
           {images.map((f) => (
             // eslint-disable-next-line @next/next/no-img-element

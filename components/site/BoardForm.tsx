@@ -67,6 +67,8 @@ const CONFIG = {
 const FIELD =
   "w-full rounded-lg border border-black/15 bg-white px-4 py-3 text-[15px] text-ink outline-none transition-colors placeholder:text-[#9aa0a6] focus:border-accent";
 
+const IMAGE_EXT = /^(jpe?g|png|gif|webp|bmp|svg)$/i;
+
 /**
  * 에디터에 넣을 HTML 로 바꾼다.
  * 예전 평문 글(is_html=0)을 그대로 넣으면 줄바꿈이 사라지므로, 줄 단위로 <p> 를 씌운다.
@@ -123,7 +125,19 @@ export default function BoardForm({
       .then((item) => {
         if (!alive) return;
         setTitle(item.title);
-        setContent(toEditorHtml(item.content, item.isHtml));
+
+        // 에디터 도입 전에 쓴 글은 이미지가 본문이 아니라 "첨부"로 붙어 있다. 그대로 두면
+        // 에디터 안에 아무것도 안 보이고 위치도 못 옮긴다. 본문 끝에 <img> 로 넣어준다.
+        //
+        // 첨부 자체는 떼지 않는다 — 파일 등록을 지우면 파일서버의 실물까지 사라질 수 있어서다.
+        // 대신 상세 페이지가 HTML 글(=에디터 글)의 이미지 첨부는 따로 그리지 않으므로 중복되지 않는다.
+        const body = toEditorHtml(item.content, item.isHtml);
+        const orphanImages = item.files
+          .filter((f) => IMAGE_EXT.test(f.ext) && f.url && !body.includes(f.url))
+          .map((f) => `<p><img src="${f.url}"></p>`)
+          .join("");
+        setContent(body + orphanImages);
+
         setCategory(item.category ?? "");
         setPinned(item.pinned);
         const slots = item.files.map((f) => ({ idx: f.idx, name: f.name }));
