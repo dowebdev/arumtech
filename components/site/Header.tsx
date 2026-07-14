@@ -8,6 +8,7 @@ import {
   PRODUCT_LINES,
   LINE_DESCRIPTIONS,
   LINE_EXTERNAL_LINKS,
+  FULL_RANGE_GROUPS,
   DOWNLOAD_CATEGORIES,
   SITE,
   products,
@@ -41,7 +42,14 @@ for (const line of PRODUCT_LINES) {
 const DEFAULT_PREVIEW_LINE: ProductLine =
   (PRODUCT_LINES.find((l) => LINE_PREVIEW[l]) as ProductLine) ?? "M-Line";
 
-type MenuItem = { label: string; href: string; desc?: string; external?: boolean };
+type MenuItem = {
+  label: string;
+  href: string;
+  desc?: string;
+  external?: boolean;
+  /** 상위 라인의 하위 항목 (Full Range 의 서브 라인) — 전체 메뉴에서 들여쓴다. */
+  sub?: boolean;
+};
 type MenuCategory = {
   key: string;
   label: string;
@@ -71,12 +79,24 @@ const MENU: MenuCategory[] = [
     href: "/products",
     items: [
       { label: "전체 제품", href: "/products" },
-      ...PRODUCT_LINES.map((l) => ({
-        label: l,
-        href: LINE_EXTERNAL_LINKS[l] ?? `/products?line=${encodeURIComponent(l)}`,
-        desc: LINE_DESCRIPTIONS[l],
-        external: Boolean(LINE_EXTERNAL_LINKS[l]),
-      })),
+      ...PRODUCT_LINES.flatMap((l): MenuItem[] => {
+        const line: MenuItem = {
+          label: l,
+          href: LINE_EXTERNAL_LINKS[l] ?? `/products?line=${encodeURIComponent(l)}`,
+          desc: LINE_DESCRIPTIONS[l],
+          external: Boolean(LINE_EXTERNAL_LINKS[l]),
+        };
+        // Full Range 는 서브 라인(V-ARRAY · V-Line · ...)으로 다시 나뉜다. 바로 아래에 펼쳐 보여준다.
+        if (l !== "Full Range") return [line];
+        return [
+          line,
+          ...FULL_RANGE_GROUPS.map((g) => ({
+            label: g,
+            href: `/products?line=${encodeURIComponent(l)}&group=${encodeURIComponent(g)}`,
+            sub: true,
+          })),
+        ];
+      }),
     ],
     featured: {
       label: "M-F3A PRO",
@@ -486,7 +506,12 @@ function FullMenu({ onClose, scrolled }: { onClose: () => void; scrolled: boolea
                         key={it.label}
                         href={it.href}
                         onClick={onClose}
-                        className="text-[15px] text-muted transition-colors hover:text-cream"
+                        // 서브 라인(Full Range 하위)은 한 단 들여쓰고 조금 작게 — 상위 라인과 구분되게.
+                        className={
+                          it.sub
+                            ? "-my-0.5 border-l border-cream/15 pl-3 text-[13.5px] text-dim transition-colors hover:text-cream"
+                            : "text-[15px] text-muted transition-colors hover:text-cream"
+                        }
                       >
                         {it.label}
                       </Link>
