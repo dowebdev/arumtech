@@ -17,8 +17,8 @@ const SITE_ID = process.env.NEXT_PUBLIC_WOORI_SITE_ID;
 /** 첨부파일이 실제로 올라가는 파일서버 (iwinv). */
 const FILE_URL = process.env.NEXT_PUBLIC_WOORI_FILE_URL ?? "";
 
-/** woori FILE_TYPE — 1: 일반(다운로드용), 3: 이미지. */
-export const FILE_TYPE = { general: 1, image: 3 } as const;
+/** woori FILE_TYPE — 1: 일반(다운로드용), 3: 이미지, 4: 오디오/영상. */
+export const FILE_TYPE = { general: 1, image: 3, media: 4 } as const;
 /** 공개 파일 (비로그인 조회 가능). */
 const PERMIT_PUBLIC = 0;
 /** 게시글 종료일. 상시 노출시키려고 먼 미래로 둔다 (한강미디어와 동일). */
@@ -250,4 +250,75 @@ export async function uploadFile(
   }
 
   return { idx, name: meta.file_name_origin || file.name };
+}
+
+/** 업로드된 파일의 공개 URL. 파일서버는 실제 경로(/files/data/...)를 403 으로 막고 get.php 로만 서빙한다. */
+function publicUrl(meta: {
+  file_path?: string;
+  file_name_origin?: string;
+  file_name_real?: string;
+}): string {
+  const q = new URLSearchParams({
+    permit_level: String(PERMIT_PUBLIC),
+    file_path: meta.file_path ?? "",
+    file_name_origin: meta.file_name_origin ?? "",
+    file_name_real: meta.file_name_real ?? "",
+  });
+  return `${FILE_URL}/files/get.php?${q}`;
+}
+
+/**
+ * 에디터 본문에 끼워 넣을 미디어 업로드 — 게시글 첨부로 등록하지 않고 **공개 URL 만** 돌려준다.
+ * 본문 HTML 이 이 URL 을 참조하므로 파일 idx 는 필요 없고, 따라서 로그인 토큰도 필요 없다
+ * (post.php 는 인증을 보지 않는다).
+ *
+ * onProgress 는 동영상처럼 큰 파일의 진행률 표시에 쓴다. fetch 로는 업로드 진행률을 알 수 없어 XHR 을 쓴다.
+ */
+export function uploadMedia(
+  file: File,
+  opts: { board: BoardKey; type: (typeof FILE_TYPE)[keyof typeof FILE_TYPE] },
+  onProgress?: (percent: number) => void
+): Promise<string> {
+  if (!FILE_URL) {
+    return Promise.reject(new BoardWriteError("파일서버 설정(NEXT_PUBLIC_WOORI_FILE_URL)이 없습니다."));
+  }
+
+  const form = new FormData();
+  form.append("file", file);
+  form.append("file_path", opts.board);
+  form.append("file_type", String(opts.type));
+  form.append("permit_level", String(PERMIT_PUBLIC));
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${FILE_URL}/files/post.php`);
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) onProgress?.(Math.round((e.loaded / e.total) * 100));
+    };
+
+    xhr.onload = () => {
+      // 성공 판정은 2xx + 실제 저장명 존재로 한다.
+      if (xhr.status < 200 || xhr.status >= 300) {
+        reject(new BoardWriteError("파일 업로드에 실패했습니다."));
+        return;
+      }
+      try {
+        const json = JSON.parse(xhr.responseText) as {
+          data?: { file_path?: string; file_name_origin?: string; file_name_real?: string };
+        };
+        if (!json.data?.file_name_real) {
+          reject(new BoardWriteError("파일 업로드에 실패했습니다."));
+          return;
+        }
+        resolve(publicUrl(json.data));
+      } catch {
+        reject(new BoardWriteError("파일 업로드 응답을 해석하지 못했습니다."));
+      }
+    };
+    xhr.onerror = () => reject(new BoardWriteError("파일 업로드에 실패했습니다."));
+
+    // 헤더를 붙이지 않는다 — x-site 를 실으면 파일서버 CORS 프리플라이트에 막힌다 (uploadFile 주석 참고).
+    xhr.send(form);
+  });
 }

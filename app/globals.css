@@ -4,6 +4,13 @@
 
 :root {
   color-scheme: dark;
+
+  /* 리치 에디터(components/editor)가 쓰는 변수. 게시판 폼은 흰 배경이므로 밝은 팔레트다. */
+  --color-primary: #6ea921;
+  --color-text: #33363b;
+  --color-muted: #6e7178;
+  --color-border: rgba(0, 0, 0, 0.15);
+  --color-accent-soft: #eef4e4;
 }
 
 * {
@@ -374,4 +381,133 @@ select:focus {
   .sol-cycle-active .sol-icon .orbit {
     animation: none;
   }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   게시판 본문 (에디터가 만든 HTML). 상세 페이지에서 sanitize 후 렌더한다.
+   에디터는 서식을 inline style 로 저장하므로 여기서는 블록 요소만 잡아주면 된다.
+   ────────────────────────────────────────────────────────────── */
+.board-content {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #33363b;
+  word-break: break-word;
+}
+.board-content p {
+  margin: 0 0 12px;
+}
+.board-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: 12px 0;
+}
+.board-content a {
+  color: #6ea921;
+  text-decoration: underline;
+}
+.board-content ul,
+.board-content ol {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+.board-content ul {
+  list-style: disc;
+}
+.board-content ol {
+  list-style: decimal;
+}
+.board-content blockquote {
+  border-left: 3px solid #6ea921;
+  margin: 0 0 12px;
+  padding: 4px 0 4px 16px;
+  color: #6e7178;
+}
+.board-content hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 22px 0;
+}
+
+/* 동영상 — 링크 임베드(iframe)와 업로드 파일(video) 모두 같은 크기로 */
+.board-content iframe {
+  display: block;
+  width: 80%;
+  max-width: 80%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 10px;
+  margin: 12px auto;
+  background: #000;
+}
+.board-content .eq-video-block {
+  text-align: center;
+  margin: 12px 0;
+}
+.board-content video {
+  width: 80%;
+  max-width: 80%;
+  border-radius: 10px;
+  background: #000;
+  display: inline-block;
+}
+
+/* 본문에 삽입한 첨부파일 카드 */
+.board-content a.eq-file-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 520px;
+  padding: 16px 18px;
+  margin: 12px 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  text-decoration: none;
+  background: #fff;
+}
+.board-content a.eq-file-card:hover {
+  border-color: #6ea921;
+}
+.board-content .eq-file-ico {
+  font-size: 26px;
+  line-height: 1;
+  flex: none;
+}
+.board-content .eq-file-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.board-content .eq-file-name {
+  font-weight: 600;
+  color: #1c1e22;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.board-content .eq-file-size {
+  font-size: 13px;
+  color: #6e7178;
+}
+
+/* 표 */
+.board-content table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  margin: 16px 0;
+  table-layout: fixed;
+}
+.board-content td,
+.board-content th {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 10px 12px;
+  vertical-align: top;
+  word-break: break-word;
+}
+.board-content th {
+  background: #f7f8fa;
+  font-weight: 700;
 }

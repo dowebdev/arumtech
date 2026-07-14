@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import DOMPurify from "dompurify";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchContent, ContentsConfigError, type ContentDetail } from "@/lib/contents";
@@ -129,9 +130,26 @@ export default function BoardDetail({
       {item.content &&
         (item.isHtml ? (
           <div
-            className="board-content py-10 text-[16px] leading-[1.8] text-[#33363b]"
-            // 관리자만 작성하는 신뢰된 콘텐츠
-            dangerouslySetInnerHTML={{ __html: item.content }}
+            className="board-content py-10"
+            // 에디터가 만든 본문. 관리자만 쓰지만 그래도 sanitize 한 뒤 렌더한다.
+            // 동영상(iframe/video)과 파일 카드가 살아 있어야 하므로 관련 태그·속성을 허용한다.
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(item.content, {
+                ADD_TAGS: ["iframe", "video"],
+                ADD_ATTR: [
+                  "target",
+                  "allow",
+                  "allowfullscreen",
+                  "frameborder",
+                  "scrolling",
+                  "controls",
+                  "controlslist",
+                  "preload",
+                  "download",
+                  "rel",
+                ],
+              }),
+            }}
           />
         ) : (
           <div className="whitespace-pre-wrap break-keep py-10 text-[16px] leading-[1.8] text-[#33363b]">
