@@ -47,16 +47,16 @@ export default function Footer() {
           <div>
             <div className="mb-[18px] flex items-center gap-3">
               <Logo height={30} />
-              <span className="border-l border-cream/20 pl-3.5 text-[13px] tracking-[0.14em] text-muted">
+              <span className="border-l border-cream/20 pl-3.5 text-[14px] tracking-[0.14em] text-muted">
                 KOREA 공식총판
               </span>
             </div>
-            <p className="m-0 max-w-[280px] text-[13px] leading-[1.7] text-muted">
+            <p className="m-0 max-w-[280px] text-[14px] leading-[1.7] text-muted">
               공간을 완성하는 정밀 음향 시스템. SE AUDIOTECHNIK 기반 전문 음향장비의 설계·공급·설치·기술지원.
             </p>
-            <div className="mt-5 text-xs leading-[1.8] text-dim">
+            <div className="mt-5 text-[13px] leading-[1.8] text-dim">
               {SITE.brandName} · 대표전화{" "}
-              <span className="font-mono text-[18px] font-semibold text-accent">{SITE.phone}</span>
+              <span className="font-mono text-[19px] font-semibold text-accent">{SITE.phone}</span>
             </div>
             <div className="mt-[22px] flex gap-2.5">
               {SOCIALS.map((s) => (
@@ -75,7 +75,7 @@ export default function Footer() {
 
           {COLS.map((col) => (
             <div key={col.title}>
-              <div className="mb-4 text-[16px] font-semibold tracking-[0.04em] text-cream">
+              <div className="mb-4 text-[17px] font-semibold tracking-[0.04em] text-cream">
                 {col.title}
               </div>
               <div className="flex flex-col gap-[13px]">
@@ -83,7 +83,7 @@ export default function Footer() {
                   <Link
                     key={it.label}
                     href={it.href}
-                    className="text-[15px] text-muted transition-colors hover:text-cream"
+                    className="text-[16px] text-muted transition-colors hover:text-cream"
                   >
                     {it.label}
                   </Link>
@@ -94,8 +94,8 @@ export default function Footer() {
         </div>
 
         {/* Company / legal info */}
-        <div className="mt-12 border-t border-cream/[0.08] pt-8 text-[12px] leading-[1.9] text-dim">
-          <span className="text-[13px] font-semibold text-muted">{SITE.brandName}</span>
+        <div className="mt-12 border-t border-cream/[0.08] pt-8 text-[13px] leading-[1.9] text-dim">
+          <span className="text-[14px] font-semibold text-muted">{SITE.brandName}</span>
           <div className="mt-2 flex flex-col gap-x-5 gap-y-0.5 sm:flex-row sm:flex-wrap">
             <span>본사 : {SITE.hqAddress}</span>
             <span>서울사무소 : {SITE.seoulAddress}</span>
@@ -112,9 +112,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-[11.5px] text-dim">{SITE.copyright}</span>
+          <span className="text-[12.5px] text-dim">{SITE.copyright}</span>
           <div className="flex items-center gap-4">
-            <span className="text-[11.5px] text-dim">
+            <span className="text-[12.5px] text-dim">
               개인정보처리방침 · 이용약관 · 오시는 길
             </span>
             <AdminAccess />

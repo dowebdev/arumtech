@@ -5,7 +5,7 @@ import { useAdminAuth } from "./AdminAuthProvider";
 import AdminLoginModal from "./AdminLoginModal";
 
 const BUTTON =
-  "flex items-center gap-[5px] rounded-md border border-cream/10 px-[11px] py-[5px] text-[11.5px] text-dim transition-colors hover:border-cream/40 hover:text-accent";
+  "flex items-center gap-[5px] rounded-md border border-cream/10 px-[11px] py-[5px] text-[12.5px] text-dim transition-colors hover:border-cream/40 hover:text-accent";
 
 /**
  * 푸터 우측의 관리자 진입점.
@@ -20,7 +20,7 @@ export default function AdminAccess() {
   if (session) {
     return (
       <div className="flex items-center gap-2">
-        <span className="flex items-center gap-[5px] text-[11.5px] text-muted">
+        <span className="flex items-center gap-[5px] text-[12.5px] text-muted">
           <i className="ph ph-user-circle-check" style={{ color: "#6EA921" }} />
           {session.memberName}
         </span>
