@@ -530,7 +530,8 @@ export default function RichEditor({ value, onChange, onImageUpload, onFileUploa
           <button type="button" className="ql-list" value="bullet" data-tip="글머리 기호" />
           <button type="button" className="ql-list" value="ordered" data-tip="번호 목록" />
           <button type="button" className="ql-blockquote" data-tip="인용구" />
-          <button type="button" className="ql-link" data-tip="링크" />
+          {/* 링크 버튼은 툴바에서 뺐다. FORMATS 의 "link" 는 남겨둔다 — 빼면 기존 글에 들어 있는
+              링크가 편집할 때 지워진다. */}
           <button type="button" className={styles.iconBtn} onClick={hrHandler} aria-label="구분선" data-tip="구분선">—</button>
           <span className={styles.anchor}>
             <button type="button" className={styles.iconBtn} aria-label="표" data-tip="표" aria-haspopup="true" aria-expanded={menu === "table"} onClick={() => { setMenu((m) => (m === "table" ? null : "table")); setTblHover({ r: 0, c: 0 }); }}>
