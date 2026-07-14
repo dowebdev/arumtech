@@ -243,8 +243,9 @@ export default function Header() {
       }}
     >
       <div className={`transition-all duration-300 ${scrolled ? "px-3 pt-3 sm:px-4" : ""}`}>
+        {/* 모바일은 높이를 20% 줄인다 (68 → 54px). sm 이상은 기존 그대로. */}
         <div
-          className={`mx-auto flex h-[68px] w-full items-center justify-between gap-6 transition-all duration-300 ${
+          className={`mx-auto flex h-[54px] w-full items-center justify-between gap-6 transition-all duration-300 sm:h-[68px] ${
             scrolled
               ? `max-w-[1240px] rounded-full border px-6 shadow-[0_14px_44px_-14px_rgba(0,0,0,0.45)] sm:px-8 ${
                   invert ? "border-black/10" : "border-cream/15"
@@ -257,13 +258,13 @@ export default function Header() {
             WebkitBackdropFilter: "blur(18px)",
           }}
         >
-        {/* Logo */}
-        <Link href="/" className="flex flex-shrink-0 items-center gap-3.5">
+        {/* Logo — 줄어든 모바일 헤더에 맞춰 로고·문구도 작게 (46 → 36px). */}
+        <Link href="/" className="flex flex-shrink-0 items-center gap-2.5 sm:gap-3.5">
           <span className="block transition-[filter] duration-300" style={{ filter: invert ? "invert(1)" : "none" }}>
-            <Logo height={46} />
+            <Logo className="h-[36px] sm:h-[46px]" />
           </span>
           <span
-            className={`border-l pl-[15px] text-[14px] leading-[1.35] tracking-[0.16em] transition-colors ${
+            className={`border-l pl-2.5 text-[11px] leading-[1.35] tracking-[0.16em] transition-colors sm:pl-[15px] sm:text-[14px] ${
               invert ? "border-black/20 text-[#3a3d42]" : "border-cream/20 text-muted"
             }`}
           >
@@ -528,8 +529,11 @@ function FullMenu({ onClose, scrolled }: { onClose: () => void; scrolled: boolea
 
   return (
     <div
+      // 헤더 바로 아래에서 시작한다. 모바일 헤더는 54px(스크롤 시 여백 포함 66px), sm 이상은 68/80px.
       className={`fixed inset-x-0 z-[90] flex flex-col overflow-hidden ${
-        scrolled ? "top-[80px] h-[calc(100vh-80px)]" : "top-[68px] h-[calc(100vh-68px)]"
+        scrolled
+          ? "top-[66px] h-[calc(100vh-66px)] sm:top-[80px] sm:h-[calc(100vh-80px)]"
+          : "top-[54px] h-[calc(100vh-54px)] sm:top-[68px] sm:h-[calc(100vh-68px)]"
       }`}
       style={{
         background: "rgba(11,13,16,0.97)",

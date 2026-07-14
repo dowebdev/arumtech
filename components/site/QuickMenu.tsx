@@ -3,17 +3,20 @@
 import Link from "next/link";
 import { SITE } from "@/lib/data";
 
+/**
+ * 우측 하단 퀵메뉴. 모바일에서는 화면을 많이 가려서 크게 줄인다 (56px → 38px).
+ * sm 이상은 기존 크기 그대로.
+ */
+const BUTTON = "flex h-[38px] w-[38px] items-center justify-center rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.5)] sm:h-14 sm:w-14";
+const ICON = "text-[17px] sm:text-[24px]";
+
 export default function QuickMenu() {
   return (
-    <div className="fixed bottom-6 right-6 z-[200] flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-4 z-[200] flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
       {/* 문의하기 */}
       <Quick tip="문의하기" tipFont="sans">
-        <Link
-          href="/contact"
-          aria-label="문의하기"
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
-        >
-          <i className="ph ph-chat-circle-text" style={{ fontSize: 24 }} />
+        <Link href="/contact" aria-label="문의하기" className={`${BUTTON} bg-accent text-white`}>
+          <i className={`ph ph-chat-circle-text ${ICON}`} />
         </Link>
       </Quick>
 
@@ -28,8 +31,8 @@ export default function QuickMenu() {
         tipFont="mono"
         href={`tel:${SITE.phone}`}
       >
-        <span className="flex h-14 w-14 items-center justify-center rounded-full border border-cream/[0.18] bg-[#16191D] text-cream shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
-          <i className="ph ph-phone" style={{ fontSize: 24 }} />
+        <span className={`${BUTTON} border border-cream/[0.18] bg-[#16191D] text-cream`}>
+          <i className={`ph ph-phone ${ICON}`} />
         </span>
       </Quick>
 
@@ -39,9 +42,9 @@ export default function QuickMenu() {
           type="button"
           aria-label="맨 위로"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex h-14 w-14 items-center justify-center rounded-full border border-cream/[0.18] bg-[#16191D] text-cream shadow-[0_8px_24px_rgba(0,0,0,0.5)]"
+          className={`${BUTTON} border border-cream/[0.18] bg-[#16191D] text-cream`}
         >
-          <i className="ph ph-arrow-up" style={{ fontSize: 24 }} />
+          <i className={`ph ph-arrow-up ${ICON}`} />
         </button>
       </Quick>
     </div>

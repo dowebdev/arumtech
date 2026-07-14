@@ -59,31 +59,43 @@ export default function HomePage() {
   return (
     <div className="[word-break:keep-all]">
       {/* ===== HERO ===== */}
-      <section data-nav-theme="dark" className="relative flex min-h-[calc(100vh-68px)] items-center overflow-hidden bg-ink">
+      {/* 모바일은 헤더가 54px 이라 뷰포트 계산이 다르다 (sm 이상은 68px). */}
+      <section
+        data-nav-theme="dark"
+        className="relative flex min-h-[calc(100vh-54px)] items-center overflow-hidden bg-ink sm:min-h-[calc(100vh-68px)]"
+      >
         <HeroMedia />
         <div className="container-site relative z-10 w-full">
-          <div className="max-w-[620px] animate-fade">
-            <div className="mb-7 inline-flex items-center gap-2 font-mono text-xs tracking-[0.16em] text-accent">
+          {/* 모바일에서는 가운데 정렬 + 작은 글자, sm 이상은 기존 왼쪽 정렬 그대로. */}
+          <div className="mx-auto max-w-[620px] animate-fade text-center sm:mx-0 sm:text-left">
+            <div className="mb-5 inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-accent sm:mb-7 sm:text-xs">
               <span className="h-px w-6 bg-accent" />
               PRECISION SOUND INFRASTRUCTURE
             </div>
-            <h1 className="m-0 text-[40px] font-semibold leading-[1.16] tracking-[-0.02em] text-cream sm:text-[60px]">
+            <h1 className="m-0 text-[30px] font-semibold leading-[1.2] tracking-[-0.02em] text-cream sm:text-[60px] sm:leading-[1.16]">
               공간을 완성하는
               <br />
               정밀 음향 시스템
             </h1>
-            <p className="m-0 mt-[22px] font-mono text-[17px] tracking-[0.01em] text-muted">
+            <p className="m-0 mt-4 font-mono text-[14px] tracking-[0.01em] text-muted sm:mt-[22px] sm:text-[17px]">
               Professional Sound System for Every Space
             </p>
-            <p className="m-0 mt-5 max-w-[480px] text-base leading-[1.7] text-muted">
+            <p className="m-0 mx-auto mt-4 max-w-[480px] text-[14px] leading-[1.7] text-muted sm:mx-0 sm:mt-5 sm:text-base">
               강당·공연장·교회·관공서까지, 공간에 맞는 음향 인프라를 설계하고 공급하는 SE
               AUDIOTECHNIK 전문 파트너.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/products" className="btn-primary">
-                제품소개 보기 <i className="ph ph-arrow-right" style={{ fontSize: 17 }} />
+            {/* 모바일 버튼은 높이를 낮춘다 (py-4 → py-2.5). */}
+            <div className="mt-7 flex flex-wrap justify-center gap-2.5 sm:mt-10 sm:justify-start sm:gap-3">
+              <Link
+                href="/products"
+                className="btn-primary px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+              >
+                제품소개 보기 <i className="ph ph-arrow-right" style={{ fontSize: 16 }} />
               </Link>
-              <Link href="/contact" className="btn-outline btn-runline">
+              <Link
+                href="/contact"
+                className="btn-outline btn-runline px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+              >
                 설치 상담 문의
               </Link>
             </div>
