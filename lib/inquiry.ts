@@ -15,18 +15,19 @@ const MESSAGE_TYPE_EMAIL = 1;
 const MESSAGE_TYPE_SMS = 2;
 
 /**
- * 발송에 쓸 메시지 템플릿 번호.
+ * 발송에 쓸 메시지 템플릿 번호 — 채널마다 다르다.
  *
- * 원래는 한강미디어처럼 문의 전용 템플릿(1000)을 쓰려 했으나, 아름텍 사이트에는 그 템플릿이
- * 등록돼 있지 않아 서버가 501(템플릿 없음)을 냈다 — 문의가 통째로 실패하던 원인이다.
- * 템플릿 등록은 권한 300 이상(백엔드 관리자)만 가능하고, 사이트 관리자 계정은 200이라 못 만든다.
+ * 이메일: 문의 전용 템플릿(1000). 백엔드에 등록돼 있고, 문의 내용이 표로 정리돼 나간다.
+ *   변수: inquiry_type · name · company_name · email · phone_number · content
  *
- * 그래서 기본값은 이미 등록돼 있는 공용 알림 템플릿(2)이다.
- * 본문이 한 줄짜리라 문의 내용을 title 에 모아 담는다 (아래 summarize 참고).
- * 백엔드에 1000 템플릿이 등록되면 NEXT_PUBLIC_INQUIRY_MESSAGE_OPTION=1000 만 넣으면 된다 —
- * 그 템플릿은 subject·name·company·email·phone·category·message 를 각각 쓰므로 코드는 그대로 동작한다.
+ * 문자: 문의 전용 템플릿(1000)이 **아직 등록돼 있지 않다** (서버가 501 을 낸다). 그래서 이미
+ *   있는 공용 알림 템플릿(2)을 쓴다. 본문이 한 줄이라 문의 내용을 title 에 모아 담는다(summarize).
+ *   문자용 1000 템플릿이 등록되면 NEXT_PUBLIC_INQUIRY_SMS_OPTION=1000 만 넣으면 된다.
+ *
+ * 두 템플릿이 요구하는 변수를 모두 실어 보내므로(payload) 번호만 바꾸면 코드는 그대로 동작한다.
  */
-const MESSAGE_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_MESSAGE_OPTION ?? 2);
+const EMAIL_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_EMAIL_OPTION ?? 1000);
+const SMS_OPTION = Number(process.env.NEXT_PUBLIC_INQUIRY_SMS_OPTION ?? 2);
 
 export interface InquiryPayload {
   name: string;
@@ -78,10 +79,21 @@ export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "
 
   // 두 채널 모두 send_admin 으로 보낸다 — 수신처(관리자 이메일·연락처)는 사이트 설정을 따르므로
   // 코드가 번호를 들고 있을 필요가 없다.
+  //
+  // 템플릿마다 쓰는 변수 이름이 달라서, 필요한 이름을 모두 실어 보낸다. 템플릿은 자기가 쓰는
+  // 것만 꺼내 쓰고 나머지는 무시하므로 안전하다.
+  //   · 공용 알림(2)      : module_name, name, title
+  //   · 문의 전용(1000)   : inquiry_type, name, company_name, email, phone_number, content
   const payload = {
     ...data,
+    // 공용 알림 템플릿(2)용
     module_name: "홈페이지 문의",
     title: summarize(data),
+    // 문의 전용 템플릿(1000)용
+    inquiry_type: data.category,
+    company_name: data.company,
+    phone_number: data.phone,
+    content: data.message,
   };
 
   const sent: Array<"sms" | "email"> = [];
@@ -89,7 +101,7 @@ export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "
   try {
     await post("/message/send_admin", {
       type: MESSAGE_TYPE_EMAIL,
-      option: MESSAGE_OPTION,
+      option: EMAIL_OPTION,
       data: payload,
     });
     sent.push("email");
@@ -100,7 +112,7 @@ export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "
   try {
     await post("/message/send_admin", {
       type: MESSAGE_TYPE_SMS,
-      option: MESSAGE_OPTION,
+      option: SMS_OPTION,
       data: payload,
     });
     sent.push("sms");
