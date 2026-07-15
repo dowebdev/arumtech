@@ -62,18 +62,18 @@ export default function AboutIntroPage() {
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <div>
             <div className="eyebrow">SE AUDIOTECHNIK</div>
-            <h2 className="m-0 text-[32px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
+            <h2 className="m-0 text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
               독일 졸링겐에서 시작된
               <br />
               프로페셔널 오디오 브랜드
             </h2>
-            <p className="m-0 mt-6 text-[18px] leading-[1.85] text-[#52555b]">
+            <p className="m-0 mt-6 text-[15px] leading-[1.8] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
               SE-Audiotechnik는 1980년 Michael von Keitz에 의해 독일 졸링겐(Solingen)에서
               설립되었습니다. 설립 초기 ‘Speaker Trade’라는 브랜드로 시작해 이후 SE-Audiotechnik로
               변경하여, 현재까지 40여 년 이상 고품질의 Loudspeaker 및 Power Amplifier 제품을 설계·생산하고
               있습니다.
             </p>
-            <p className="m-0 mt-4 text-[18px] leading-[1.85] text-[#52555b]">
+            <p className="m-0 mt-4 text-[15px] leading-[1.8] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
               독일 엔지니어링 기반의 프로페셔널 오디오 브랜드로, 컴팩트하면서도 강력한 사운드를 구현하는
               혁신적인 음향 시스템을 제공합니다. 설계부터 제조까지 엄격한 품질 기준을 적용하여, 다양한
               환경에서도 안정적이고 일관된 사운드를 전달하는 것이 핵심 가치입니다.
@@ -81,7 +81,7 @@ export default function AboutIntroPage() {
             <div className="mt-10 flex flex-wrap gap-10 border-t border-black/10 pt-8">
               {STATS.map((s) => (
                 <div key={s.l}>
-                  <div className="font-mono text-[34px] font-semibold text-accent">{s.v}</div>
+                  <div className="font-mono text-[27px] font-semibold text-accent sm:text-[34px]">{s.v}</div>
                   <div className="mt-1 max-w-[180px] text-[13.5px] leading-[1.5] text-[#52555b]">
                     {s.l}
                   </div>
@@ -110,7 +110,7 @@ export default function AboutIntroPage() {
         <div className="container-site py-20">
           <div className="mb-12 text-center">
             <div className="eyebrow text-accent">PHILOSOPHY</div>
-            <h2 className="m-0 text-[32px] font-semibold tracking-[-0.02em] sm:text-[36px]">
+            <h2 className="m-0 text-[23px] font-semibold tracking-[-0.02em] sm:text-[36px]">
               Easy. <span className="text-accent">Compact.</span> Modular.
             </h2>
           </div>
@@ -120,8 +120,8 @@ export default function AboutIntroPage() {
                 <div className="font-mono text-[14px] tracking-[0.12em] text-accent">
                   0{i + 1}
                 </div>
-                <div className="mt-4 text-[26px] font-semibold tracking-[-0.01em]">{p.k}</div>
-                <p className="m-0 mt-3 text-[15px] leading-[1.7] text-cream/70">{p.d}</p>
+                <div className="mt-4 text-[20px] font-semibold tracking-[-0.01em] sm:text-[26px]">{p.k}</div>
+                <p className="m-0 mt-3 text-[14px] leading-[1.7] text-cream/70 sm:text-[15px]">{p.d}</p>
               </div>
             ))}
           </div>
@@ -133,10 +133,10 @@ export default function AboutIntroPage() {
         <div className="container-site py-20">
           <div className="mb-10 max-w-[640px]">
             <div className="eyebrow">SOLUTIONS</div>
-            <h2 className="m-0 break-keep text-[32px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
+            <h2 className="m-0 break-keep text-[23px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
               다양한 환경에 최적화된 음향 솔루션
             </h2>
-            <p className="m-0 mt-5 break-keep text-base leading-[1.8] text-[#52555b]">
+            <p className="m-0 mt-5 break-keep text-[14px] leading-[1.7] text-[#52555b] sm:text-base sm:leading-[1.8]">
               SE AUDIOTECHNIK는 라인어레이부터 서브우퍼까지, 현장의 요구를 이해하고 최적의 음향 경험을 제공하는 것을 목표로 합니다.
             </p>
           </div>
@@ -148,7 +148,7 @@ export default function AboutIntroPage() {
                 className="rounded-[14px] border border-black/[0.08] bg-white p-7 transition-colors hover:border-black/20"
               >
                 <i className={f.icon} style={{ fontSize: 30, color: "#6EA921" }} />
-                <div className="mt-5 text-[18px] font-semibold text-ink">{f.title}</div>
+                <div className="mt-5 text-[16px] font-semibold text-ink sm:text-[18px]">{f.title}</div>
                 <div className="mt-2 text-[14.5px] leading-[1.6] text-[#52555b]">{f.desc}</div>
               </div>
             ))}
@@ -160,7 +160,7 @@ export default function AboutIntroPage() {
                 key={l.label}
                 className="flex items-center justify-between rounded-[14px] border border-black/[0.08] bg-white px-7 py-6"
               >
-                <span className="text-[16px] font-semibold text-ink">{l.label}</span>
+                <span className="text-[14px] font-semibold text-ink sm:text-[16px]">{l.label}</span>
                 <span className="font-mono text-[14.5px] tracking-[0.02em] text-accent">
                   {l.models}
                 </span>
@@ -168,7 +168,7 @@ export default function AboutIntroPage() {
             ))}
           </div>
 
-          <p className="m-0 mt-10 max-w-[760px] text-base leading-[1.8] text-[#52555b]">
+          <p className="m-0 mt-10 max-w-[760px] text-[14px] leading-[1.7] text-[#52555b] sm:text-base sm:leading-[1.8]">
             각 제품은 DSP 기반 설계로 별도의 복잡한 세팅 없이도 최적의 사운드를 구현할 수 있도록
             설계되었습니다. 앞으로도 지속적인 기술 혁신과 고객 중심의 솔루션을 통해 글로벌 프로 오디오
             시장에서 신뢰받는 브랜드로 성장해 나가겠습니다.
@@ -181,7 +181,7 @@ export default function AboutIntroPage() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
             <div className="eyebrow">WHY SE-AUDIOTECHNIK</div>
-            <h2 className="m-0 text-[32px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
+            <h2 className="m-0 text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
               선택받는
               <br />
               다섯 가지 이유
@@ -194,7 +194,7 @@ export default function AboutIntroPage() {
                   0{i + 1}
                 </span>
                 <i className="ph ph-check-circle" style={{ fontSize: 20, color: "#6EA921" }} />
-                <span className="text-[16.5px] font-medium text-ink">{w}</span>
+                <span className="text-[15px] font-medium text-ink sm:text-[16.5px]">{w}</span>
               </li>
             ))}
           </ul>
@@ -205,12 +205,12 @@ export default function AboutIntroPage() {
       <section className="bg-ink text-cream">
         <div className="container-site py-20 text-center">
           <div className="eyebrow text-accent">OUR COMMITMENT</div>
-          <h2 className="m-0 mx-auto max-w-[820px] text-[28px] font-semibold leading-[1.5] tracking-[-0.01em] sm:text-[36px]">
+          <h2 className="m-0 mx-auto max-w-[820px] text-[21px] font-semibold leading-[1.5] tracking-[-0.01em] sm:text-[36px]">
             단순한 스피커 제조를 넘어, 현장의 요구를 이해하고
             <br className="hidden sm:block" />
             최적의 음향 경험을 제공합니다.
           </h2>
-          <p className="m-0 mx-auto mt-6 max-w-[680px] text-[17px] leading-[1.85] text-cream/70">
+          <p className="m-0 mx-auto mt-6 max-w-[680px] text-[14px] leading-[1.7] text-cream/70 sm:text-[17px] sm:leading-[1.85]">
             앞으로도 지속적인 기술 혁신과 고객 중심의 솔루션을 통해 글로벌 프로 오디오 시장에서
             신뢰받는 브랜드로 성장해 나가겠습니다.
           </p>

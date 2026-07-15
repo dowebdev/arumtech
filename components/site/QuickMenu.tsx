@@ -12,7 +12,7 @@ const ICON = "text-[17px] sm:text-[24px]";
 
 export default function QuickMenu() {
   return (
-    <div className="fixed bottom-4 right-4 z-[200] flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
+    <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] right-4 z-[200] flex flex-col items-end gap-2 sm:right-6 sm:gap-3 lg:bottom-6">
       {/* 문의하기 */}
       <Quick tip="문의하기" tipFont="sans">
         <Link href="/contact" aria-label="문의하기" className={`${BUTTON} bg-accent text-white`}>

@@ -51,7 +51,7 @@ export default function Footer() {
                 KOREA 공식총판
               </span>
             </div>
-            <p className="m-0 max-w-[280px] text-[14px] leading-[1.7] text-muted">
+            <p className="m-0 max-w-[280px] text-[13px] leading-[1.7] text-muted sm:text-[14px]">
               공간을 완성하는 정밀 음향 시스템. SE AUDIOTECHNIK 기반 전문 음향장비의 설계·공급·설치·기술지원.
             </p>
             <div className="mt-5 text-[13px] leading-[1.8] text-dim">
@@ -73,8 +73,9 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* 제품·바로가기·고객지원 컬럼 — 모바일에서는 숨긴다 (md 이상에서만 표시). */}
           {COLS.map((col) => (
-            <div key={col.title}>
+            <div key={col.title} className="hidden md:block">
               <div className="mb-4 text-[17px] font-semibold tracking-[0.04em] text-cream">
                 {col.title}
               </div>
@@ -113,7 +114,8 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
           <span className="text-[12.5px] text-dim">{SITE.copyright}</span>
-          <div className="flex items-center gap-4">
+          {/* 모바일은 관리자 버튼을 '오시는 길' 아래 줄로 내린다. sm 이상은 우측에 나란히. */}
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
             <span className="text-[12.5px] text-dim">
               개인정보처리방침 · 이용약관 · 오시는 길
             </span>

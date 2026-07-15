@@ -227,11 +227,15 @@ export default function Header() {
   const isActive = (key: string) =>
     (ACTIVE_MAP[key] || []).some((p) => pathname === p || pathname.startsWith(p + "/"));
 
-  // invert the bar to white only once it has collapsed into the floating pill
-  const invert = scrolled && darkBg;
+  // 알약(pill)로 축약되는 형태는 홈에서만. 서브페이지는 스크롤해도 슬림한 상단 바로 고정한다.
+  const isHome = pathname === "/";
+  const pill = scrolled && isHome;
 
-  // dropdowns / sitemap sit just below the bar (which floats lower when scrolled)
-  const dropTop = scrolled ? "top-[80px]" : "top-[68px]";
+  // invert the bar to white only once it has collapsed into the floating pill (home only)
+  const invert = pill && darkBg;
+
+  // dropdowns / sitemap sit just below the bar (which floats lower when it becomes a pill)
+  const dropTop = pill ? "top-[80px]" : "top-[68px]";
 
   return (
     <header
@@ -242,16 +246,19 @@ export default function Header() {
         setPreviewLine(DEFAULT_PREVIEW_LINE);
       }}
     >
-      <div className={`transition-all duration-300 ${scrolled ? "px-3 pt-3 sm:px-4" : ""}`}>
-        {/* 모바일은 높이를 20% 줄인다 (68 → 54px). sm 이상은 기존 그대로. */}
+      <div className={`transition-all duration-300 ${pill ? "px-3 pt-3 sm:px-4" : ""}`}>
+        {/*
+          모바일은 높이를 20% 줄인다 (68 → 54px). sm 이상은 기존 그대로.
+          스크롤 시 알약(pill) 상태에서는 모바일 높이를 46px 로 더 줄여 공간을 덜 차지하게 한다 (sm+ 는 68 유지).
+        */}
         <div
-          className={`mx-auto flex h-[54px] w-full items-center justify-between gap-6 transition-all duration-300 sm:h-[68px] ${
-            scrolled
-              ? `max-w-[1240px] rounded-full border px-6 shadow-[0_14px_44px_-14px_rgba(0,0,0,0.45)] sm:px-8 ${
+          className={`mx-auto flex w-full items-center justify-between gap-6 transition-all duration-300 ${
+            pill
+              ? `h-[46px] max-w-[1240px] rounded-full border px-6 shadow-[0_14px_44px_-14px_rgba(0,0,0,0.45)] sm:h-[68px] sm:px-8 ${
                   invert ? "border-black/10" : "border-cream/15"
                 }`
-              : "max-w-site border-b border-cream/10 px-5 sm:px-8"
-          }`}
+              : "h-[54px] max-w-site border-b border-cream/10 px-5 sm:h-[68px] sm:px-8"
+          }${scrolled && !isHome ? " shadow-[0_2px_14px_-4px_rgba(0,0,0,0.35)]" : ""}`}
           style={{
             background: invert ? "#ffffff" : "#000000",
             backdropFilter: "blur(18px)",
@@ -415,7 +422,7 @@ export default function Header() {
       )}
 
       {/* Full-screen overlay menu */}
-      {menuOpen && <FullMenu onClose={() => setMenuOpen(false)} scrolled={scrolled} />}
+      {menuOpen && <FullMenu onClose={() => setMenuOpen(false)} scrolled={pill} />}
     </header>
   );
 }
@@ -529,10 +536,10 @@ function FullMenu({ onClose, scrolled }: { onClose: () => void; scrolled: boolea
 
   return (
     <div
-      // 헤더 바로 아래에서 시작한다. 모바일 헤더는 54px(스크롤 시 여백 포함 66px), sm 이상은 68/80px.
+      // 헤더 바로 아래에서 시작한다. 모바일 헤더는 54px(스크롤 시 46px+여백 12 = 58px), sm 이상은 68/80px.
       className={`fixed inset-x-0 z-[90] flex flex-col overflow-hidden ${
         scrolled
-          ? "top-[66px] h-[calc(100vh-66px)] sm:top-[80px] sm:h-[calc(100vh-80px)]"
+          ? "top-[58px] h-[calc(100vh-58px)] sm:top-[80px] sm:h-[calc(100vh-80px)]"
           : "top-[54px] h-[calc(100vh-54px)] sm:top-[68px] sm:h-[calc(100vh-68px)]"
       }`}
       style={{

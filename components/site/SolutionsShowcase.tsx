@@ -32,7 +32,8 @@ export default function SolutionsShowcase() {
             }`}
           >
             <span
-              className={`relative mb-5 flex h-[96px] w-[96px] items-center justify-center rounded-full border bg-panel transition-all duration-300 group-hover:border-accent/40 group-hover:bg-accent/[0.06] group-hover:shadow-[0_0_34px_-10px_rgba(110,169,33,0.65)] ${
+              // 모바일은 아이콘 원을 줄인다 (96 → 68px, 여백 mb-5 → mb-3). sm 이상은 기존 그대로.
+              className={`relative mb-3 flex h-[68px] w-[68px] items-center justify-center rounded-full border bg-panel transition-all duration-300 group-hover:border-accent/40 group-hover:bg-accent/[0.06] group-hover:shadow-[0_0_34px_-10px_rgba(110,169,33,0.65)] sm:mb-5 sm:h-[96px] sm:w-[96px] ${
                 on
                   ? "border-accent/40 bg-accent/[0.06] shadow-[0_0_34px_-10px_rgba(110,169,33,0.65)]"
                   : "border-cream/10"
@@ -40,13 +41,13 @@ export default function SolutionsShowcase() {
             >
               <SolutionIcon
                 art={sol.art}
-                className={`h-12 w-12 transition-colors duration-300 group-hover:text-accent ${
+                className={`h-9 w-9 transition-colors duration-300 group-hover:text-accent sm:h-12 sm:w-12 ${
                   on ? "text-accent" : "text-cream/70"
                 }`}
               />
             </span>
             <div
-              className={`text-[18px] font-semibold leading-[1.3] transition-colors duration-300 group-hover:text-accent ${
+              className={`text-[15px] font-semibold leading-[1.3] transition-colors duration-300 group-hover:text-accent sm:text-[18px] ${
                 on ? "text-accent" : "text-cream"
               }`}
             >

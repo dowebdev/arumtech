@@ -5,6 +5,7 @@ import CaseCard from "@/components/site/CaseCard";
 import { CTABand } from "@/components/site/InquiryCTA";
 import SolutionsShowcase from "@/components/site/SolutionsShowcase";
 import ProductLensCarousel from "@/components/site/ProductLensCarousel";
+import MobileProductSlider from "@/components/site/MobileProductSlider";
 import { cases, featuredProducts } from "@/lib/data";
 
 const LINEUP_SLIDES = [
@@ -129,9 +130,13 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-        {/* pull the carousel up so the title overlaps its empty top-centre area */}
-        <div className="relative z-0 -mt-4 sm:-mt-12">
+        {/* PC(lg+) — 렌즈 캐러셀 그대로. 제목이 위 빈 영역과 겹치도록 위로 당긴다. */}
+        <div className="relative z-0 -mt-4 hidden sm:-mt-12 lg:block">
           <ProductLensCarousel items={LINEUP_SLIDES} fadeColor="#ffffff" />
+        </div>
+        {/* 모바일(lg 미만) — 평평한 자동 슬라이드 (스와이프 가능) */}
+        <div className="mt-7 lg:hidden">
+          <MobileProductSlider items={LINEUP_SLIDES} />
         </div>
       </section>
 

@@ -49,17 +49,18 @@ export function CTABand({
             </p>
           )}
         </div>
-        <div className="flex flex-shrink-0 flex-wrap gap-2.5 sm:gap-3">
+        {/* 모바일은 버튼을 세로로 쌓아 한 줄에 하나씩(전체 너비). sm 이상은 기존 가로 배치. */}
+        <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-shrink-0 sm:flex-row sm:gap-3">
           <Link
             href={primaryHref}
-            className="btn-primary px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+            className="btn-primary w-full justify-center px-5 py-2.5 text-center text-[14px] sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
           >
             {primaryLabel}
           </Link>
           {showPhone && (
             <a
               href={`tel:${SITE.phone}`}
-              className="btn-outline px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
+              className="btn-outline w-full justify-center px-5 py-2.5 text-center text-[14px] sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
             >
               <i className="ph ph-phone" style={{ color: "#6EA921" }} />
               전화상담 {SITE.phone}
