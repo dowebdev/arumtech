@@ -26,6 +26,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* 전역 줄바꿈을 단어(어절) 단위로 — 한글이 글자 단위로 잘리지 않게. 영문은 공백에서 정상 줄바꿈. */
+  word-break: keep-all;
 }
 
 ::selection {

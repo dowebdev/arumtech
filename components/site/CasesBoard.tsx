@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   fetchContentsList,
   ContentsConfigError,
@@ -58,29 +58,83 @@ export default function CasesBoard() {
     setPage(1);
   };
 
+  // 모바일 카테고리 한 줄 가로 스크롤 — 넘칠 때만 좌우 화살표 (제품소개와 동일 패턴).
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 1);
+    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
+
+  useEffect(() => {
+    updateArrows();
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    return () => {
+      el.removeEventListener("scroll", updateArrows);
+      window.removeEventListener("resize", updateArrows);
+    };
+  }, [updateArrows, state.status]);
+
+  const scrollTabs = (dir: number) => {
+    const el = scrollerRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.7, behavior: "smooth" });
+  };
+
   return (
     <>
-      {/* 카테고리 필터 */}
-      <div className="mb-8 flex flex-wrap gap-2">
-        {CATEGORIES.map((c) => {
-          const active = c === category;
-          return (
-            <button
-              key={c}
-              type="button"
-              onClick={() => selectCategory(c)}
-              className="cursor-pointer whitespace-nowrap rounded-md border px-[18px] py-[9px] text-[16px] transition-colors"
-              style={{
-                fontWeight: active ? 600 : 500,
-                borderColor: active ? "#6EA921" : "rgba(0,0,0,0.12)",
-                color: active ? "#ffffff" : "#52555b",
-                background: active ? "#6EA921" : "transparent",
-              }}
-            >
-              {c}
-            </button>
-          );
-        })}
+      {/* 카테고리 필터 — 모바일 한 줄 가로 스크롤(넘치면 좌우 화살표), sm 이상은 flex-wrap */}
+      <div className="relative mb-6">
+        {canLeft && (
+          <button
+            type="button"
+            aria-label="이전 카테고리"
+            onClick={() => scrollTabs(-1)}
+            className="absolute left-0 top-0 z-10 flex h-full items-center bg-gradient-to-r from-white via-white to-transparent pl-0.5 pr-5 text-[#52555b] sm:hidden"
+          >
+            <i className="ph ph-caret-left" style={{ fontSize: 18 }} />
+          </button>
+        )}
+        <div
+          ref={scrollerRef}
+          className="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible"
+        >
+          {CATEGORIES.map((c) => {
+            const active = c === category;
+            return (
+              <button
+                key={c}
+                type="button"
+                onClick={() => selectCategory(c)}
+                className="shrink-0 cursor-pointer whitespace-nowrap rounded-md border px-3.5 py-2 text-[14px] transition-colors sm:px-[18px] sm:py-[9px] sm:text-[16px]"
+                style={{
+                  fontWeight: active ? 600 : 500,
+                  borderColor: active ? "#6EA921" : "rgba(0,0,0,0.12)",
+                  color: active ? "#ffffff" : "#52555b",
+                  background: active ? "#6EA921" : "transparent",
+                }}
+              >
+                {c}
+              </button>
+            );
+          })}
+        </div>
+        {canRight && (
+          <button
+            type="button"
+            aria-label="다음 카테고리"
+            onClick={() => scrollTabs(1)}
+            className="absolute right-0 top-0 z-10 flex h-full items-center bg-gradient-to-l from-white via-white to-transparent pl-5 pr-0.5 text-[#52555b] sm:hidden"
+          >
+            <i className="ph ph-caret-right" style={{ fontSize: 18 }} />
+          </button>
+        )}
       </div>
 
       {state.status === "loading" && (
@@ -135,7 +189,7 @@ export default function CasesBoard() {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-1 flex-col gap-2 p-6">
+                  <div className="flex flex-1 flex-col gap-2 p-5 sm:p-6">
                     <h3 className="m-0 break-keep text-[17px] font-semibold leading-[1.4] text-ink">
                       {item.title}
                     </h3>

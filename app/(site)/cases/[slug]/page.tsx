@@ -15,8 +15,8 @@ export default async function CaseDetailPage({
   const { slug } = await params;
   return (
     <div className="bg-white text-ink">
-      <section className="mx-auto w-full max-w-[964px] px-5 py-20 sm:px-8">
-        <BoardDetail idx={slug} listPath="/cases" notFoundLabel="설치사례" />
+      <section className="mx-auto w-full max-w-[964px] px-5 pb-20 pt-6 sm:px-8">
+        <BoardDetail idx={slug} listPath="/cases" notFoundLabel="설치사례" showBreadcrumb />
       </section>
     </div>
   );

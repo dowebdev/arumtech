@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductCard from "./ProductCard";
 import {
   products,
@@ -16,7 +16,7 @@ const TABS = ["전체", ...PRODUCT_LINES] as const;
 const GROUP_TABS = ["전체", ...FULL_RANGE_GROUPS] as const;
 
 const TAB_CLS =
-  "cursor-pointer whitespace-nowrap rounded-md border px-[18px] py-[9px] text-[16px] transition-colors";
+  "shrink-0 cursor-pointer whitespace-nowrap rounded-md border px-3.5 py-2 text-[14px] transition-colors sm:px-[18px] sm:py-[9px] sm:text-[16px]";
 
 export default function ProductsBrowser() {
   const searchParams = useSearchParams();
@@ -52,6 +52,35 @@ export default function ProductsBrowser() {
     return list;
   }, [tab, group, showGroups, query]);
 
+  // 모바일 카테고리 한 줄 가로 스크롤 — 넘칠 때만 좌우 화살표를 띄운다.
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 1);
+    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
+
+  useEffect(() => {
+    updateArrows();
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    return () => {
+      el.removeEventListener("scroll", updateArrows);
+      window.removeEventListener("resize", updateArrows);
+    };
+  }, [updateArrows]);
+
+  const scrollTabs = (dir: number) => {
+    const el = scrollerRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.7, behavior: "smooth" });
+  };
+
   /** 사이트맵에는 있으나 아직 제품 데이터가 없는 서브 라인 */
   const emptyGroup =
     showGroups &&
@@ -61,9 +90,24 @@ export default function ProductsBrowser() {
 
   return (
     <>
-      <div className="mb-2 flex flex-wrap items-center gap-4">
-        <div className="flex flex-1 flex-wrap gap-2">
-          {TABS.map((t) => {
+      <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+        {/* 카테고리 — 모바일은 한 줄 가로 스크롤(넘치면 좌우 화살표), sm 이상은 기존 flex-wrap */}
+        <div className="relative min-w-0 sm:flex-1">
+          {canLeft && (
+            <button
+              type="button"
+              aria-label="이전 카테고리"
+              onClick={() => scrollTabs(-1)}
+              className="absolute left-0 top-0 z-10 flex h-full items-center bg-gradient-to-r from-white via-white to-transparent pl-0.5 pr-5 text-[#52555b] sm:hidden"
+            >
+              <i className="ph ph-caret-left" style={{ fontSize: 18 }} />
+            </button>
+          )}
+          <div
+            ref={scrollerRef}
+            className="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible"
+          >
+            {TABS.map((t) => {
             const active = t === tab;
             const external = LINE_EXTERNAL_LINKS[t as ProductLine];
             const style = {
@@ -115,9 +159,20 @@ export default function ProductsBrowser() {
               </button>
             );
           })}
+          </div>
+          {canRight && (
+            <button
+              type="button"
+              aria-label="다음 카테고리"
+              onClick={() => scrollTabs(1)}
+              className="absolute right-0 top-0 z-10 flex h-full items-center bg-gradient-to-l from-white via-white to-transparent pl-5 pr-0.5 text-[#52555b] sm:hidden"
+            >
+              <i className="ph ph-caret-right" style={{ fontSize: 18 }} />
+            </button>
+          )}
         </div>
 
-        <div className="flex min-w-[220px] items-center gap-2.5 rounded-lg border border-black/10 bg-white px-3.5 py-2.5">
+        <div className="flex w-full items-center gap-2.5 rounded-lg border border-black/10 bg-white px-3.5 py-2.5 sm:w-auto sm:min-w-[220px]">
           <i className="ph ph-magnifying-glass" style={{ fontSize: 16, color: "#6E7178" }} />
           <input
             value={query}
@@ -130,35 +185,40 @@ export default function ProductsBrowser() {
 
       {/* Full Range 서브 라인 */}
       {showGroups && (
-        <div className="mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-black/10 bg-[#f4f5f7] p-3">
-          <span className="mr-1 pl-1.5 font-mono text-[12px] font-semibold tracking-[0.08em] text-[#9aa0a6]">
-            SUB LINE
-          </span>
-          {GROUP_TABS.map((g) => {
-            const active = g === group;
-            const count =
-              g === "전체"
-                ? products.filter((p) => p.line === "Full Range").length
-                : products.filter((p) => p.group === (g as ProductGroup)).length;
+        <div className="mt-4 rounded-xl border border-black/10 bg-[#f4f5f7] p-3">
+          {/* 모바일: SUB LINE 라벨 아래 4열 그리드(8개 → 2줄), 갯수 숨김, 사각 버튼. sm 이상: 기존 알약 한 줄. */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+            <span className="pl-0.5 font-mono text-[12px] font-semibold tracking-[0.08em] text-[#9aa0a6] sm:mr-1 sm:pl-1.5">
+              SUB LINE
+            </span>
+            <div className="grid grid-cols-4 gap-2 sm:contents">
+              {GROUP_TABS.map((g) => {
+                const active = g === group;
+                const count =
+                  g === "전체"
+                    ? products.filter((p) => p.line === "Full Range").length
+                    : products.filter((p) => p.group === (g as ProductGroup)).length;
 
-            return (
-              <button
-                key={g}
-                type="button"
-                onClick={() => setGroup(g)}
-                className="cursor-pointer whitespace-nowrap rounded-full border px-3.5 py-1.5 text-[14px] transition-colors"
-                style={{
-                  fontWeight: active ? 600 : 500,
-                  borderColor: active ? "#6EA921" : "rgba(0,0,0,0.10)",
-                  color: active ? "#1A1D23" : count === 0 ? "#9aa0a6" : "#52555b",
-                  background: active ? "rgba(110,169,33,0.10)" : "#ffffff",
-                }}
-              >
-                {g}
-                <span className="ml-1.5 font-mono text-[12px] text-[#9aa0a6]">{count}</span>
-              </button>
-            );
-          })}
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setGroup(g)}
+                    className="flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md border px-1 py-2 text-center text-[11.5px] transition-colors sm:inline-flex sm:rounded-full sm:px-3.5 sm:py-1.5 sm:text-[14px]"
+                    style={{
+                      fontWeight: active ? 600 : 500,
+                      borderColor: active ? "#6EA921" : "rgba(0,0,0,0.10)",
+                      color: active ? "#1A1D23" : count === 0 ? "#9aa0a6" : "#52555b",
+                      background: active ? "rgba(110,169,33,0.10)" : "#ffffff",
+                    }}
+                  >
+                    {g}
+                    <span className="ml-1.5 hidden font-mono text-[12px] text-[#9aa0a6] sm:inline">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 

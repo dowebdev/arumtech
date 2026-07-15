@@ -86,15 +86,16 @@ export function CTABlock({
   label: string;
   href?: string;
 }) {
+  // 모바일: 박스 안 센터 정렬 + 좌우 여백 축소. sm 이상은 기존 가로 배치.
   return (
-    <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-black/10 bg-[#f4f5f7] p-10">
+    <div className="flex flex-col items-center gap-5 rounded-2xl border border-black/10 bg-[#f4f5f7] px-5 py-7 text-center sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 sm:p-10 sm:text-left">
       <div>
-        <div className="text-[22px] font-semibold text-ink">{title}</div>
+        <div className="text-[20px] font-semibold text-ink sm:text-[22px]">{title}</div>
         <div className="mt-2 text-sm text-[#52555b]">{desc}</div>
       </div>
       <Link
         href={href}
-        className="flex-shrink-0 cursor-pointer rounded-lg border-none bg-accent px-7 py-[15px] text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover"
+        className="flex-shrink-0 cursor-pointer rounded-lg border-none bg-accent px-7 py-[13px] text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover sm:py-[15px]"
       >
         {label}
       </Link>

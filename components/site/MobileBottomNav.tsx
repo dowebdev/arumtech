@@ -24,7 +24,8 @@ export default function MobileBottomNav() {
   return (
     <nav
       aria-label="모바일 하단 메뉴"
-      className="fixed inset-x-0 bottom-0 z-[150] border-t border-cream/10 bg-black/95 backdrop-blur-md lg:hidden"
+      // 다크 콘텐츠 위에서도 구분되도록: 밝은 상단 경계선 + 위로 뜨는 그림자(밝은 콘텐츠 대응)
+      className="fixed inset-x-0 bottom-0 z-[150] border-t border-white/20 bg-black/95 shadow-[0_-1px_0_0_rgba(255,255,255,0.14),0_-8px_26px_-6px_rgba(0,0,0,0.6)] backdrop-blur-md lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="flex h-[56px] items-stretch">

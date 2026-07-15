@@ -24,10 +24,11 @@ export default function DownloadsPage() {
         <BoardWriteButton href="/downloads/write" label="자료 등록" />
         <ArchiveBoard />
 
-        <div className="mb-24 mt-12 flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-black/10 bg-[#f4f5f7] px-10 py-8">
-          <div className="flex items-center gap-4">
+        {/* 모바일: 아이콘·타이틀·설명·버튼을 한 줄씩 세로로. sm 이상은 기존 가로 배치. */}
+        <div className="mb-24 mt-12 flex flex-col items-center gap-4 rounded-2xl border border-black/10 bg-[#f4f5f7] px-6 py-7 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 sm:px-10 sm:py-8">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
             <i className="ph ph-lock-key" style={{ fontSize: 28, color: "#6EA921" }} />
-            <div>
+            <div className="text-center sm:text-left">
               <div className="text-base font-semibold text-ink">
                 시방서·도면 원본이 필요하신가요?
               </div>
@@ -38,7 +39,7 @@ export default function DownloadsPage() {
           </div>
           <Link
             href="/contact"
-            className="flex-shrink-0 cursor-pointer rounded-lg bg-accent px-6 py-[13px] text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+            className="w-full flex-shrink-0 cursor-pointer rounded-lg bg-accent px-6 py-[13px] text-center text-sm font-semibold text-white transition-colors hover:bg-accent-hover sm:w-auto"
           >
             기술자료 요청
           </Link>

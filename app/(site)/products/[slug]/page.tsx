@@ -58,7 +58,7 @@ export default async function ProductDetailPage({
   const accessoriesBlock =
     product.accessories && product.accessories.length > 0 ? (
       <div className="mb-14">
-        <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+        <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
           ACCESSORIES
         </h2>
         {product.accessoriesIntro && (
@@ -146,6 +146,17 @@ export default async function ProductDetailPage({
       {/* Breadcrumb */}
       {breadcrumb}
 
+      {/* 목록으로 — 상단 (모바일·태블릿 전용; 데스크톱은 히어로 우측에 이미 있음) */}
+      <div className="mx-auto mt-3 w-full max-w-[1200px] px-5 sm:px-8 lg:hidden">
+        <Link
+          href={`/products?line=${encodeURIComponent(product.line)}`}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-black/15 px-3.5 py-1.5 text-[13px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
+        >
+          <i className="ph ph-arrow-left" style={{ fontSize: 14 }} />
+          목록으로
+        </Link>
+      </div>
+
       {/* HERO */}
       <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -168,14 +179,14 @@ export default async function ProductDetailPage({
                 </span>
               )}
             </div>
-            <h1 className="m-0 font-mono text-[40px] font-bold tracking-[0.01em] text-ink sm:text-5xl">
+            <h1 className="m-0 font-mono text-[28px] font-bold tracking-[0.01em] text-ink sm:text-5xl">
               {product.model}
             </h1>
-            <p className="m-0 mt-3.5 text-[19px] font-medium text-ink">{product.kicker}</p>
-            <p className="m-0 mt-1.5 font-mono text-[15px] text-[#52555b]">{product.en}</p>
+            <p className="m-0 mt-3 text-[16px] font-medium text-ink sm:mt-3.5 sm:text-[19px]">{product.kicker}</p>
+            <p className="m-0 mt-1.5 font-mono text-[14px] text-[#52555b] sm:text-[15px]">{product.en}</p>
             {product.tagline && (
               <div className="mt-4">
-                <p className="m-0 text-[20px] font-semibold leading-[1.35] text-accent">
+                <p className="m-0 text-[17px] font-semibold leading-[1.35] text-accent sm:text-[20px]">
                   {product.tagline.headline}
                 </p>
                 {product.tagline.sub && (
@@ -184,10 +195,10 @@ export default async function ProductDetailPage({
               </div>
             )}
             {product.keySpecs.length > 0 && (
-              <div className="my-8 flex gap-6 border-y border-black/10 py-6">
+              <div className="my-8 flex gap-4 border-y border-black/10 py-6 sm:gap-6">
                 {product.keySpecs.map((ks) => (
                   <div key={ks.l}>
-                    <div className="font-mono text-[26px] font-semibold text-accent">{ks.v}</div>
+                    <div className="font-mono text-[20px] font-semibold text-accent sm:text-[26px]">{ks.v}</div>
                     <div className="mt-1 text-[11.5px] tracking-[0.04em] text-[#52555b]">{ks.l}</div>
                   </div>
                 ))}
@@ -215,17 +226,17 @@ export default async function ProductDetailPage({
       {product.intro && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
           <div className="mx-auto max-w-[680px] text-center [word-break:keep-all]">
-            <h2 className="m-0 text-[20px] font-semibold tracking-[-0.01em] text-accent">
+            <h2 className="m-0 text-[17px] font-semibold tracking-[-0.01em] text-accent sm:text-[20px]">
               {product.intro.title}
             </h2>
             <div className="mt-6 flex flex-col gap-6">
               {product.intro.sections.map((s, i) => (
                 <div key={i}>
                   {s.heading && (
-                    <h3 className="m-0 mb-2 text-[20px] font-semibold text-accent">{s.heading}</h3>
+                    <h3 className="m-0 mb-2 text-[17px] font-semibold text-accent sm:text-[20px]">{s.heading}</h3>
                   )}
                   {/* whitespace-pre-line: 원본이 줄바꿈으로 나열한 항목(예: V-15 Application)을 살린다 */}
-                  <p className="m-0 whitespace-pre-line text-[18px] leading-[1.85] text-[#52555b]">
+                  <p className="m-0 whitespace-pre-line text-[15px] leading-[1.75] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
                     {s.body}
                   </p>
                 </div>
@@ -267,20 +278,20 @@ export default async function ProductDetailPage({
       {/* DOWNLOADS */}
       {product.docs && product.docs.length > 0 && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <h2 className="m-0 mb-7 text-center text-[28px] font-semibold tracking-[-0.01em] text-ink">
+          <h2 className="m-0 mb-7 text-center text-[22px] font-semibold tracking-[-0.01em] text-ink sm:text-[28px]">
             자료 다운로드
           </h2>
           <div className="mx-auto flex max-w-[1200px] flex-col gap-3">
             {product.docs.map((d) => (
               <div
                 key={d.file}
-                className="flex flex-wrap items-center gap-4 rounded-xl border border-black/10 bg-white px-6 py-5 transition-colors hover:border-black/25"
+                className="flex items-center gap-3 rounded-xl border border-black/10 bg-white px-4 py-4 transition-colors hover:border-black/25 sm:gap-4 sm:px-6 sm:py-5"
               >
-                <span className="inline-flex min-w-[64px] justify-center rounded-md bg-[#f4f5f7] px-3 py-1.5 text-[12.5px] font-semibold text-[#52555b]">
+                <span className="inline-flex min-w-[56px] flex-shrink-0 justify-center rounded-md bg-[#f4f5f7] px-2.5 py-1.5 text-[12px] font-semibold text-[#52555b] sm:min-w-[64px] sm:px-3 sm:text-[12.5px]">
                   {d.cat}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-[16px] font-semibold text-ink">{d.title}</div>
+                  <div className="truncate text-[15px] font-semibold text-ink sm:text-[16px]">{d.title}</div>
                   <div className="mt-0.5 flex items-center gap-2 text-[12.5px] text-[#6e7178]">
                     <span
                       className="font-mono font-semibold"
@@ -292,13 +303,15 @@ export default async function ProductDetailPage({
                     <span>{d.size}</span>
                   </div>
                 </div>
+                {/* 모바일: 우측 작은 원형 아이콘 버튼(아이콘만). sm 이상: 기존 텍스트 버튼. */}
                 <a
                   href={downloadUrl(`m-f3a-pro/${d.file}`)}
                   download={`${d.title}.${d.fmt.toLowerCase()}`}
-                  className="inline-flex flex-shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-accent px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-accent-hover"
+                  aria-label={`${d.title} 다운로드`}
+                  className="flex h-10 w-10 flex-shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-accent text-[14px] font-semibold text-white transition-colors hover:bg-accent-hover sm:h-auto sm:w-auto sm:rounded-lg sm:px-6 sm:py-3"
                 >
-                  <i className="ph ph-download-simple" />
-                  다운로드
+                  <i className="ph ph-download-simple" style={{ fontSize: 18 }} />
+                  <span className="hidden sm:inline">다운로드</span>
                 </a>
               </div>
             ))}
@@ -341,7 +354,7 @@ export default async function ProductDetailPage({
       {/* CONTENT GALLERY (faithful reproduction of the legacy product page) */}
       {product.gallery && product.gallery.length > 0 && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <h2 className="m-0 mb-7 text-center text-[28px] font-semibold tracking-[-0.01em] text-ink">
+          <h2 className="m-0 mb-7 text-center text-[22px] font-semibold tracking-[-0.01em] text-ink sm:text-[28px]">
             제품 상세
           </h2>
           {/* Centered content column */}
@@ -373,12 +386,12 @@ export default async function ProductDetailPage({
                   {(g.title || g.body) && (
                     <div className="mx-auto mb-6 max-w-[900px]">
                       {g.title && (
-                        <h3 className="m-0 mb-3 text-[26px] font-semibold tracking-[-0.01em] text-ink">
+                        <h3 className="m-0 mb-3 text-[20px] font-semibold tracking-[-0.01em] text-ink sm:text-[26px]">
                           {g.title}
                         </h3>
                       )}
                       {g.body && (
-                        <p className="m-0 break-keep text-[16px] leading-[1.8] text-[#52555b]">
+                        <p className="m-0 break-keep text-[14px] leading-[1.7] text-[#52555b] sm:text-[16px] sm:leading-[1.8]">
                           {g.body}
                         </p>
                       )}
@@ -415,7 +428,7 @@ export default async function ProductDetailPage({
         {product.specIntro && product.specIntro.length > 0 && (
           <div className="mx-auto mb-14 flex max-w-[900px] flex-col gap-5">
             {product.specIntro.map((p) => (
-              <p key={p} className="m-0 break-keep text-[16px] leading-[1.8] text-[#52555b]">
+              <p key={p} className="m-0 break-keep text-[14px] leading-[1.7] text-[#52555b] sm:text-[16px] sm:leading-[1.8]">
                 {p}
               </p>
             ))}
@@ -440,7 +453,7 @@ export default async function ProductDetailPage({
           product.features.length > 0 &&
           (product.features.some((f) => f.images && f.images.length > 0) ? (
           <div className="mx-auto mb-16 flex max-w-[900px] flex-col gap-10">
-            <h2 className="m-0 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+            <h2 className="m-0 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
               FEATURES
             </h2>
             {product.features.map((f) => (
@@ -466,10 +479,10 @@ export default async function ProductDetailPage({
                 );
                 const text = (
                   <div>
-                    <h3 className="m-0 mb-3 text-[26px] font-semibold tracking-[-0.01em] text-ink">
+                    <h3 className="m-0 mb-3 text-[20px] font-semibold tracking-[-0.01em] text-ink sm:text-[26px]">
                       {f.title}
                     </h3>
-                    <p className="m-0 break-keep text-[16px] leading-[1.8] text-[#52555b]">{f.body}</p>
+                    <p className="m-0 break-keep text-[14px] leading-[1.7] text-[#52555b] sm:text-[16px] sm:leading-[1.8]">{f.body}</p>
                   </div>
                 );
                 // 특징 본문 아래에 한 줄로 나란히 넣는 보조 이미지들
@@ -536,7 +549,7 @@ export default async function ProductDetailPage({
           ) : (
             /* 이미지 없는 텍스트 특징 — Features 타이틀 밑 카드 그리드 */
             <div className="mx-auto mb-16 w-full max-w-[1000px]">
-              <h2 className="m-0 mb-8 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-8 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 FEATURES
               </h2>
               {/* 3개짜리는 한 줄에 3열로 — 폭이 좁아지는 만큼 카드를 세로로 키운다. */}
@@ -550,7 +563,7 @@ export default async function ProductDetailPage({
                     key={f.title}
                     className="flex min-h-[260px] flex-col rounded-2xl border border-black/10 bg-[#f7f8fa] p-7"
                   >
-                    <h3 className="m-0 mb-2.5 text-[20px] font-semibold tracking-[-0.01em] text-ink">
+                    <h3 className="m-0 mb-2.5 text-[17px] font-semibold tracking-[-0.01em] text-ink sm:text-[20px]">
                       {f.title}
                     </h3>
                     <p className="m-0 break-keep text-[15.5px] leading-[1.75] text-[#52555b]">
@@ -581,7 +594,7 @@ export default async function ProductDetailPage({
         {product.productsSlider && product.productsSlider.length > 0 && (
           <div className="mx-auto mb-16 w-full max-w-[1000px]">
             {product.productsSliderTitle && (
-              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 {product.productsSliderTitle}
               </h2>
             )}
@@ -590,7 +603,7 @@ export default async function ProductDetailPage({
         )}
 
         {product.specGroups && (
-          <h2 className="m-0 mb-7 text-center text-[28px] font-semibold tracking-[-0.01em] text-ink">
+          <h2 className="m-0 mb-7 text-center text-[22px] font-semibold tracking-[-0.01em] text-ink sm:text-[28px]">
             Specifications
           </h2>
         )}
@@ -698,7 +711,7 @@ export default async function ProductDetailPage({
       {/* REFERENCES */}
       {product.references && product.references.length > 0 && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <h2 className="m-0 mb-7 text-[28px] font-semibold tracking-[-0.01em] text-ink">
+          <h2 className="m-0 mb-7 text-[22px] font-semibold tracking-[-0.01em] text-ink sm:text-[28px]">
             References
           </h2>
           <div className="flex flex-col gap-12">
@@ -766,7 +779,7 @@ export default async function ProductDetailPage({
         <section className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:px-8">
           {product.accessoriesImage && (
             <div className="mb-14">
-              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 ACCESSORIES
               </h2>
               <div className="overflow-hidden rounded-xl border border-black/10 bg-white p-4 sm:p-8">
@@ -783,7 +796,7 @@ export default async function ProductDetailPage({
 
           {product.diagram && product.diagram.length > 0 && (
             <div className="mb-14">
-              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 DIAGRAM
               </h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -807,7 +820,7 @@ export default async function ProductDetailPage({
 
           {product.diagramGrid && product.diagramGrid.length > 0 && (
             <div className="mb-14">
-              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 DIAGRAM
               </h2>
               <div
@@ -855,7 +868,7 @@ export default async function ProductDetailPage({
           {product.slider && product.slider.length > 0 && (
             <>
               {product.sliderTitle && (
-                <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+                <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                   {product.sliderTitle}
                 </h2>
               )}
@@ -882,7 +895,7 @@ export default async function ProductDetailPage({
 
           {product.downloadLinks && product.downloadLinks.length > 0 && (
             <div className="mt-14">
-              <h2 className="m-0 mb-7 text-center font-mono text-[22px] font-bold tracking-[0.14em] text-ink">
+              <h2 className="m-0 mb-7 text-center font-mono text-[18px] font-bold tracking-[0.14em] text-ink sm:text-[22px]">
                 DOWNLOAD
               </h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -932,7 +945,7 @@ export default async function ProductDetailPage({
       {/* RELATED PRODUCTS */}
       {related.length > 0 && (
         <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 py-10">
-          <h2 className="m-0 mb-6 text-[28px] font-semibold text-ink">관련 제품</h2>
+          <h2 className="m-0 mb-6 text-[22px] font-semibold text-ink sm:text-[28px]">관련 제품</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
               <ProductCard key={p.slug} product={p} light />
@@ -944,23 +957,27 @@ export default async function ProductDetailPage({
       {/* CTA */}
       <section className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 pb-24 pt-10">
         <div className="relative overflow-hidden rounded-[20px] border border-black/10 bg-[#f4f5f7]">
-          <div className="relative flex flex-wrap items-center justify-between gap-8 p-14">
+          <div className="relative flex flex-wrap items-center justify-between gap-6 p-7 sm:gap-8 sm:p-14">
             <div>
-              <h2 className="m-0 text-[28px] font-semibold text-ink">
+              <h2 className="m-0 text-[19px] font-semibold text-ink sm:text-[28px]">
                 {product.model} 도입을 검토 중이신가요?
               </h2>
-              <p className="m-0 mt-3.5 text-[15px] text-[#52555b]">
+              <p className="m-0 mt-2.5 text-[14px] text-[#52555b] sm:mt-3.5 sm:text-[15px]">
                 설치 환경에 맞는 시스템 구성과 견적을 안내해드립니다.
               </p>
             </div>
-            <div className="flex gap-3">
+            {/* 모바일: 버튼을 전체 폭으로 세로 2줄, 텍스트는 한 줄(whitespace-nowrap). sm 이상은 가로 나란히. */}
+            <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:gap-3">
               <Link
                 href="/contact"
-                className="cursor-pointer rounded-lg bg-accent px-7 py-[15px] text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover"
+                className="w-full cursor-pointer whitespace-nowrap rounded-lg bg-accent px-7 py-[13px] text-center text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover sm:w-auto sm:py-[15px]"
               >
                 제품 상담 문의
               </Link>
-              <a href={`tel:${SITE.phone}`} className="btn-outline-light !px-7 !py-[15px]">
+              <a
+                href={`tel:${SITE.phone}`}
+                className="btn-outline-light w-full whitespace-nowrap !px-7 !py-[13px] sm:w-auto sm:!py-[15px]"
+              >
                 <i className="ph ph-phone" style={{ color: "#6EA921" }} />
                 전화 상담
               </a>

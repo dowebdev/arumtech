@@ -23,10 +23,13 @@ export default function BoardDetail({
   idx,
   listPath,
   notFoundLabel = "게시글",
+  showBreadcrumb = false,
 }: {
   idx: string;
   listPath: string;
   notFoundLabel?: string;
+  /** 상단 브레드크럼(홈 / {목록} / {제목}) 표시 여부 — 제품 상세와 통일용. */
+  showBreadcrumb?: boolean;
 }) {
   const [state, setState] = useState<State>({ status: "loading" });
   const [deleting, setDeleting] = useState(false);
@@ -54,19 +57,44 @@ export default function BoardDetail({
     };
   }, [idx, notFoundLabel]);
 
+  // 상단 브레드크럼 — 제품 상세와 동일한 스타일. 제목은 로딩 완료 후 붙는다.
+  const breadcrumb = showBreadcrumb ? (
+    <nav className="mb-3 flex items-center gap-2 overflow-hidden text-[12.5px] text-[#6e7178]">
+      <Link href="/" className="flex-shrink-0 hover:text-[#52555b]">홈</Link>
+      <i className="ph ph-caret-right flex-shrink-0" style={{ fontSize: 11 }} />
+      <Link href={listPath} className="flex-shrink-0 whitespace-nowrap hover:text-[#52555b]">
+        {notFoundLabel}
+      </Link>
+      {state.status === "ready" && (
+        <>
+          <i className="ph ph-caret-right flex-shrink-0" style={{ fontSize: 11 }} />
+          <span className="min-w-0 truncate text-accent">{state.item.title}</span>
+        </>
+      )}
+    </nav>
+  ) : null;
+
   if (state.status === "loading") {
-    return <div className="py-24 text-center text-[15px] text-[#6e7178]">불러오는 중…</div>;
+    return (
+      <>
+        {breadcrumb}
+        <div className="py-24 text-center text-[15px] text-[#6e7178]">불러오는 중…</div>
+      </>
+    );
   }
 
   if (state.status === "error") {
     return (
-      <div className="flex flex-col items-center gap-4 py-20 text-center">
-        <i className="ph ph-warning-circle" style={{ fontSize: 36, color: "#6E7178" }} />
-        <div className="text-[15px] text-[#52555b]">{state.message}</div>
-        <Link href={listPath} className="btn-outline-light !px-6 !py-3">
-          목록으로
-        </Link>
-      </div>
+      <>
+        {breadcrumb}
+        <div className="flex flex-col items-center gap-4 py-20 text-center">
+          <i className="ph ph-warning-circle" style={{ fontSize: 36, color: "#6E7178" }} />
+          <div className="text-[15px] text-[#52555b]">{state.message}</div>
+          <Link href={listPath} className="btn-outline-light !px-6 !py-3">
+            목록으로
+          </Link>
+        </div>
+      </>
     );
   }
 
@@ -92,14 +120,16 @@ export default function BoardDetail({
   };
 
   return (
-    <article>
+    <>
+      {breadcrumb}
+      <article>
       {/* 상단 바 — 왼쪽에 목록으로, 오른쪽에 관리자 버튼. 목록으로는 하단에도 하나 더 있다. */}
       <div className="mb-6 flex items-center justify-between gap-2">
         <Link
           href={listPath}
-          className="flex items-center gap-1.5 rounded-lg border border-black/15 px-4 py-2.5 text-[14px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-black/15 px-3.5 py-1.5 text-[13px] font-medium text-[#52555b] transition-colors hover:border-accent hover:text-accent"
         >
-          <i className="ph ph-arrow-left" />
+          <i className="ph ph-arrow-left" style={{ fontSize: 14 }} />
           목록으로
         </Link>
 
@@ -220,6 +250,7 @@ export default function BoardDetail({
           목록으로
         </Link>
       </div>
-    </article>
+      </article>
+    </>
   );
 }

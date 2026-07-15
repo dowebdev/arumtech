@@ -42,7 +42,7 @@ const COLS = [
 export default function Footer() {
   return (
     <footer className="border-t border-cream/10 bg-panel">
-      <div className="container-site pb-10 pt-16">
+      <div className="container-site pb-10 pt-8 sm:pt-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <div className="mb-[18px] flex items-center gap-3">
