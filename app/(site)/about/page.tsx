@@ -58,11 +58,12 @@ export default function AboutIntroPage() {
   return (
     <div className="bg-white text-ink [word-break:keep-all]">
       {/* SE AUDIOTECHNIK BRAND STORY */}
-      <section className="container-site py-20">
+      {/* 서브메뉴와 콘텐츠 사이 상단 여백을 모바일에서 50% 축소 (80 → 40px). PC는 그대로. */}
+      <section className="container-site pb-20 pt-10 sm:pt-20">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <div>
-            <div className="eyebrow">SE AUDIOTECHNIK</div>
-            <h2 className="m-0 text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
+            <div className="eyebrow text-center sm:text-left">SE AUDIOTECHNIK</div>
+            <h2 className="m-0 text-center text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-left sm:text-[36px]">
               독일 졸링겐에서 시작된
               <br />
               프로페셔널 오디오 브랜드
@@ -78,11 +79,20 @@ export default function AboutIntroPage() {
               혁신적인 음향 시스템을 제공합니다. 설계부터 제조까지 엄격한 품질 기준을 적용하여, 다양한
               환경에서도 안정적이고 일관된 사운드를 전달하는 것이 핵심 가치입니다.
             </p>
-            <div className="mt-10 flex flex-wrap gap-10 border-t border-black/10 pt-8">
+            {/*
+              모바일: 각 항목을 가로로 펼친다 — 왼쪽에 연두 큰 숫자, 오른쪽에 작은 설명.
+              (한쪽으로 쏠려 보이던 문제 해결) sm 이상은 기존처럼 숫자 위·설명 아래로 쌓아 나열.
+            */}
+            <div className="mt-10 flex flex-col gap-4 border-t border-black/10 pt-8 sm:flex-row sm:flex-wrap sm:gap-10">
               {STATS.map((s) => (
-                <div key={s.l}>
-                  <div className="font-mono text-[27px] font-semibold text-accent sm:text-[34px]">{s.v}</div>
-                  <div className="mt-1 max-w-[180px] text-[13.5px] leading-[1.5] text-[#52555b]">
+                <div
+                  key={s.l}
+                  className="flex items-center justify-between gap-4 border-b border-black/[0.06] pb-4 last:border-b-0 last:pb-0 sm:block sm:border-b-0 sm:pb-0"
+                >
+                  <div className="font-mono text-[27px] font-semibold leading-none text-accent sm:text-[34px]">
+                    {s.v}
+                  </div>
+                  <div className="max-w-[200px] text-right text-[13.5px] leading-[1.5] text-[#52555b] sm:mt-1 sm:max-w-[180px] sm:text-left">
                     {s.l}
                   </div>
                 </div>
@@ -132,8 +142,8 @@ export default function AboutIntroPage() {
       <section className="bg-[#f4f5f7]">
         <div className="container-site py-20">
           <div className="mb-10 max-w-[640px]">
-            <div className="eyebrow">SOLUTIONS</div>
-            <h2 className="m-0 break-keep text-[23px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
+            <div className="eyebrow text-center sm:text-left">SOLUTIONS</div>
+            <h2 className="m-0 break-keep text-center text-[22px] font-semibold tracking-[-0.02em] text-ink sm:text-left sm:text-[36px]">
               다양한 환경에 최적화된 음향 솔루션
             </h2>
             <p className="m-0 mt-5 break-keep text-[14px] leading-[1.7] text-[#52555b] sm:text-base sm:leading-[1.8]">
@@ -158,7 +168,8 @@ export default function AboutIntroPage() {
             {LINEUP.map((l) => (
               <div
                 key={l.label}
-                className="flex items-center justify-between rounded-[14px] border border-black/[0.08] bg-white px-7 py-6"
+                // 모바일: 검정 라벨(윗줄) · 연두 모델명(아랫줄)로 쌓는다. sm 이상은 좌우 배치.
+                className="flex flex-col items-start gap-1.5 rounded-[14px] border border-black/[0.08] bg-white px-7 py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-0"
               >
                 <span className="text-[14px] font-semibold text-ink sm:text-[16px]">{l.label}</span>
                 <span className="font-mono text-[14.5px] tracking-[0.02em] text-accent">
@@ -180,8 +191,8 @@ export default function AboutIntroPage() {
       <section className="container-site py-20">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
-            <div className="eyebrow">WHY SE-AUDIOTECHNIK</div>
-            <h2 className="m-0 text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-[36px]">
+            <div className="eyebrow text-center sm:text-left">WHY SE-AUDIOTECHNIK</div>
+            <h2 className="m-0 text-center text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-ink sm:text-left sm:text-[36px]">
               선택받는
               <br />
               다섯 가지 이유

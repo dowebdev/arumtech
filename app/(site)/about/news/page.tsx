@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 export default function AboutNewsPage() {
   return (
     <div className="bg-white text-ink">
-      <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8">
-        <div className="mb-10">
+      <section className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 sm:px-8 sm:pt-20">
+        <div className="mb-10 text-center sm:text-left">
           <div className="eyebrow">NEWS</div>
-          <h2 className="m-0 text-[32px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
+          <h2 className="m-0 text-[23px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
             아름텍 소식
           </h2>
         </div>

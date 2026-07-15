@@ -13,9 +13,9 @@ const KAKAO_MAP_URL = `https://map.kakao.com/?q=${encodeURIComponent(SITE.hqAddr
 export default function AboutLocationPage() {
   return (
     <div className="bg-white text-ink">
-      <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8">
-        <div className="eyebrow">LOCATION</div>
-        <h2 className="m-0 mb-10 text-[32px] font-semibold tracking-[-0.02em] text-ink sm:text-[36px]">
+      <section className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 sm:px-8 sm:pt-20">
+        <div className="eyebrow text-center sm:text-left">LOCATION</div>
+        <h2 className="m-0 mb-10 text-center text-[23px] font-semibold tracking-[-0.02em] text-ink sm:text-left sm:text-[36px]">
           오시는 길
         </h2>
 

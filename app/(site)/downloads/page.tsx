@@ -20,7 +20,7 @@ export default function DownloadsPage() {
         image="/images/hero/downloads.jpg"
       />
 
-      <section className="container-site py-8">
+      <section className="container-site pb-8 pt-4 sm:pt-8">
         <BoardWriteButton href="/downloads/write" label="자료 등록" />
         <ArchiveBoard />
 

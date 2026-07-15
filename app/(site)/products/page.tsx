@@ -20,7 +20,7 @@ export default function ProductsPage() {
         image="/images/hero/products.jpg"
       />
 
-      <section className="container-site py-8">
+      <section className="container-site pb-8 pt-4 sm:pt-8">
         <Suspense fallback={<div className="py-20 text-center text-[#52555b]">불러오는 중…</div>}>
           <ProductsBrowser />
         </Suspense>

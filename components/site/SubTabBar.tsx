@@ -56,7 +56,8 @@ export default function SubTabBar({
 
   return (
     <div className="sticky top-[54px] z-40 border-b border-black/10 bg-white sm:top-[68px]">
-      <div className="container-site relative">
+      {/* container-site(px-5=20px) 대신 모바일 좌우 여백을 10px 로 줄인다. PC(sm:px-8=32px)는 유지. */}
+      <div className="relative mx-auto w-full max-w-site px-2.5 sm:px-8">
         {/* 왼쪽 화살표 — 왼쪽으로 더 스크롤할 수 있을 때만 */}
         {canLeft && (
           <button
@@ -73,23 +74,34 @@ export default function SubTabBar({
           ref={scrollerRef}
           className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {/* 들어가면 가운데 정렬(w-fit + mx-auto), 넘치면 스크롤된다. */}
-          <div className="mx-auto flex w-fit gap-1">
+          {/*
+            모바일: 전체 폭에 균등 배치(min-w-full + justify-between)해 좌우 빈 공간을 없앤다.
+            sm 이상: 가운데 정렬(w-fit + mx-auto). 넘치면(항목 많을 때) 스크롤된다.
+          */}
+          <div className="flex min-w-full justify-between gap-1 sm:mx-auto sm:min-w-0 sm:w-fit sm:justify-normal">
             {tabs.map((t) => {
               const active = isActive(t.href);
               return (
                 <Link
                   key={t.href}
                   href={t.href}
-                  className={`whitespace-nowrap px-5 py-4 text-[14px] transition-colors sm:text-[16px] ${
-                    active ? "text-ink" : "text-[#52555b] hover:text-ink"
-                  }`}
-                  style={{
-                    borderBottom: `2px solid ${active ? "#6EA921" : "transparent"}`,
-                    fontWeight: active ? 600 : 500,
-                  }}
+                  className="relative whitespace-nowrap px-2 py-4 sm:px-5"
                 >
-                  {t.label}
+                  <span
+                    className={`relative inline-block text-[14px] transition-colors sm:text-[16px] ${
+                      active ? "text-ink" : "text-[#52555b] hover:text-ink"
+                    }`}
+                    style={{ fontWeight: active ? 600 : 500 }}
+                  >
+                    {t.label}
+                    {/*
+                      연두 라인: 폭은 텍스트(span)와 동일하게(left-0 right-0), 위치는 바 맨 아래
+                      회색 라인과 같은 선상에 오도록 py-4(16px) 만큼 내린다(-bottom-4).
+                    */}
+                    {active && (
+                      <span className="absolute -bottom-4 left-0 right-0 h-[2px] bg-accent" />
+                    )}
+                  </span>
                 </Link>
               );
             })}

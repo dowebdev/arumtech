@@ -157,9 +157,9 @@ export default function ContactForm() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-12 sm:px-8">
-      <div className="eyebrow">CONTACT</div>
-      <h2 className="m-0 mb-8 break-keep text-[26px] font-semibold tracking-[-0.02em] text-ink sm:text-[30px]">
+    <section className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-6 sm:px-8 sm:pt-12">
+      <div className="eyebrow text-center sm:text-left">CONTACT</div>
+      <h2 className="m-0 mb-8 break-keep text-center text-[26px] font-semibold tracking-[-0.02em] text-ink sm:text-left sm:text-[30px]">
         문의하기
       </h2>
 

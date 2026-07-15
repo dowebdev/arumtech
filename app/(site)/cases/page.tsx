@@ -19,7 +19,7 @@ export default function CasesPage() {
         image="/images/hero/cases.jpg"
       />
 
-      <section className="container-site py-8 pb-24">
+      <section className="container-site pb-24 pt-4 sm:pt-8">
         <BoardWriteButton href="/cases/write" label="설치사례 등록" />
         <CasesBoard />
       </section>

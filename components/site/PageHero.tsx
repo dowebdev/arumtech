@@ -35,13 +35,14 @@ export default function PageHero({
             "linear-gradient(90deg, rgba(11,13,16,0.78) 0%, rgba(11,13,16,0.55) 45%, rgba(11,13,16,0.18) 100%)",
         }}
       />
-      <div className="container-site relative flex min-h-[300px] flex-col justify-center py-16 sm:min-h-[420px]">
+      {/* 모바일은 높이·폰트를 줄이고(min-h 300→180, py-16→10, 제목 36→26) 가운데 정렬. sm 이상은 기존 좌측정렬. */}
+      <div className="container-site relative flex min-h-[180px] flex-col items-center justify-center py-10 text-center sm:min-h-[420px] sm:items-start sm:py-16 sm:text-left">
         <div className="eyebrow">{eyebrow}</div>
-        <h1 className="m-0 text-[36px] font-semibold tracking-[-0.02em] text-white sm:text-[44px]">
+        <h1 className="m-0 text-[26px] font-semibold tracking-[-0.02em] text-white sm:text-[44px]">
           {title}
         </h1>
         {subtitle && (
-          <p className="m-0 mt-4 font-mono text-base text-white/75">{subtitle}</p>
+          <p className="m-0 mt-3 font-mono text-[13px] text-white/75 sm:mt-4 sm:text-base">{subtitle}</p>
         )}
       </div>
     </section>

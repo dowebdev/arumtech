@@ -49,7 +49,7 @@ function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
 export default function SupportPage() {
   return (
     <div className="bg-white text-ink">
-      <section className="mx-auto w-full max-w-[1000px] px-5 py-16 sm:px-8">
+      <section className="mx-auto w-full max-w-[1000px] px-5 pb-16 pt-8 sm:px-8 sm:pt-16">
         {/* 보증기간 */}
         <div className="eyebrow">WARRANTY</div>
         <h2 className="m-0 mb-6 text-[26px] font-semibold tracking-[-0.02em] text-ink sm:text-[30px]">
