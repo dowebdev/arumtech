@@ -198,12 +198,15 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   // true when the section currently behind the bar has a dark background
   const [darkBg, setDarkBg] = useState(false);
+  // PC(≥lg) 여부 — 서브페이지에서도 PC 는 스크롤 시 알약으로 바뀌게 하기 위함.
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     // sample the section sitting behind the bar's vertical centre
     const SAMPLE_Y = 50;
     const update = () => {
       setScrolled(window.scrollY > 20);
+      setIsDesktop(window.innerWidth >= 1024);
       const els = document.querySelectorAll<HTMLElement>("[data-nav-theme]");
       let dark = false;
       for (const el of els) {
@@ -227,9 +230,9 @@ export default function Header() {
   const isActive = (key: string) =>
     (ACTIVE_MAP[key] || []).some((p) => pathname === p || pathname.startsWith(p + "/"));
 
-  // 알약(pill)로 축약되는 형태는 홈에서만. 서브페이지는 스크롤해도 슬림한 상단 바로 고정한다.
+  // 알약(pill) 축약: 홈은 모든 화면에서, 서브페이지는 PC(≥lg)에서만. 모바일 서브페이지는 슬림 바로 고정.
   const isHome = pathname === "/";
-  const pill = scrolled && isHome;
+  const pill = scrolled && (isHome || isDesktop);
 
   // invert the bar to white only once it has collapsed into the floating pill (home only)
   const invert = pill && darkBg;
@@ -239,7 +242,8 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 z-[100]"
+      // 사이트맵이 열리면 헤더 전체를 최상위로 올려, 그 안의 FullMenu 가 퀵메뉴(z-200)·버텀바(z-150)를 덮게 한다.
+      className={`sticky top-0 ${menuOpen ? "z-[210]" : "z-[100]"}`}
       onMouseLeave={() => {
         setOpenMenu(null);
         // 다음에 열 때는 기본 라인부터 보여준다.
@@ -258,7 +262,7 @@ export default function Header() {
                   invert ? "border-black/10" : "border-cream/15"
                 }`
               : "h-[54px] max-w-site border-b border-cream/10 px-5 sm:h-[68px] sm:px-8"
-          }${scrolled && !isHome ? " shadow-[0_2px_14px_-4px_rgba(0,0,0,0.35)]" : ""}`}
+          }${scrolled && !pill ? " shadow-[0_2px_14px_-4px_rgba(0,0,0,0.35)]" : ""}`}
           style={{
             background: invert ? "#ffffff" : "#000000",
             backdropFilter: "blur(18px)",
@@ -534,6 +538,47 @@ function FullMenu({ onClose, scrolled }: { onClose: () => void; scrolled: boolea
     };
   }, [onClose]);
 
+  const renderCat = (cat: MenuCategory) => (
+    <div key={cat.key}>
+      <Link href={cat.href} onClick={onClose} className="group block">
+        <span className="font-mono text-[11px] tracking-[0.2em] text-accent">{cat.en}</span>
+        <span className="mt-1.5 block text-[22px] font-semibold tracking-[-0.01em] text-cream transition-colors group-hover:text-accent">
+          {cat.label}
+        </span>
+      </Link>
+      <div className="mt-5 flex flex-col gap-3 border-t border-cream/10 pt-5">
+        {cat.items.map((it) =>
+          it.external ? (
+            <a
+              key={it.label}
+              href={it.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              className="text-[15px] text-muted transition-colors hover:text-cream"
+            >
+              {it.label}
+            </a>
+          ) : (
+            <Link
+              key={it.label}
+              href={it.href}
+              onClick={onClose}
+              // 서브 라인(Full Range 하위)은 한 단 들여쓰고 조금 작게 — 상위 라인과 구분되게.
+              className={
+                it.sub
+                  ? "-my-0.5 border-l border-cream/15 pl-3 text-[13.5px] text-dim transition-colors hover:text-cream"
+                  : "text-[15px] text-muted transition-colors hover:text-cream"
+              }
+            >
+              {it.label}
+            </Link>
+          )
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div
       // 헤더 바로 아래에서 시작한다. 모바일 헤더는 54px(스크롤 시 46px+여백 12 = 58px), sm 이상은 68/80px.
@@ -552,49 +597,21 @@ function FullMenu({ onClose, scrolled }: { onClose: () => void; scrolled: boolea
       {/* Body — full sitemap */}
       <div className="flex-1 overflow-y-auto">
         <div className="container-site py-10 md:py-16">
-          <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
-            {MENU.map((cat) => (
-              <div key={cat.key}>
-                <Link href={cat.href} onClick={onClose} className="group block">
-                  <span className="font-mono text-[11px] tracking-[0.2em] text-accent">
-                    {cat.en}
-                  </span>
-                  <span className="mt-1.5 block text-[22px] font-semibold tracking-[-0.01em] text-cream transition-colors group-hover:text-accent">
-                    {cat.label}
-                  </span>
-                </Link>
-                <div className="mt-5 flex flex-col gap-3 border-t border-cream/10 pt-5">
-                  {cat.items.map((it) =>
-                    it.external ? (
-                      <a
-                        key={it.label}
-                        href={it.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={onClose}
-                        className="text-[15px] text-muted transition-colors hover:text-cream"
-                      >
-                        {it.label}
-                      </a>
-                    ) : (
-                      <Link
-                        key={it.label}
-                        href={it.href}
-                        onClick={onClose}
-                        // 서브 라인(Full Range 하위)은 한 단 들여쓰고 조금 작게 — 상위 라인과 구분되게.
-                        className={
-                          it.sub
-                            ? "-my-0.5 border-l border-cream/15 pl-3 text-[13.5px] text-dim transition-colors hover:text-cream"
-                            : "text-[15px] text-muted transition-colors hover:text-cream"
-                        }
-                      >
-                        {it.label}
-                      </Link>
-                    )
-                  )}
-                </div>
-              </div>
-            ))}
+          {/*
+            모바일: 좌/우 컬럼을 독립적으로 흘려 회사소개(짧음) 아래 빈 여백을 없앤다.
+            좌 = 회사소개·설치사례·고객지원, 우 = 제품소개·자료실.
+          */}
+          <div className="grid grid-cols-2 gap-x-8 sm:hidden">
+            <div className="flex flex-col gap-y-12">
+              {MENU.filter((m) => ["about", "cases", "support"].includes(m.key)).map(renderCat)}
+            </div>
+            <div className="flex flex-col gap-y-12">
+              {MENU.filter((m) => ["products", "downloads"].includes(m.key)).map(renderCat)}
+            </div>
+          </div>
+          {/* sm 이상: 기존 그리드 (3 → 5열) */}
+          <div className="hidden gap-x-8 gap-y-12 sm:grid sm:grid-cols-3 lg:grid-cols-5">
+            {MENU.map(renderCat)}
           </div>
 
           {featured && (

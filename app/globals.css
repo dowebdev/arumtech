@@ -59,6 +59,17 @@ select:focus {
   border-color: #6ea921 !important;
 }
 
+/* 카카오(다음) 약도 — 지도만 보이게: 폭 100% + 지도 높이(400px)로 잘라 하단 정보(주소·전화 등)를 가린다. */
+.root_daum_roughmap {
+  width: 100% !important;
+  height: 400px !important;
+  overflow: hidden !important;
+}
+.root_daum_roughmap .wrap_map,
+.root_daum_roughmap .map_border {
+  width: 100% !important;
+}
+
 @layer components {
   /* Centered site container */
   .container-site {

@@ -17,6 +17,9 @@ const COLS = [
       { label: "L-Line", href: "/products?line=L-Line" },
       { label: "B-Line", href: "/products?line=B-Line" },
       { label: "Column", href: "/products?line=Column" },
+      { label: "Full Range", href: "/products?line=Full%20Range" },
+      { label: "Monitor", href: "/products?line=Monitor" },
+      { label: "Amplifiers", href: "/products?line=Amplifiers" },
     ],
   },
   {
@@ -79,7 +82,14 @@ export default function Footer() {
               <div className="mb-4 text-[17px] font-semibold tracking-[0.04em] text-cream">
                 {col.title}
               </div>
-              <div className="flex flex-col gap-[13px]">
+              {/* 제품은 항목이 많아 2열로 나눠 세로 길이를 줄인다. 나머지 컬럼은 1열 유지. */}
+              <div
+                className={
+                  col.title === "제품"
+                    ? "grid grid-cols-2 gap-x-6 gap-y-[13px]"
+                    : "flex flex-col gap-[13px]"
+                }
+              >
                 {col.items.map((it) => (
                   <Link
                     key={it.label}

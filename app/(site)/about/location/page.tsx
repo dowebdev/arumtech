@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SITE } from "@/lib/data";
+import KakaoRoughMap from "@/components/site/KakaoRoughMap";
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -19,40 +20,9 @@ export default function AboutLocationPage() {
           오시는 길
         </h2>
 
-        {/* MAP */}
-        <div className="relative min-h-[420px] overflow-hidden rounded-[20px] border border-black/10 bg-gradient-to-b from-[#f7f8fa] to-[#eaebee] lg:min-h-[480px]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-          <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2.5">
-            <span className="relative flex h-[68px] w-[68px] items-center justify-center">
-              <span className="absolute inset-0 rounded-full bg-accent/15" />
-              <span className="absolute inset-[10px] rounded-full bg-accent/25" />
-              <i
-                className="ph ph-map-pin ph-fill relative"
-                style={{ fontSize: 34, color: "#6EA921" }}
-              />
-            </span>
-            <span className="text-[14px] text-[#52555b]">지도 영역 (Map)</span>
-          </div>
-
-          {/* 주소 오버레이 */}
-          <div className="absolute bottom-5 left-5 right-5 sm:right-auto sm:max-w-[420px]">
-            <div className="rounded-2xl border border-black/10 bg-white/90 p-5 shadow-[0_6px_24px_rgba(0,0,0,0.08)] backdrop-blur">
-              <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                <span className="text-[12.5px] font-semibold tracking-[0.04em] text-accent">
-                  본사
-                </span>
-              </div>
-              <p className="m-0 mt-2 text-[16px] leading-[1.6] text-ink">{SITE.hqAddress}</p>
-            </div>
-          </div>
+        {/* MAP — 카카오(다음) 약도. 키 없이 소스만으로 렌더(정적). 하단 정보바는 CSS 로 잘라 가린다. */}
+        <div className="overflow-hidden rounded-[20px] border border-black/10">
+          <KakaoRoughMap />
         </div>
 
         {/* 지도 바로가기 */}
