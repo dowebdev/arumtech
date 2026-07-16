@@ -196,8 +196,10 @@ export async function fetchContentsList(
   const { page = 1, limit = 12, search, withContent } = opts;
   const params: Record<string, string | number> = {
     module_idx: BOARDS[board],
-    page,
-    limit,
+    // API 가 받는 이름은 page_index/page_size 다. page/limit 으로 보내면 조용히 무시돼
+    // 기본값 20건만 돌아온다 (글이 20건 이하일 땐 티가 나지 않는다).
+    page_index: page,
+    page_size: limit,
   };
   // 설치사례처럼 목록 카드에 대표 이미지가 필요하면 본문·첨부를 함께 로드한다.
   if (withContent) {
