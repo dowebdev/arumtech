@@ -31,6 +31,14 @@ export default function ProductsBrowser() {
   );
   const [query, setQuery] = useState("");
 
+  // useState 초기값은 마운트 때 한 번만 계산된다. Next.js 는 /products 안에서 이동할 때
+  // ProductsBrowser 를 마운트된 채로 재사용하고 searchParams 만 바꾸므로(푸터의 라인 링크가
+  // 그렇다), URL 이 바뀌어도 탭이 옛 값에 머문다. searchParams 를 따라 동기화한다.
+  useEffect(() => {
+    setTab((TABS as readonly string[]).includes(initialLine) ? initialLine : "전체");
+    setGroup((GROUP_TABS as readonly string[]).includes(initialGroup) ? initialGroup : "전체");
+  }, [initialLine, initialGroup]);
+
   const showGroups = tab === "Full Range";
 
   const filtered = useMemo(() => {
