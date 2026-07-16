@@ -25,7 +25,8 @@ export default function CasesBoard() {
 
   useEffect(() => {
     let alive = true;
-    fetchContentsList("cases", { limit: 100, withContent: true })
+    // 이관한 설치사례가 정확히 100건이라 limit:100 이면 경계에 걸린다. 한 건만 늘어도 잘린다.
+    fetchContentsList("cases", { limit: 300, withContent: true })
       .then((res) => {
         if (alive) setState({ status: "ready", items: res.items });
       })

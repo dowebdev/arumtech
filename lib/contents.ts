@@ -103,20 +103,31 @@ async function get(path: string, params: Record<string, string | number>): Promi
   return res.json();
 }
 
-/** extras JSON 문자열을 안전하게 파싱한다. */
+/**
+ * extras JSON 문자열을 안전하게 파싱한다.
+ *
+ * date·views 는 구 사이트에서 옮겨온 글의 원본 게시일·조회수다. 서버가 date_active 와
+ * count_read 의 쓰기를 막아서(전자는 생성시각 강제, 후자는 조회 시에만 증가) 원본값을
+ * 여기 실어 보내고 표시할 때 우선한다. 이관한 글에만 있고, 나머지는 없어서 폴백된다.
+ */
 function parseExtras(extras: unknown): {
   pinned: boolean;
   category?: string;
   listImage?: string;
+  date?: string;
+  views?: number;
 } {
   if (typeof extras !== "string") return { pinned: false };
   try {
     const e = JSON.parse(extras);
     const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
+    const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
     return {
       pinned: e?.isPinned === 1,
       category: str(e?.category),
       listImage: str(e?.listImage),
+      date: str(e?.date),
+      views: num(e?.views),
     };
   } catch {
     return { pinned: false };
@@ -173,13 +184,15 @@ function firstImage(raw: RawItem): string | undefined {
 }
 
 function toItem(raw: RawItem): ContentItem {
-  const { pinned, category, listImage } = parseExtras(raw.extras);
+  const { pinned, category, listImage, date, views } = parseExtras(raw.extras);
   return {
     idx: raw.idx,
     title: raw.title ?? "",
-    date: raw.date_active ?? raw.date_start ?? "",
+    // 이관 글은 extras 의 원본 게시일을 쓴다. date_start 는 쓰면 안 된다 — 게시기간용이고
+    // 화면이 UTC 문자열을 타임존 변환 없이 slice(0,10) 해서 하루 밀린다.
+    date: date ?? raw.date_active ?? raw.date_start ?? "",
     pinned,
-    views: raw.count_read ?? 0,
+    views: views ?? raw.count_read ?? 0,
     fileCount: raw.files?.length ?? 0,
     category,
     listImage,

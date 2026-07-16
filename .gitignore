@@ -23,8 +23,8 @@ yarn-error.log*
 .env*.local
 .env
 
-# 설치사례 마이그레이션 대장 (등록한 글 idx 기록 — 재실행 시 중복 등록 방지)
-/scripts/.migrate-cases-ledger.json
+# 마이그레이션 대장 (등록한 글 idx 기록 — 재실행 시 중복 등록 방지)
+/scripts/.migrate-*-ledger.json
 __pycache__/
 
 # typescript

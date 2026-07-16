@@ -25,7 +25,9 @@ export default function ArchiveBoard() {
 
   useEffect(() => {
     let alive = true;
-    fetchContentsList("archive", { limit: 100 })
+    // 목록을 통째로 받아 브라우저에서 필터·페이징한다. 구 사이트에서 옮겨온 137건이 있어
+    // 100 이면 잘린다.
+    fetchContentsList("archive", { limit: 300 })
       .then((res) => {
         if (alive) setState({ status: "ready", items: res.items });
       })
