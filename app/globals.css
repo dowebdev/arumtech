@@ -524,3 +524,11 @@ select:focus {
   background: #f7f8fa;
   font-weight: 700;
 }
+
+/* reCAPTCHA v3 배지 숨김.
+   우하단에 퀵메뉴 버튼이 떠 있어(components/site/QuickMenu.tsx) 배지를 두면 겹친다.
+   Google 은 배지를 숨기는 대신 폼에 고지문구를 노출하는 것을 허용한다 — ContactForm 하단에 있다.
+   JS 로 숨기면 배지가 삽입되기 전에 실행돼 놓친다. CSS 는 타이밍을 타지 않는다. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

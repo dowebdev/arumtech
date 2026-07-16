@@ -53,6 +53,13 @@ async function post(path: string, body: unknown): Promise<void> {
 }
 
 /**
+ * 캡차 토큰 발급기. 요청마다 새로 부른다 — reCAPTCHA v3 토큰은 1회용이라
+ * 하나를 이메일·문자 두 요청에 재사용하면 두 번째 검증이 실패한다.
+ * undefined 를 주면 토큰 없이 보낸다 (captcha_token 은 API 스펙상 선택값).
+ */
+export type CaptchaTokenFactory = (action: string) => Promise<string | undefined>;
+
+/**
  * 공용 알림 템플릿(2번)은 본문이 `${module_name} 작성 알림 : [${name}] - ${title}` 한 줄이다.
  * 그대로 두면 연락처·문의 내용이 메일에 안 담기므로 title 에 전부 모아 넣는다.
  * 문의 전용 템플릿(1000)이 등록되면 그 템플릿은 개별 필드를 각각 쓰므로 이 값은 무시된다.
@@ -69,7 +76,10 @@ function summarize(d: InquiryPayload): string {
 }
 
 /** 성공한 채널 목록을 돌려준다. 전부 실패하면 throw. */
-export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "email">> {
+export async function sendInquiry(
+  data: InquiryPayload,
+  getCaptchaToken?: CaptchaTokenFactory
+): Promise<Array<"sms" | "email">> {
   if (!API_URL || !SITE_ID) {
     throw new InquiryConfigError(
       "NEXT_PUBLIC_WOORI_API_URL 과 NEXT_PUBLIC_WOORI_SITE_ID 가 설정되지 않았습니다."
@@ -97,11 +107,18 @@ export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "
 
   const sent: Array<"sms" | "email"> = [];
 
+  // captcha_token 은 data 안이 아니라 최상위 필드다 (MessageSendAdminDto: type·option·data·captcha_token).
+  async function captcha(action: string) {
+    const token = await getCaptchaToken?.(action);
+    return token ? { captcha_token: token } : {};
+  }
+
   try {
     await post("/message/send_admin", {
       type: MESSAGE_TYPE_EMAIL,
       option: EMAIL_OPTION,
       data: payload,
+      ...(await captcha("inquiry")),
     });
     sent.push("email");
   } catch (err) {
@@ -113,6 +130,7 @@ export async function sendInquiry(data: InquiryPayload): Promise<Array<"sms" | "
       type: MESSAGE_TYPE_SMS,
       option: SMS_OPTION,
       data: payload,
+      ...(await captcha("inquiry")),
     });
     sent.push("sms");
   } catch (err) {

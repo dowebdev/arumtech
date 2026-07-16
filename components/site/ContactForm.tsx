@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { SITE } from "@/lib/data";
 import { InquiryConfigError, sendInquiry } from "@/lib/inquiry";
 import { PRIVACY_POLICY } from "@/lib/privacy";
+import { getCaptchaToken, isCaptchaEnabled, loadCaptcha } from "@/lib/recaptcha";
 
 const FIELD =
   "w-full rounded-lg border border-black/15 bg-white px-3.5 py-[13px] text-[15px] text-ink outline-none placeholder:text-[#9aa0a6]";
@@ -61,6 +62,12 @@ export default function ContactForm() {
     return extras.length ? `${form.message}\n\n---\n${extras.join("\n")}` : form.message;
   }
 
+  // reCAPTCHA v3 는 문의 페이지에서만 로드한다. 전역으로 두면 모든 페이지에서 스크립트가
+  // 돌고 배지도 뜬다 (한강미디어도 같은 이유로 문의 페이지 한정으로 로드한다).
+  useEffect(() => {
+    loadCaptcha();
+  }, []);
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
@@ -74,17 +81,20 @@ export default function ContactForm() {
     setErrorMessage("");
 
     try {
-      const sent = await sendInquiry({
-        name: form.name,
-        phone: form.phone,
-        email: form.email,
-        company: "",
-        category: type,
-        subject: `[${type}] ${form.name}`,
-        message: buildMessage(),
-        agreePrivacy: form.agreePrivacy,
-        agreedAt: new Date().toISOString(),
-      });
+      const sent = await sendInquiry(
+        {
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          company: "",
+          category: type,
+          subject: `[${type}] ${form.name}`,
+          message: buildMessage(),
+          agreePrivacy: form.agreePrivacy,
+          agreedAt: new Date().toISOString(),
+        },
+        getCaptchaToken
+      );
 
       setSentVia(sent);
       setDone(true);
@@ -269,6 +279,31 @@ export default function ContactForm() {
               )}
             </button>
           </div>
+
+          {/* 배지를 숨기는 대신 이 고지를 노출해야 Google 정책을 충족한다 (lib/recaptcha.ts 의 hideBadge 참고). */}
+          {isCaptchaEnabled() && (
+            <p className="mt-5 text-center text-[12.5px] leading-[1.6] text-[#9aa0a6]">
+              이 사이트는 reCAPTCHA로 보호되며 Google{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 transition-colors hover:text-accent"
+              >
+                개인정보처리방침
+              </a>
+              과{" "}
+              <a
+                href="https://policies.google.com/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 transition-colors hover:text-accent"
+              >
+                서비스 약관
+              </a>
+              이 적용됩니다.
+            </p>
+          )}
         </form>
       </div>
 
