@@ -45,16 +45,6 @@ for (const line of PRODUCT_LINES) {
   }
 }
 
-// M-F3A PRO MAX 는 사이트에 제품 페이지가 없고 외부 사이트로 나간다. 그래서 위 루프에서
-// 미리보기가 안 잡히고 우측이 텅 비었다. 전용 이미지로 직접 채운다.
-LINE_PREVIEW["M-F3A PRO MAX"] = {
-  model: "M-F3A PRO MAX",
-  href: LINE_EXTERNAL_LINKS["M-F3A PRO MAX"] as string,
-  image: "/images/products/m-f3a-pro-max-menu.png",
-  desc: LINE_DESCRIPTIONS["M-F3A PRO MAX"],
-  external: true,
-};
-
 /** 메뉴를 열었을 때 처음 보여줄 라인. */
 const DEFAULT_PREVIEW_LINE: ProductLine = "M-Line";
 
