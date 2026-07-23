@@ -74,9 +74,7 @@ export default function HomePage() {
               PRECISION SOUND INFRASTRUCTURE
             </div>
             <h1 className="m-0 text-[18px] font-semibold leading-[1.6] tracking-[-0.02em] text-cream sm:text-[24px] sm:leading-[1.55]">
-              독일 기술로 완성하는
-              <br />
-              최고의 사운드
+              독일 기술로 완성하는 최고의 사운드
             </h1>
             <p className="m-0 mt-4 text-[18px] font-semibold leading-[1.6] tracking-[-0.02em] text-cream sm:mt-5 sm:text-[24px] sm:leading-[1.55]">
               공연장부터 다양한 상업 공간까지, SE-Audiotechnik은{" "}
