@@ -386,7 +386,7 @@ export default function Header() {
             <form
               action="/search"
               method="get"
-              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.55)] ${
+              className={`mx-auto flex w-full max-w-[480px] items-center gap-3 rounded-2xl border px-4 py-3 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.55)] ${
                 invert ? "border-black/10 bg-white" : "border-cream/15 bg-[#111419]"
               }`}
             >

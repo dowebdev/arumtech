@@ -57,6 +57,12 @@ export default function BoardDetail({
     };
   }, [idx, notFoundLabel]);
 
+  // 목록·검색 등 스크롤이 내려간 상태에서 상세로 들어오면 항상 최상단부터 보이게 한다.
+  // (본문이 비동기로 로드돼 Next 기본 스크롤 복원만으로는 최상단이 보장되지 않는다.)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [idx]);
+
   // 상단 브레드크럼 — 제품 상세와 동일한 스타일. 제목은 로딩 완료 후 붙는다.
   const breadcrumb = showBreadcrumb ? (
     <nav className="mb-3 flex items-center gap-2 overflow-hidden text-[12.5px] text-[#6e7178]">

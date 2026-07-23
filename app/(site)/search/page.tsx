@@ -78,31 +78,9 @@ export default async function SearchPage({
           </h1>
         </div>
 
-        <form
-          action="/search"
-          method="get"
-          className="flex max-w-[640px] items-center gap-3 rounded-2xl border border-black/12 bg-[#f7f8fa] px-5 py-3.5 focus-within:border-accent focus-within:bg-white"
-        >
-          <i className="ph ph-magnifying-glass text-[#9aa0a6]" style={{ fontSize: 20 }} />
-          <input
-            type="text"
-            name="keyword"
-            defaultValue={keyword}
-            placeholder="제품 · 자료 · 설치사례 검색"
-            aria-label="통합 검색"
-            className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-[#9aa0a6]"
-          />
-          <button
-            type="submit"
-            className="flex-shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-          >
-            검색
-          </button>
-        </form>
-
         {!keyword ? (
-          <p className="mt-8 text-[14px] text-[#6e7178]">
-            찾으시는 제품·자료·설치사례를 검색해 보세요.
+          <p className="mt-2 text-[14px] text-[#6e7178]">
+            상단 검색창에서 제품·자료·설치사례를 검색해 보세요.
           </p>
         ) : (
           <>
