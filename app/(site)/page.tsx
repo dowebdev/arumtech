@@ -73,12 +73,12 @@ export default function HomePage() {
               <span className="h-px w-6 bg-accent" />
               PRECISION SOUND INFRASTRUCTURE
             </div>
-            <h1 className="m-0 text-[30px] font-semibold leading-[1.3] tracking-[-0.02em] text-cream sm:text-[52px] sm:leading-[1.2]">
+            <h1 className="m-0 text-[18px] font-semibold leading-[1.6] tracking-[-0.02em] text-cream sm:text-[24px] sm:leading-[1.55]">
               독일 기술로 완성하는
               <br />
               최고의 사운드
             </h1>
-            <p className="m-0 mt-5 text-[15px] leading-[1.7] text-cream/80 sm:mt-7 sm:text-[17px] sm:leading-[1.75]">
+            <p className="m-0 mt-4 text-[18px] font-semibold leading-[1.6] tracking-[-0.02em] text-cream sm:mt-5 sm:text-[24px] sm:leading-[1.55]">
               공연장부터 다양한 상업 공간까지, SE-Audiotechnik은{" "}
               <br className="hidden sm:block" />
               공간에 최적화된 프로페셔널 음향 솔루션을 제공합니다
