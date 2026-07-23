@@ -5,7 +5,6 @@
 // =============================================================
 
 export type ProductLine =
-  | "M-F3A PRO MAX"
   | "M-Line"
   | "L-Line"
   | "B-Line"
@@ -216,7 +215,6 @@ export interface Inquiry {
 // ---------------- PRODUCT LINES ----------------
 
 export const PRODUCT_LINES: ProductLine[] = [
-  "M-F3A PRO MAX",
   "M-Line",
   "L-Line",
   "B-Line",
@@ -227,7 +225,6 @@ export const PRODUCT_LINES: ProductLine[] = [
 ];
 
 export const LINE_DESCRIPTIONS: Record<ProductLine, string> = {
-  "M-F3A PRO MAX": "플래그십 컴팩트 라인어레이",
   "M-Line": "모듈형 컴팩트 라인어레이",
   "L-Line": "대형 포맷 라인어레이",
   "B-Line": "고출력 서브우퍼",
@@ -238,12 +235,10 @@ export const LINE_DESCRIPTIONS: Record<ProductLine, string> = {
 };
 
 // Product lines that link to an external page (opened in a new tab) instead of
-// the internal /products filter. Keyed by line name.
-// (M-F3A PRO MAX 는 실제 상품이 생겨 내부 /products 로 연결된다 — 외부 링크 없음.)
+// the internal /products filter. Keyed by line name. (현재 외부 링크 라인 없음.)
 export const LINE_EXTERNAL_LINKS: Partial<Record<ProductLine, string>> = {};
 
 export const LINE_ICONS: Record<ProductLine, string> = {
-  "M-F3A PRO MAX": "ph ph-star",
   "M-Line": "ph ph-speaker-hifi",
   "L-Line": "ph ph-speaker-high",
   "B-Line": "ph ph-waveform",
@@ -288,7 +283,7 @@ export const HOME_LINEUP: { title: string; desc: string; icon: string; href: str
 export const products: Product[] = [
   {
     slug: "m-f3a-pro-max",
-    line: "M-F3A PRO MAX",
+    line: "M-Line",
     model: "M-F3A PRO MAX",
     kicker: "플래그십 컴팩트 액티브 라인어레이",
     en: "Active Line Array Module",

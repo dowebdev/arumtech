@@ -85,6 +85,8 @@ const MENU: MenuCategory[] = [
     href: "/products",
     items: [
       { label: "전체 제품", href: "/products" },
+      // M-F3A PRO MAX 는 라인이 아니라 M-Line 소속 단일 제품 — 상단 메뉴에선 제품 상세로 바로 보낸다.
+      { label: "M-F3A PRO MAX", href: "/products/m-f3a-pro-max", desc: "플래그십 컴팩트 라인어레이" },
       ...PRODUCT_LINES.flatMap((l): MenuItem[] => {
         const line: MenuItem = {
           label: l,
@@ -338,6 +340,23 @@ export default function Header() {
         <div className={`absolute left-0 right-0 ${dropTop} hidden border-b border-cream/10 bg-[#111419] shadow-2xl lg:block`}>
           <div className="container-site grid grid-cols-[1.4fr_1fr] gap-10 py-8">
             <div className="grid grid-cols-4 gap-x-6 gap-y-2">
+              {/* M-F3A PRO MAX 는 라인이 아니라 M-Line 소속 단일 제품 — 상단 메뉴에선 제품 상세로 바로 보낸다. */}
+              <Link
+                href="/products/m-f3a-pro-max"
+                className="group rounded-md border border-transparent p-3 transition-colors hover:border-cream/25 hover:bg-white/[0.08]"
+                onMouseEnter={() => setPreviewLine("M-Line")}
+                onFocus={() => setPreviewLine("M-Line")}
+              >
+                <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tracking-[0.02em] text-cream">
+                  M-F3A PRO MAX
+                  <i
+                    className="ph ph-arrow-right text-accent opacity-0 transition-opacity group-hover:opacity-100"
+                    style={{ fontSize: 14 }}
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="mt-1 text-[11.5px] leading-[1.4] text-muted">플래그십 컴팩트 라인어레이</div>
+              </Link>
               {PRODUCT_LINES.map((line) => {
                 const external = LINE_EXTERNAL_LINKS[line];
                 const cls =
