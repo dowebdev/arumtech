@@ -73,17 +73,13 @@ export default function HomePage() {
               <span className="h-px w-6 bg-accent" />
               PRECISION SOUND INFRASTRUCTURE
             </div>
-            <h1 className="m-0 text-[30px] font-semibold leading-[1.2] tracking-[-0.02em] text-cream sm:text-[60px] sm:leading-[1.16]">
-              공간을 완성하는
+            <h1 className="m-0 text-[23px] font-semibold leading-[1.4] tracking-[-0.02em] text-cream sm:text-[40px] sm:leading-[1.32]">
+              공연장·강당·종교시설·기업체·상업시설 등의 공간에
               <br />
-              정밀 음향 시스템
+              완벽한 음향 인프라를 디자인하기 위한 파트너
             </h1>
-            <p className="m-0 mt-4 font-mono text-[14px] tracking-[0.01em] text-muted sm:mt-[22px] sm:text-[17px]">
-              Professional Sound System for Every Space
-            </p>
-            <p className="m-0 mx-auto mt-4 max-w-[480px] text-[14px] leading-[1.7] text-muted sm:mx-0 sm:mt-5 sm:text-base">
-              강당·공연장·교회·관공서까지, 공간에 맞는 음향 인프라를 설계하고 공급하는 SE
-              AUDIOTECHNIK 전문 파트너.
+            <p className="m-0 mt-5 font-mono text-[22px] font-semibold tracking-[0.06em] text-accent sm:mt-7 sm:text-[32px]">
+              SE AUDIOTECHNIK
             </p>
             {/* 모바일 버튼은 높이를 낮춘다 (py-4 → py-2.5). */}
             <div className="mt-7 flex flex-wrap justify-center gap-2.5 sm:mt-10 sm:justify-start sm:gap-3">
@@ -116,11 +112,8 @@ export default function HomePage() {
       <section data-nav-theme="light" className="bg-white py-14 sm:py-32">
         <div className="container-site relative z-10">
           <div className="flex flex-col items-center text-center">
-            <div className="mb-2.5 font-mono text-[11px] tracking-[0.16em] text-[#6e7178] sm:mb-3 sm:text-xs">
+            <h2 className="m-0 text-[28px] font-bold tracking-[-0.01em] text-[#000000] sm:text-[52px]">
               PRODUCT LINEUP
-            </div>
-            <h2 className="m-0 text-[24px] font-bold tracking-[-0.02em] text-[#000000] sm:text-[42px]">
-              제품 라인업
             </h2>
             <Link
               href="/products"

@@ -36,8 +36,8 @@ const FEATURES = [
 ];
 
 const LINEUP = [
-  { label: "라인어레이 시스템", models: "M-F3A PRO · M-F3A FS · M-F3" },
-  { label: "서브우퍼 시스템", models: "S12 PRO · S15 PRO · B-18" },
+  { label: "라인어레이 시스템", models: "M-F3A PRO · M-F3A FS" },
+  { label: "서브우퍼 시스템", models: "S15 PRO · B-18" },
 ];
 
 const PILLARS = [
@@ -70,14 +70,18 @@ export default function AboutIntroPage() {
             </h2>
             <p className="m-0 mt-6 text-[15px] leading-[1.8] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
               SE-Audiotechnik는 1980년 Michael von Keitz에 의해 독일 졸링겐(Solingen)에서
-              설립되었습니다. 설립 초기 ‘Speaker Trade’라는 브랜드로 시작해 이후 SE-Audiotechnik로
-              변경하여, 현재까지 40여 년 이상 고품질의 Loudspeaker 및 Power Amplifier 제품을 설계·생산하고
-              있습니다.
+              설립되어 40여 년 이상 고품질의 Loudspeaker 및 Power Amplifier 제품을 글로벌 시장에
+              공급해 왔습니다.
             </p>
             <p className="m-0 mt-4 text-[15px] leading-[1.8] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
-              독일 엔지니어링 기반의 프로페셔널 오디오 브랜드로, 컴팩트하면서도 강력한 사운드를 구현하는
-              혁신적인 음향 시스템을 제공합니다. 설계부터 제조까지 엄격한 품질 기준을 적용하여, 다양한
-              환경에서도 안정적이고 일관된 사운드를 전달하는 것이 핵심 가치입니다.
+              SE-Audiotechnik는 정통 독일 엔지니어링 기반의 프로페셔널 오디오 브랜드로 지속적으로
+              성장해 왔으며, 컴팩트하면서도 강력한 사운드를 구현하는 혁신적 음향 시스템을 지속적으로
+              출시하고 있습니다.
+            </p>
+            <p className="m-0 mt-4 text-[15px] leading-[1.8] text-[#52555b] sm:text-[18px] sm:leading-[1.85]">
+              SE-Audiotechnik는 엄격한 품질 기준이 적용된 프로페셔널 음향장비의 디자인, 설계, 제조
+              시스템을 자체적으로 구축하고 있으며, 고객이 요구하는 어떠한 환경에서도 안정적이고
+              만족스러운 사운드를 전달하기 위해 오늘도 최선을 다하고 있습니다.
             </p>
             {/*
               모바일: 각 항목을 가로로 펼친다 — 왼쪽에 연두 큰 숫자, 오른쪽에 작은 설명.

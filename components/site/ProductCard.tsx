@@ -46,11 +46,7 @@ export default function ProductCard({
         </div>
       </div>
       <div className="p-[22px]">
-        <div
-          className={`font-mono text-xl font-semibold tracking-[0.01em] ${
-            light ? "text-ink" : "text-cream"
-          }`}
-        >
+        <div className="font-mono text-xl font-semibold tracking-[0.01em] text-accent">
           {product.model}
         </div>
         <div className={`mt-[5px] text-[13.5px] ${light ? "text-[#52555b]" : "text-muted"}`}>

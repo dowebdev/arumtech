@@ -179,7 +179,7 @@ export default async function ProductDetailPage({
                 </span>
               )}
             </div>
-            <h1 className="m-0 font-mono text-[28px] font-bold tracking-[0.01em] text-ink sm:text-5xl">
+            <h1 className="m-0 font-mono text-[28px] font-bold tracking-[0.01em] text-accent sm:text-5xl">
               {product.model}
             </h1>
             <p className="m-0 mt-3 text-[16px] font-medium text-ink sm:mt-3.5 sm:text-[19px]">{product.kicker}</p>
