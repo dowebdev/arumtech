@@ -179,7 +179,10 @@ export default function ContactForm() {
           <div className="mb-3 text-[14px] font-semibold text-ink">
             문의 유형 <span className="text-accent">*</span>
           </div>
-          <div className="mb-8 grid grid-cols-3 gap-2">
+          <div
+            className="mb-8 grid gap-2"
+            style={{ gridTemplateColumns: `repeat(${TYPES.length}, minmax(0, 1fr))` }}
+          >
             {TYPES.map((t) => {
               const active = t === type;
               return (
