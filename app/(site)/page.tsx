@@ -89,12 +89,6 @@ export default function HomePage() {
               >
                 제품소개 보기 <i className="ph ph-arrow-right" style={{ fontSize: 16 }} />
               </Link>
-              <Link
-                href="/contact"
-                className="btn-outline btn-runline px-5 py-2.5 text-[14px] sm:px-7 sm:py-4 sm:text-[15px]"
-              >
-                설치 상담 문의
-              </Link>
             </div>
           </div>
         </div>

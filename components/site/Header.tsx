@@ -151,7 +151,7 @@ const MENU: MenuCategory[] = [
     href: "/support",
     items: [
       { label: "A/S 안내", href: "/support", desc: "A/S 접수 · 처리 절차" },
-      { label: "문의하기", href: "/contact", desc: "견적 · 제품 · 설치 상담" },
+      { label: "문의하기", href: "/contact", desc: "견적 · 제품 상담" },
     ],
   },
 ];
@@ -186,7 +186,7 @@ const ABOUT_MENU = [
 
 const SUPPORT_MENU = [
   { label: "A/S 안내", desc: "제품 A/S 접수 및 처리 절차", icon: "ph ph-wrench", href: "/support" },
-  { label: "문의하기", desc: "견적·제품·설치 상담 요청", icon: "ph ph-chat-circle-text", href: "/contact" },
+  { label: "문의하기", desc: "견적·제품 상담 요청", icon: "ph ph-chat-circle-text", href: "/contact" },
 ];
 
 export default function Header() {

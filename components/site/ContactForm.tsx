@@ -13,7 +13,7 @@ const FIELD =
 const LABEL = "text-[14px] font-semibold text-ink";
 
 /** 문의 유형 (아름텍 기존 사이트 기준). */
-const TYPES = ["A/S문의", "제품문의", "설치문의"];
+const TYPES = ["A/S문의", "제품문의"];
 
 /** 제품명은 API 스키마에 없어 message 본문 끝에 라벨과 함께 덧붙인다. */
 const EXTRA_LABELS: Record<string, string> = {
