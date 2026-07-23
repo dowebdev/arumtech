@@ -156,8 +156,13 @@ export interface Product {
   accessoriesBeforeSpec?: boolean;
   /** 히어로 라인 뱃지 옆에 표시할 상태 라벨 (예: "단종모델"). */
   statusLabel?: string;
-  /** 하단 DOWNLOAD 버튼. file 이 없으면 아직 파일을 확보하지 못한 항목이다. */
-  downloadLinks?: { label: string; file?: string }[];
+  /**
+   * 하단 DOWNLOAD 버튼.
+   * - file: 자사 파일서버 경로. file·href 둘 다 없으면 "준비중" 으로 표시된다.
+   * - href: 외부 절대 URL (예: 독일 본사 서버) — 있으면 새 탭으로 바로 연결한다.
+   * - meta: 포맷·용량·업데이트 등 부가 설명 한 줄.
+   */
+  downloadLinks?: { label: string; file?: string; href?: string; meta?: string }[];
   /** 원본 페이지 URL — 대조 검증에 쓴다. */
   sourceUrl?: string;
   image?: string; // 대표 제품 이미지 (없으면 플레이스홀더)
@@ -287,7 +292,7 @@ export const products: Product[] = [
     model: "M-F3A PRO MAX",
     kicker: "플래그십 컴팩트 액티브 라인어레이",
     en: "Active Line Array Module",
-    badge: "출시예정",
+    badge: null,
     featured: false,
     tags: ["라인어레이", "투어링", "설치", "강당"],
     keySpecs: [
@@ -865,6 +870,25 @@ export const products: Product[] = [
         },
       ],
     },
+    // 독일 본사(se-audiotechnik.de) SE Mission Control 다운로드 3종.
+    // 대용량 바이너리라 자사 저장소에 넣지 않고 본사 서버 파일로 직접 연결한다.
+    downloadLinks: [
+      {
+        label: "macOS 소프트웨어",
+        href: "https://se-audiotechnik.de/wp-content/uploads/2025/07/se_mission_control_-_1.2.1.dmg_.zip",
+        meta: "ZIP · 80.8 MB · 2026.05 업데이트",
+      },
+      {
+        label: "Windows 소프트웨어",
+        href: "https://se-audiotechnik.de/wp-content/uploads/2025/07/se_mission_control_-_1.2.1_win_setup.exe_.zip",
+        meta: "ZIP · 96.5 MB · 2026.05 업데이트",
+      },
+      {
+        label: "릴리즈 노트",
+        href: "https://se-audiotechnik.de/wp-content/uploads/2025/07/SE-MissionControl-v1.2-v1.2.1-ReleaseNotes-v202603.pdf",
+        meta: "PDF · 393 KB · 2026.05 업데이트",
+      },
+    ],
     sourceUrl: "https://www.arumtech.co.kr/145",
   },
   {

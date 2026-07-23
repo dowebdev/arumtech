@@ -50,7 +50,7 @@ const LINEUP_SLIDES = [
 const DOWNLOAD_STRIP = [
   { title: "제품 카탈로그", desc: "라인별 카탈로그 게시판", icon: "ph ph-book-open", href: "/downloads?cat=카탈로그" },
   { title: "표준 시방서", desc: "설계 반영용 시방서 게시판", icon: "ph ph-file-text", href: "/downloads?cat=시방서" },
-  { title: "리깅 도면자료", desc: "설치 도면 게시판", icon: "ph ph-blueprint", href: "/downloads?cat=도면자료" },
+  { title: "도면자료", desc: "설치 도면 게시판", icon: "ph ph-blueprint", href: "/downloads?cat=도면자료" },
 ];
 
 export default function HomePage() {

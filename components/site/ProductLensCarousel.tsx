@@ -321,7 +321,7 @@ export default function ProductLensCarousel({
                 className="pointer-events-none absolute left-1/2 top-6 w-full -translate-x-1/2 px-4 text-center text-white"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.85)" }}
               >
-                <div className="text-[24px] font-bold tracking-[0.01em]">{it.label}</div>
+                <div className="text-[24px] font-bold tracking-[0.01em] text-accent">{it.label}</div>
                 {it.sub && (
                   <div className="mt-2 text-[16px] font-thin leading-[1.5]">
                     {it.sub.map((line, idx) => (

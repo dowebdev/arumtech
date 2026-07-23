@@ -899,17 +899,23 @@ export default async function ProductDetailPage({
                 DOWNLOAD
               </h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {product.downloadLinks.map((d) =>
-                  d.file ? (
+                {product.downloadLinks.map((d) => {
+                  // 외부 절대 URL(href)은 그대로, 자사 파일(file)은 파일서버 경로로 만든다.
+                  // "/" 로 시작하는 file 은 절대경로 — 다른 제품과 파일을 공유할 때 쓴다.
+                  const href = d.href
+                    ? d.href
+                    : d.file
+                      ? d.file.startsWith("/")
+                        ? downloadUrl(d.file)
+                        : downloadUrl(`${product.slug}/${d.file}`)
+                      : null;
+                  return href ? (
                     <a
                       key={d.label}
-                      /* "/" 로 시작하면 절대경로 — 다른 제품과 파일을 공유할 때 쓴다 */
-                      href={
-                        d.file.startsWith("/")
-                          ? downloadUrl(d.file)
-                          : downloadUrl(`${product.slug}/${d.file}`)
-                      }
+                      href={href}
                       download
+                      target={d.href ? "_blank" : undefined}
+                      rel={d.href ? "noopener noreferrer" : undefined}
                       className="group flex items-center gap-3 rounded-xl border border-black/10 bg-white px-5 py-4 transition-colors hover:border-accent"
                     >
                       <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent/[0.08] transition-colors group-hover:bg-accent">
@@ -918,7 +924,12 @@ export default async function ProductDetailPage({
                           style={{ fontSize: 18 }}
                         />
                       </span>
-                      <span className="break-keep text-[15px] font-medium text-ink">{d.label}</span>
+                      <span className="flex min-w-0 flex-col">
+                        <span className="break-keep text-[15px] font-medium text-ink">{d.label}</span>
+                        {d.meta && (
+                          <span className="mt-0.5 text-[12px] text-[#9aa0a6]">{d.meta}</span>
+                        )}
+                      </span>
                     </a>
                   ) : (
                     <span
@@ -934,8 +945,8 @@ export default async function ProductDetailPage({
                       </span>
                       <span className="ml-auto flex-shrink-0 text-[12px] text-[#9aa0a6]">준비중</span>
                     </span>
-                  )
-                )}
+                  );
+                })}
               </div>
             </div>
           )}

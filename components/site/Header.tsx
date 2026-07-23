@@ -151,7 +151,6 @@ const MENU: MenuCategory[] = [
 const SOCIALS = [
   { href: "https://www.facebook.com/seaudiotechnik/", icon: "ph ph-facebook-logo", label: "Facebook" },
   { href: "https://www.instagram.com/se_audiotechnik", icon: "ph ph-instagram-logo", label: "Instagram" },
-  { href: "https://www.youtube.com/channel/UCxcsYAQ_KjtsycSRi5If9DQ", icon: "ph ph-youtube-logo", label: "YouTube" },
 ];
 
 const NAV = [

@@ -123,7 +123,7 @@ export default function MobileProductSlider({ items }: { items: SlideItem[] }) {
               className="pointer-events-none absolute inset-x-0 top-5 px-4 text-center text-white"
               style={{ textShadow: "0 1px 2px rgba(0,0,0,0.85)" }}
             >
-              <div className="text-[19px] font-bold tracking-[0.01em]">{it.label}</div>
+              <div className="text-[19px] font-bold tracking-[0.01em] text-accent">{it.label}</div>
               {it.sub && (
                 <div className="mt-1.5 text-[12.5px] font-light leading-[1.5]">
                   {it.sub.map((line, idx) => (
