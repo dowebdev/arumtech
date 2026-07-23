@@ -91,13 +91,19 @@ function requireConfig() {
   }
 }
 
-async function get(path: string, params: Record<string, string | number>): Promise<unknown> {
+async function get(
+  path: string,
+  params: Record<string, string | number>,
+  revalidate?: number
+): Promise<unknown> {
   requireConfig();
   const qs = new URLSearchParams(
     Object.entries(params).map(([k, v]) => [k, String(v)])
   ).toString();
   const res = await fetch(`${API_URL}${path}?${qs}`, {
     headers: { "x-site": SITE_ID as string },
+    // 통합 검색처럼 목록 전체를 반복해서 받는 곳은 revalidate 로 서버 캐시를 건다.
+    ...(revalidate !== undefined ? { next: { revalidate } } : {}),
   });
   if (!res.ok) throw new Error(`${path} → HTTP ${res.status}`);
   return res.json();
@@ -191,9 +197,16 @@ function toItem(raw: RawItem): ContentItem {
 /** 게시판 목록. 상단 고정 글이 먼저 오도록 정렬한다. */
 export async function fetchContentsList(
   board: BoardKey,
-  opts: { page?: number; limit?: number; search?: string; withContent?: boolean } = {}
+  opts: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    withContent?: boolean;
+    /** 설정 시 서버 fetch 캐시(ISR) 초. 통합 검색의 목록 전체 조회에 쓴다. */
+    revalidate?: number;
+  } = {}
 ): Promise<ContentPage> {
-  const { page = 1, limit = 12, search, withContent } = opts;
+  const { page = 1, limit = 12, search, withContent, revalidate } = opts;
   const params: Record<string, string | number> = {
     module_idx: BOARDS[board],
     // API 가 받는 이름은 page_index/page_size 다. page/limit 으로 보내면 조용히 무시돼
@@ -208,7 +221,7 @@ export async function fetchContentsList(
   }
   if (search?.trim()) params.search = search.trim();
 
-  const json = (await get("/contents/list", params)) as {
+  const json = (await get("/contents/list", params, revalidate)) as {
     page?: { total?: number; total_page?: number; page_index?: number; has_next_page?: boolean };
     list?: RawItem[];
   };

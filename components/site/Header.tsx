@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import {
   PRODUCT_LINES,
@@ -186,6 +186,9 @@ export default function Header() {
   /** 제품소개 메가메뉴에서 지금 호버 중인 라인 — 우측 미리보기가 이 라인을 따라간다. */
   const [previewLine, setPreviewLine] = useState<ProductLine>(DEFAULT_PREVIEW_LINE);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchPanelRef = useRef<HTMLDivElement>(null);
+  const searchIconRef = useRef<HTMLButtonElement>(null);
   const [scrolled, setScrolled] = useState(false);
   // true when the section currently behind the bar has a dark background
   const [darkBg, setDarkBg] = useState(false);
@@ -218,6 +221,33 @@ export default function Header() {
     };
   }, [pathname]);
 
+  // 검색 드롭다운: ESC·바깥클릭으로 닫고, 페이지 이동 시 자동으로 닫는다.
+  useEffect(() => {
+    if (!searchOpen) return;
+    const onDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (
+        !searchPanelRef.current?.contains(t) &&
+        !searchIconRef.current?.contains(t)
+      ) {
+        setSearchOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSearchOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [searchOpen]);
+
+  useEffect(() => {
+    setSearchOpen(false);
+  }, [pathname]);
+
   const isActive = (key: string) =>
     (ACTIVE_MAP[key] || []).some((p) => pathname === p || pathname.startsWith(p + "/"));
 
@@ -247,7 +277,7 @@ export default function Header() {
           스크롤 시 알약(pill) 상태에서는 모바일 높이를 46px 로 더 줄여 공간을 덜 차지하게 한다 (sm+ 는 68 유지).
         */}
         <div
-          className={`mx-auto flex w-full items-center justify-between gap-6 transition-all duration-300 ${
+          className={`relative mx-auto flex w-full items-center justify-between gap-6 transition-all duration-300 ${
             pill
               ? `h-[46px] max-w-[1240px] rounded-full border px-6 shadow-[0_14px_44px_-14px_rgba(0,0,0,0.45)] sm:h-[68px] sm:px-8 ${
                   invert ? "border-black/10" : "border-cream/15"
@@ -299,8 +329,23 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Right: socials + mobile toggle */}
+        {/* Right: search + socials + mobile toggle */}
         <div className="flex flex-shrink-0 items-center gap-2">
+          <button
+            ref={searchIconRef}
+            type="button"
+            aria-label="검색"
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen((v) => !v)}
+            className={`flex h-10 w-10 items-center justify-center transition-colors hover:text-accent ${
+              invert ? "text-[#000000]" : "text-cream"
+            }`}
+          >
+            <i
+              className={`ph ${searchOpen ? "ph-x" : "ph-magnifying-glass"}`}
+              style={{ fontSize: 20 }}
+            />
+          </button>
           <div className="hidden items-center gap-2 sm:flex">
             {SOCIALS.map((s) => (
               <a
@@ -331,6 +376,46 @@ export default function Header() {
             <MenuToggle open={menuOpen} />
           </button>
         </div>
+
+        {/* 검색 드롭다운 — 바 아래 전폭. 제출 시 /search?keyword= 로 이동. */}
+        {searchOpen && (
+          <div
+            ref={searchPanelRef}
+            className="absolute left-0 right-0 top-full z-[120] mt-2 sm:mt-3"
+          >
+            <form
+              action="/search"
+              method="get"
+              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.55)] ${
+                invert ? "border-black/10 bg-white" : "border-cream/15 bg-[#111419]"
+              }`}
+            >
+              <i
+                className={`ph ph-magnifying-glass ${invert ? "text-[#9aa0a6]" : "text-muted"}`}
+                style={{ fontSize: 20 }}
+              />
+              {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
+              <input
+                autoFocus
+                type="text"
+                name="keyword"
+                placeholder="제품 · 자료 · 설치사례 검색"
+                aria-label="통합 검색"
+                className={`min-w-0 flex-1 bg-transparent text-[15px] outline-none ${
+                  invert
+                    ? "text-ink placeholder:text-[#9aa0a6]"
+                    : "text-cream placeholder:text-muted"
+                }`}
+              />
+              <button
+                type="submit"
+                className="flex-shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+              >
+                검색
+              </button>
+            </form>
+          </div>
+        )}
         </div>
       </div>
 
