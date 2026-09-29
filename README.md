@@ -14,14 +14,16 @@ SE AUDIOTECHNIK 국내 공식총판 아름텍의 B2B 음향장비 브랜드 사�
 - Tailwind CSS 3
 - Quill 기반 편집기
 
-## 로컬 실행
+## 실행 및 운영
+
+### 로컬 실행
 
 ```sh
 npm install
 npm run dev
 ```
 
-## 빌드 및 실행
+### 빌드 및 실행
 
 ```sh
 npm run build
